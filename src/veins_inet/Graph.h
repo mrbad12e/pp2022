@@ -21,16 +21,16 @@
 #include <fstream>
 #include <sstream>
 
-class Count {
+class ItineraryRecord {// Ban ghi hanh trinh cua xe
 public:
-    std::string laneId;
-    int i, k;
+    std::string laneId, prevLaneId;
+    int stopTime;
 };
 
 class AGV {
 public:
     std::string id;
-    Count *n;
+    ItineraryRecord *itinerary;
 };
 
 class Edge {
@@ -74,14 +74,18 @@ private:
     std::vector<Edge*> from, to;
 
 public:
+    int k;
+    double predictW, q, d;
     Vertex() {
+        k = 0;
+        predictW = 0;
     }
     void setId(std::string id) {
         this->id = id;
     }
     void setFrom(Edge *from) {
         for (auto f : this->from) {
-            if (f->getId() == from->getId())
+            if (f->getId().compare(from->getId()) == 0)
                 return;
         }
         this->from.push_back(from);
@@ -91,7 +95,7 @@ public:
     }
     void setTo(Edge *to) {
         for (auto t : this->to) {
-            if (t->getId() == to->getId())
+            if (t->getId().compare(to->getId()) == 0)
                 return;
         }
         this->to.push_back(to);
@@ -194,7 +198,7 @@ public:
     NodeVertex *left, *right;
     J_of_vertex* search_j(std::string name) {
         for (auto j : j_of_vertex) {
-            if (j->name == name)
+            if (j->name.compare(name) == 0)
                 return j;
         }
         return NULL;
@@ -208,7 +212,7 @@ public:
     NodeEdge *left, *right;
     int check_edge(std::string name) {
         for (auto e : e_of_edge) {
-            if (e == name)
+            if (e.compare(name) == 0)
                 return 1;
         }
         return 0;
@@ -223,7 +227,8 @@ private:
         if (*root == NULL) {
             *root = new NodeVertex();
             root[0]->v = (Intersection*) v;
-            root[0]->j_of_vertex.push_back(j_of_vertex);
+            if (j_of_vertex != NULL)
+                root[0]->j_of_vertex.push_back(j_of_vertex);
             return;
         }
         if (v->getId() < root[0]->v->getId()) {
@@ -329,11 +334,30 @@ private:
                     v->setId(str_id);
                     v->setFrom(ne->e);
                     insertVertex(&vertices, v, new J_of_vertex(str));
+                    std::string newExitBuffer = ne->e->getId() + "-"
+                            + v->getId();
+                    Vertex *eb = new Vertex();
+                    eb->setId(newExitBuffer);
+                    eb->setW(0);
+                    insertVertex(&vertices, eb, NULL);
                     nv = searchVertex(str_id);
                     J_of_vertex *j = nv->search_j(str);
                     j->from = e_id;
                     ne->e->setTo(str_id);
                 } else {
+                    int c = 0;
+                    for (auto f : nv->v->getFrom()) {
+                        if (f->getId().compare(ne->e->getId()) == 0)
+                            c = 1;
+                    }
+                    if (c == 0) {
+                        std::string newExitBuffer = ne->e->getId() + "-"
+                                + nv->v->getId();
+                        Vertex *eb = new Vertex();
+                        eb->setId(newExitBuffer);
+                        eb->setW(0);
+                        insertVertex(&vertices, eb, NULL);
+                    }
                     nv->v->setFrom(ne->e);
                     J_of_vertex *j = nv->search_j(str);
                     if (j == NULL) {
@@ -368,7 +392,8 @@ private:
     void inorder(NodeVertex **root) {
         if (*root != NULL) {
             inorder(&root[0]->left);
-            if (root[0]->j_of_vertex.size() <= 2) {
+            if (root[0]->j_of_vertex.size() <= 2
+                    && root[0]->j_of_vertex.size() > 0) {
                 double w = 0;
                 for (auto j : root[0]->j_of_vertex) {
                     w = w + j->w;
