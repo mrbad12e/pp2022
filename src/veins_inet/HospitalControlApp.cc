@@ -17,11 +17,12 @@
 #include <stdio.h>
 #include <iostream>
 #include "Zone.h"
+#include "Graph.h"
 //#include "HashAPI.cpp"
 //#include "UnitTest.cpp"
 //#include "ReadFile.cpp"
 
-#include "veins/modules/application/traci/TraCIDemo11pMessage_m.h"
+
 
 using namespace veins;
 
@@ -32,6 +33,7 @@ void HospitalControlApp::initialize(int stage)
     TraCIDemoRSU11p::initialize(stage);
     if(graphGenerator == NULL){
         graphGenerator = new Parser();
+        graph = new Graph();
         //graphGenerator->readFile();
     }
     if (stage == 0) {
@@ -39,10 +41,6 @@ void HospitalControlApp::initialize(int stage)
 
         sendBeacon= new cMessage("send Beacon");
         graph = new Graph();
-        count = new Count();
-        count->k = 0;
-        count->i = 0;
-        count->laneId = "";
     }
     else if (stage == 1) {
         // Initializing members that require initialized other modules goes here
@@ -92,59 +90,9 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
         }
         std::stringstream streamData(bc->getDemoData());
         std::string str, before_name;
-        before_name = count->laneId;
+        //before_name = count->laneId;
         int i = 0;
-        while (getline(streamData, str, ' ')) {
-            if (i == 0) {
-                int x = str.find("_");
-                str.erase(x);
-                if (count->laneId.length() == 0) {
-                    count->laneId = str;
-                } else if (count->laneId.length() > 0 && str.compare(count->laneId) != 0) {
-                    std::string mes;
-                    if (before_name.front() == ':') {//kiem tra xem co phai laneID la mot intersection
-                        mes = count->laneId + " "
-                                + std::to_string(count->k * 0.1);
-                        NodeVertex *nv = graph->searchVertex(before_name);
-                        double w =
-                                (nv->v->getW() == 0) ?
-                                        count->k :
-                                        (nv->v->getW() + count->k) / 2;//why???
-                        nv->v->setW(w);
-                    } else {
-                        std::string full_name = before_name + "-" + str;
-                        mes = full_name + " " + std::to_string(count->k * 0.1);
-                        NodeVertex *nv = graph->searchVertex(full_name);
-                        if (nv != NULL) {
-                            double w =
-                                    (nv->v->getW() == 0) ?
-                                            count->k :
-                                            (nv->v->getW() + count->k) / 2;//why?
-                            nv->v->setW(w);
-                        } else {
-                            Vertex *e = new Vertex();
-                            e->setId(full_name);
-                            e->setW(count->k);
-                            graph->addVertex(e);
-                        }
-                    }
-                    message.push_back(mes);
-                    count->i = 0;
-                    count->k = 0;
-                    count->laneId.erase();
-                }
-            } else if (i == 2) {
-                if (std::stod(str) == 0) {
-                    count->i = 0;
-                    count->k++;
-                } else {
-                    if (count->i == 0 && count->k > 0)
-                        count->k--;
-                    count->i++;
-                }
-            }
-            i++;
-        }
+
     }
 
 }
@@ -199,4 +147,79 @@ void HospitalControlApp::readCrossing(){
 
     MyReadFile.close();
 }
+
+void HospitalControlApp::exponentialSmoothing(NodeVertex *nv, double stopTime) {
+    if (nv->v->k == 0) {
+        nv->v->predictW = stopTime;
+        nv->v->d = nv->v->q = 0;
+        nv->v->k++;
+    } else {
+        double error = stopTime - nv->v->predictW;
+        nv->v->q = Constant::GAMMA * error - (1 - Constant::GAMMA) * nv->v->q;
+        nv->v->d = Constant::GAMMA * abs(error)
+                - (1 - Constant::GAMMA) * nv->v->d;
+        double lambda = abs(nv->v->q / nv->v->d);
+        nv->v->predictW = lambda * stopTime + (1 - lambda) * nv->v->predictW;
+//        mes = mes + " " + std::to_string(nv->v->predictW);
+    }
+}
+
+void HospitalControlApp::readLane(AGV *cur, std::string str) {
+    double stopTime = cur->itinerary->stopTime * 0.1;
+    str.erase(str.find("_"));
+    cur->itinerary->laneId = str;
+    if (cur->itinerary->prevLaneId.length() == 0) {
+        cur->itinerary->prevLaneId = str;
+    } else if (cur->itinerary->laneId.compare(cur->itinerary->prevLaneId)
+            != 0) {
+        std::string mes;
+        if (cur->itinerary->prevLaneId.front() == ':') {
+            mes = cur->itinerary->laneId + " " + std::to_string(stopTime);
+            NodeVertex *nv = graph->searchVertex(cur->itinerary->prevLaneId);
+            exponentialSmoothing(nv, stopTime);
+            nv->v->setW(stopTime);
+            message.push_back(mes);
+        } else if (cur->itinerary->laneId.front() == ':') {
+            std::string full_name = cur->itinerary->prevLaneId + "-" + str;
+            mes = full_name + " " + std::to_string(stopTime);
+            NodeVertex *nv = graph->searchVertex(full_name);
+            exponentialSmoothing(nv, stopTime);
+            nv->v->setW(stopTime);
+            message.push_back(mes);
+        }
+        if (cur->itinerary->prevLaneId.front()
+                != cur->itinerary->laneId.front())
+            cur->itinerary->stopTime = 0;
+        cur->itinerary->prevLaneId = cur->itinerary->laneId;
+    }
+}
+
+void HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
+    std::stringstream streamData(bc->getDemoData());
+    std::string str;
+    AGV *cur = NULL;
+    for (auto a : vhs) {
+        if (a->id.compare(std::to_string(bc->getSenderAddress())) == 0)
+            cur = a;
+    }
+    if (cur == NULL) {
+        cur = new AGV();//3 dong sau ghep thanh 1 phan ptkd cua AGV co tham so truyen vao
+        cur->id = std::to_string(bc->getSenderAddress());
+        cur->itinerary = new ItineraryRecord();
+        cur->itinerary->stopTime = 0;
+        vhs.push_back(cur);
+    }
+    int i = 0;
+    while (getline(streamData, str, ' ')) {
+        if (i == 0) {
+            readLane(cur, str);
+        } else if (i == 2) {
+            if (std::stod(str) == 0) {
+                cur->itinerary->stopTime++;
+            }
+        }
+        i++;
+    }
+}
+
 
