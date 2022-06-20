@@ -33,7 +33,7 @@ void HospitalControlApp::initialize(int stage)
     TraCIDemoRSU11p::initialize(stage);
     if(graphGenerator == NULL){
         graphGenerator = new Parser();
-        graph = new Graph();
+        //graph = new Graph();
         //graphGenerator->readFile();
     }
     if (stage == 0) {
@@ -88,10 +88,7 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
             populateWSM(WSM);
             send(WSM, lowerLayerOut);
         }
-        std::stringstream streamData(bc->getDemoData());
-        std::string str, before_name;
-        //before_name = count->laneId;
-        int i = 0;
+        readMessage(bc);
 
     }
 
