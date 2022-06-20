@@ -78,6 +78,28 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                 cancelEvent(sendBeacon);
             }
 
+            if(traci == NULL){
+                if(Constant::activation != NULL)
+                traci = Constant::activation->getCommandInterface();
+            }
+
+            std::list<std::string> allPeople = traci->getPersonIds();
+
+            for(int i = 0; i < crossings.size(); i++){
+                for (auto elem: allPeople) {
+                    std::string personId = elem;
+                    Coord peoplePosition = traci->getPersonPosition(personId);
+                    std::pair<double,double> coordTraCI = traci->getTraCIXY(peoplePosition);
+                    veins::Coord newCoord;
+                    newCoord.x = coordTraCI.first;
+                    newCoord.y = coordTraCI.second;
+                    newCoord.z = 0;
+                    if (crossings[i].rec->checkInside(newCoord)) {
+                        crossings[i].peoples.push_back(std::make_tuple(personId, newCoord.x, newCoord.y, simTime().dbl()));
+                    }
+                }
+            }
+
             TraCIDemo11pMessage *rsuBeacon = new TraCIDemo11pMessage();
 
             char *ret = mergeContent(bc->getSenderAddress());
@@ -217,6 +239,84 @@ void HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
         }
         i++;
     }
+}
+
+double HospitalControlApp::getAvailablePerdestrian(std::string crossId, double _time) {
+    int count = 0;
+    double start = 0;
+
+    if (_time - Constant::DELTA_T > 0) {
+        start = _time - Constant::DELTA_T;
+    }
+    double tmp = (_time - start)/0.1;
+    EV << "Start: "<<start << " End: "<< _time <<endl;
+    auto it = find_if(crossings.begin(), crossings.end(), [&crossId](const Crossing& obj) {return obj.id.compare(crossId) == 0;});
+    if (it != crossings.end())
+    {
+//        EV << (it->rec).A <<endl;
+        double pivot = start;
+        do {
+            for(auto elem : it->peoples) {
+                if (pivot <= get<3>(elem) && get<3>(elem) < pivot + 0.1) {
+//                    EV << "People: " << get<0>(elem) <<endl;
+//                    EV <<pivot << " " << pivot + 0.1 <<" Count: " << count <<endl;
+                    count++;
+                    break;
+                }
+            }
+//            EV << "Num duration: " << count <<endl;
+            pivot = pivot + 0.1;
+        } while(pivot < _time && count != tmp);
+    }
+
+//    EV << "Num duration: " << count <<endl;
+//    EV << "Total: " << tmp <<endl;
+
+//    EV << count/tmp <<endl;
+    return count/tmp;
+
+}
+
+double HospitalControlApp::getVeloOfPerdestrian(std::string crossId, double _time) {
+    double start = 0;
+    if (_time - Constant::DELTA_T > 0) {
+        start = _time - Constant::DELTA_T;
+    }
+    //EV << "Start: "<<start << " End: "<< _time <<endl;
+
+    std::set < std::string > personIds;
+    double sum = 0;
+    int numPeople = 0;
+    auto it = find_if(crossings.begin(), crossings.end(), [&crossId](const Crossing& obj) {return obj.id.compare(crossId) == 0;});
+    if (it != crossings.end())
+    {
+        for(auto elem : it->peoples) {
+            if (start <= get<3>(elem) && get<3>(elem) < _time) {
+                personIds.insert(get<0>(elem));
+            }
+        }
+        numPeople = personIds.size();
+        for(auto person : personIds) {
+            std::vector<std::tuple<std::string, double, double, double>> tmp;
+            for(auto elem : it->peoples) {
+                if(get<0>(elem).compare(person) == 0 && start <= get<3>(elem) && get<3>(elem) <= _time) {
+                    tmp.push_back(elem);
+                }
+            }
+            int n = tmp.size();
+            if (n > 1){
+                sum += sqrt(
+                    (get<1>(tmp[n-1]) - get<1>(tmp[0]))*(get<1>(tmp[n-1]) - get<1>(tmp[0]))
+                    + (get<2>(tmp[n-1]) - get<2>(tmp[0]))*(get<2>(tmp[n-1]) - get<2>(tmp[0]))
+                    ) / (get<3>(tmp[n-1]) - get<3>(tmp[0]));
+            }
+
+        }
+    }
+
+    double averageSpeed = sum / numPeople;
+
+    return averageSpeed;
 }
 
 
