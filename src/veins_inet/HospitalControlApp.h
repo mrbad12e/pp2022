@@ -24,6 +24,7 @@
 //#include "Parser.cc"
 #include "veins/modules/application/ieee80211p/DemoBaseApplLayer.h"
 #include "veins/modules/application/traci/TraCIDemoRSU11p.h"
+#include "veins/modules/application/traci/TraCIDemo11pMessage_m.h"
 #include "Crossing.h"
 #include "Graph.h"
 #include <vector>
@@ -51,9 +52,14 @@ private:
     void readCrossing();
     //virtual std::string getIdOfGLane(std::string str);
     //virtual int getX2(int x);
-    Count *count;
+    std::vector<AGV*> vhs;
     Graph *graph;
+    bool hasStopped = false;
+    int subscribedServiceId = 0;
     std::vector<std::string> message;
+    void readMessage(TraCIDemo11pMessage *bc);
+    void exponentialSmoothing(NodeVertex *nv, double stopTime);
+    void readLane(AGV *cur, std::string str);
 };
 }
 #endif /* VEINS_INET_HOSPITALCONTROLAPP_H_ */
