@@ -33,6 +33,7 @@ int main(){
     fstream newfile;
     newfile.open("input.txt",ios::in);
     string str;
+    cout<<"Prepare to read file...."<<endl;
     while(getline(newfile,str)){
         intersection(str);
     }
@@ -44,6 +45,7 @@ int main(){
     for(int i=0;i<N;i++){
         double num=3.0*(rand()%100)/100;
         outfile<<res[i]<<' '<<num<<'\n';
+        cout<<res[i]<<' '<<num<<'\n';
     }
     outfile.close();
     return 0;
