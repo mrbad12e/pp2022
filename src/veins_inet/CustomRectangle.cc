@@ -27,7 +27,7 @@ CustomRectangle::CustomRectangle(std::string points) {
     for (int i = 0; i < 4; i++) {
         pos = points.find(" ");
         token = points.substr(0, pos);
-        EV<<" $"<<token<<"$";
+        //EV<<" $"<<token<<"$";
         if (i == 0) //this->A = string2Coord(token);
             this->xMin = std::atof(token.c_str());//std::stof(token);
         //if (i == 1) //this->B = string2Coord(token);
@@ -39,7 +39,7 @@ CustomRectangle::CustomRectangle(std::string points) {
 
         points.erase(0, pos + 1);
     }
-    EV<<" "<<endl;
+    //EV<<" "<<endl;
 }
 
 veins::Coord CustomRectangle::string2Coord(std::string point) {
