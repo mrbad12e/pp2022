@@ -30,12 +30,12 @@ CustomRectangle::CustomRectangle(std::string points) {
         //EV<<" $"<<token<<"$";
         if (i == 0) //this->A = string2Coord(token);
             this->xMin = std::atof(token.c_str());//std::stof(token);
-        //if (i == 1) //this->B = string2Coord(token);
-        //    this->yMin = std::stof(token);
-        //if (i == 2) //this->C = string2Coord(token);
-        //    this->xMax = std::stof(token);
-        //if (i == 3) //this->D = string2Coord(token);
-        //    this->yMax = std::stof(token);
+        if (i == 1) //this->B = string2Coord(token);
+            this->yMin = std::atof(token.c_str());
+        if (i == 2) //this->C = string2Coord(token);
+            this->xMax = std::atof(token.c_str());
+        if (i == 3) //this->D = string2Coord(token);
+            this->yMax = std::atof(token.c_str());
 
         points.erase(0, pos + 1);
     }
