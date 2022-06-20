@@ -60,6 +60,9 @@ private:
     void readMessage(TraCIDemo11pMessage *bc);
     void exponentialSmoothing(NodeVertex *nv, double stopTime);
     void readLane(AGV *cur, std::string str);
+
+    double getAvailablePerdestrian(std::string crossId, double _time);
+    double getVeloOfPerdestrian(std::string crossId, double _time);
 };
 }
 #endif /* VEINS_INET_HOSPITALCONTROLAPP_H_ */
