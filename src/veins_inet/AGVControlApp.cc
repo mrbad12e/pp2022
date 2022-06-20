@@ -30,9 +30,6 @@ void AGVControlApp::initialize(int stage)
     if (stage == 0) {
         int idDebug = getId();
         sendBeacon= new cMessage("send Beacon");
-        //if(idDebug == Constant::WANTED_ID
-        //        || myId == Constant::WANTED_ID
-        //)
         {
             mobility = TraCIMobilityAccess().get(getParentModule());
             traciVehicle = mobility->getVehicleCommandInterface();
@@ -44,7 +41,6 @@ void AGVControlApp::initialize(int stage)
         {
             cancelEvent(sendBeacon);
         }
-        //if(myId == Constant::WANTED_ID)
         {
             scheduleAt(simTime() + 0.1, sendBeacon);
             //EV<<"Initialize AGV at "<<simTime().dbl()<<" ";
@@ -62,7 +58,6 @@ void AGVControlApp::finish()
     if(Constant::activation == NULL){
             EV<<"Constant is helpless eventually"<<endl;
     }
-    //EV<<"AGV["<<myId<<"] reaches destination over here"<<endl;
     // statistics recording goes here
 }
 
@@ -90,18 +85,14 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
     // it is important to call the DemoBaseApplLayer function for BSM and WSM transmission
     {
         TraCIDemo11pMessage* carBeacon = new TraCIDemo11pMessage("test", 0);
-        /*if(!sentFirstMessage){
-            carBeacon->setDemoData(Constant::FIRST);
-            sentFirstMessage = true;
-        }
-        else*/ //if(myId == Constant::WANTED_ID)
         {
            std::string content = //std::to_string(simTime().dbl()) + " ";
            //curPosition = mobility->getPositionAt(simTime());
            //content = content +
            //             std::to_string(curPosition.x) + " "
            //             + std::to_string(curPosition.y);
-           /*content = content +*/ /*"Lid"*/ /*" " +*/ traciVehicle->getLaneId();
+           /*content = content +*/ /*"Lid"*/ /*" " +*/
+                   traciVehicle->getLaneId();
            content = content + /*"L.P"*/ " " + std::to_string(traciVehicle->getLanePosition());
            content = content + /*"velo:"*/ " " + std::to_string(traciVehicle->getSpeed())
                            //+ /*"/"*/ " " + std::to_string(traciVehicle->getAcceleration())
@@ -134,31 +125,8 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
     if(TraCIDemo11pMessage* bc = dynamic_cast<TraCIDemo11pMessage*>(enc)){
         char *ret = mergeContent(myId);
 
-        if(/*strcmp(ret, bc->getDemoData()) == 0 &&*/ myId == 16){
-            //EV<<"Received message: "<<bc->getDemoData()<<endl;
-            /*if(traciVehicle->getSpeed() <= 5){
-                traciVehicle->setSpeedMode(0x06);
-                traciVehicle->setSpeed(20);
-            }
-            else if(false){
-                std::string land ("B0toB1_0");
-                std::string new_land("B1toB0_0");
-                std::string sub_new_land("B1toB0_1");
-                if(land.compare(traciVehicle->getLaneId()) == 0
-                        && new_land.compare(traciVehicle->getLaneId()) != 0
-                        && sub_new_land.compare(traciVehicle->getLaneId()) != 0
-                        )
-                {
-                    if(myId == 16)
-                        EV<<"\tprepare to change route of "<<myId<<endl;
-                    //willChange = true;
-                    bool change = traciVehicle->changeVehicleRoute({
-                        "B0toB1", "B1toB0", "B0toA0", "A0toA1"
-                    });
-                    if(myId == 16)
-                        EV<<"Could change route? "<<change<<endl;
-                }
-            }*/
+        //if(/*strcmp(ret, bc->getDemoData()) == 0 &&*/ myId == 16)
+        {
             if(!receivedReRouting){
                 int length = strlen(bc->getDemoData());
                 std::string str = std::string(bc->getDemoData(), length);
