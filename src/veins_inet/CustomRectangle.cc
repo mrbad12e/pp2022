@@ -73,10 +73,28 @@ double CustomRectangle::triangleArea(veins::Coord A, veins::Coord B, veins::Coor
     return S;
 }
 
-bool CustomRectangle::checkInside(veins::Coord I) {
+/*bool CustomRectangle::checkInside(veins::Coord I) {
     if(I.x >= this->xMin && I.x <= this->xMax
             && I.y <= this->yMax
             && I.y >= this->yMin){
+        return true;
+    }
+    else return false;
+}*/
+
+bool CustomRectangle::checkAround(double x, double y) {
+    if(x >= (this->xMin - AROUND) && x <= (this->xMax + AROUND)
+            && y <= (this->yMax + AROUND)
+            && y >= (this->yMin - AROUND)){
+        return true;
+    }
+    else return false;
+}
+
+bool CustomRectangle::checkInside(double x, double y) {
+    if(x >= this->xMin && x <= this->xMax
+            && y <= this->yMax
+            && y >= this->yMin){
         return true;
     }
     else return false;
