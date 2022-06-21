@@ -32,7 +32,8 @@ public:
     static double triangleArea(veins::Coord A, veins::Coord B, veins::Coord C);
     double rectangleArea();
 //    bool checkInside(inet::Coord I);
-    bool checkInside(veins::Coord I);
+    bool checkInside(double x, double y);
+    bool checkAround(double x, double y);
     virtual ~CustomRectangle();
 
     veins::Coord A;
@@ -42,7 +43,7 @@ public:
     double xMin;
 
 private:
-
+    static constexpr const double AROUND = 2;
     double yMin;
     double xMax;
     double yMax;
