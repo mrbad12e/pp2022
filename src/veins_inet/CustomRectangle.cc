@@ -58,11 +58,11 @@ veins::Coord CustomRectangle::string2Coord(std::string point) {
     return p;
 }
 
-double CustomRectangle::rectangleArea() {
+/*double CustomRectangle::rectangleArea() {
     double x = A.distance(B);
     double y = B.distance(C);
     return x * y;
-}
+}*/
 
 double CustomRectangle::triangleArea(veins::Coord A, veins::Coord B, veins::Coord C) {
     double x = A.distance(B);
