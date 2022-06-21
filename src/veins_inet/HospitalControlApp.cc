@@ -60,6 +60,9 @@ void HospitalControlApp::finish()
     for (auto it = crossings.begin(); it != crossings.end(); it++){
         //EV<<it->id<<" "<<it->rec->xMin<<endl;
     }
+    //if period is 0.1 => count = 1453
+    //if period is 0.2 => count = 801
+    EV<<"#calling traci->getPersonIds(): "<<count<<endl;
     // statistics recording goes here
 }
 
@@ -83,7 +86,8 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                 traci = Constant::activation->getCommandInterface();
             }
 
-            if(simTime().dbl() - lastUpdate >= 0.1){
+            if(simTime().dbl() - lastUpdate >= 0.2){
+                count++;
                 std::list<std::string> allPeople = traci->getPersonIds();
                 double x, y;
             //for(int i = 0; i < crossings.size(); i++){
@@ -95,9 +99,16 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                     x = coordTraCI.first;
                     y = coordTraCI.second;
                     //newCoord.z = 0;
-                    //if (crossings[i].rec->checkInside(newCoord)) {
+                    //for(int i = 0; i < crossings.size(); i++){
+                    //    if (crossings[i].rec->checkInside(x, y)) {
                     //    crossings[i].peoples.push_back(std::make_tuple(personId, newCoord.x,
                             //newCoord.y, simTime().dbl()));
+                    //        break;
+                    //    }
+                    //    else{
+                    //        if (crossings[i].rec->checkAround(x, y))
+                    //            break;
+                    //    }
                     //}
                 }
             //}
