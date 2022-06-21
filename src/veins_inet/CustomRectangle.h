@@ -36,14 +36,15 @@ public:
     bool checkAround(double x, double y);
     virtual ~CustomRectangle();
 
-    veins::Coord A;
-    veins::Coord B;
-    veins::Coord C;
-    veins::Coord D;
-    double xMin;
+    //veins::Coord A;
+    //veins::Coord B;
+    //veins::Coord C;
+    //veins::Coord D;
+    //
 
 private:
     static constexpr const double AROUND = 2;
+    double xMin;
     double yMin;
     double xMax;
     double yMax;
