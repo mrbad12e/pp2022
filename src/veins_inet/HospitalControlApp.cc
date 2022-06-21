@@ -83,21 +83,25 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                 traci = Constant::activation->getCommandInterface();
             }
 
-            std::list<std::string> allPeople = traci->getPersonIds();
-
-            for(int i = 0; i < crossings.size(); i++){
+            if(simTime().dbl() - lastUpdate >= 0.1){
+                std::list<std::string> allPeople = traci->getPersonIds();
+                double x, y;
+            //for(int i = 0; i < crossings.size(); i++){
                 for (auto elem: allPeople) {
                     std::string personId = elem;
                     Coord peoplePosition = traci->getPersonPosition(personId);
                     std::pair<double,double> coordTraCI = traci->getTraCIXY(peoplePosition);
-                    veins::Coord newCoord;
-                    newCoord.x = coordTraCI.first;
-                    newCoord.y = coordTraCI.second;
-                    newCoord.z = 0;
-                    if (crossings[i].rec->checkInside(newCoord)) {
-                        crossings[i].peoples.push_back(std::make_tuple(personId, newCoord.x, newCoord.y, simTime().dbl()));
-                    }
+                    //veins::Coord newCoord;
+                    x = coordTraCI.first;
+                    y = coordTraCI.second;
+                    //newCoord.z = 0;
+                    //if (crossings[i].rec->checkInside(newCoord)) {
+                    //    crossings[i].peoples.push_back(std::make_tuple(personId, newCoord.x,
+                            //newCoord.y, simTime().dbl()));
+                    //}
                 }
+            //}
+                lastUpdate = simTime().dbl();
             }
 
             TraCIDemo11pMessage *rsuBeacon = new TraCIDemo11pMessage();
@@ -257,7 +261,7 @@ double HospitalControlApp::getAvailablePerdestrian(std::string crossId, double _
         double pivot = start;
         do {
             for(auto elem : it->peoples) {
-                if (pivot <= get<3>(elem) && get<3>(elem) < pivot + 0.1) {
+                if (pivot <= std::get<3>(elem) && std::get<3>(elem) < pivot + 0.1) {
 //                    EV << "People: " << get<0>(elem) <<endl;
 //                    EV <<pivot << " " << pivot + 0.1 <<" Count: " << count <<endl;
                     count++;
@@ -291,24 +295,24 @@ double HospitalControlApp::getVeloOfPerdestrian(std::string crossId, double _tim
     if (it != crossings.end())
     {
         for(auto elem : it->peoples) {
-            if (start <= get<3>(elem) && get<3>(elem) < _time) {
-                personIds.insert(get<0>(elem));
+            if (start <= std::get<3>(elem) && std::get<3>(elem) < _time) {
+                personIds.insert(std::get<0>(elem));
             }
         }
         numPeople = personIds.size();
         for(auto person : personIds) {
             std::vector<std::tuple<std::string, double, double, double>> tmp;
             for(auto elem : it->peoples) {
-                if(get<0>(elem).compare(person) == 0 && start <= get<3>(elem) && get<3>(elem) <= _time) {
+                if(std::get<0>(elem).compare(person) == 0 && start <= std::get<3>(elem) && std::get<3>(elem) <= _time) {
                     tmp.push_back(elem);
                 }
             }
             int n = tmp.size();
             if (n > 1){
                 sum += sqrt(
-                    (get<1>(tmp[n-1]) - get<1>(tmp[0]))*(get<1>(tmp[n-1]) - get<1>(tmp[0]))
-                    + (get<2>(tmp[n-1]) - get<2>(tmp[0]))*(get<2>(tmp[n-1]) - get<2>(tmp[0]))
-                    ) / (get<3>(tmp[n-1]) - get<3>(tmp[0]));
+                    (std::get<1>(tmp[n-1]) - std::get<1>(tmp[0]))*(std::get<1>(tmp[n-1]) - std::get<1>(tmp[0]))
+                    + (std::get<2>(tmp[n-1]) - std::get<2>(tmp[0]))*(std::get<2>(tmp[n-1]) - std::get<2>(tmp[0]))
+                    ) / (std::get<3>(tmp[n-1]) - std::get<3>(tmp[0]));
             }
 
         }
