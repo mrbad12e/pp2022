@@ -99,17 +99,16 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                     x = coordTraCI.first;
                     y = coordTraCI.second;
                     //newCoord.z = 0;
-                    //for(int i = 0; i < crossings.size(); i++){
-                    //    if (crossings[i].rec->checkInside(x, y)) {
+                    for(int i = 0; i < crossings.size(); i++){
+                        if (crossings[i].rec->checkInside(x, y)) {
                     //    crossings[i].peoples.push_back(std::make_tuple(personId, newCoord.x,
                             //newCoord.y, simTime().dbl()));
-                    //        break;
-                    //    }
-                    //    else{
-                    //        if (crossings[i].rec->checkAround(x, y))
-                    //            break;
-                    //    }
-                    //}
+                            break;
+                        }
+                        else if (crossings[i].rec->checkAround(x, y)){
+                                break;
+                        }
+                    }
                 }
             //}
                 lastUpdate = simTime().dbl();
@@ -163,14 +162,14 @@ void HospitalControlApp::readCrossing(){
         std::string token;
         Crossing tmp;
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 2; i++) {
             pos = line.find(" ");
             token = line.substr(0, pos);
 
             if (i == 0) tmp.id = token;
-            if (i == 1) tmp.length = std::atof(token.c_str());
-            if (i == 2) tmp.from = token;
-            if (i == 3) tmp.to = token;
+            if (i == 1) tmp.name = token; //std::atof(token.c_str());
+            //if (i == 2) tmp.from = token;
+            //if (i == 3) tmp.to = token;
             line.erase(0, pos + 1);
 
         }
