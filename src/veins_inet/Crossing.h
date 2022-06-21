@@ -27,10 +27,10 @@ public:
 public:
     // id, name, from, to, length, rec
     std::string id;
-//    std::string name;
-    std::string from;
-    std::string to;
-    double length;
+    std::string name;
+    //std::string from;
+    //std::string to;
+    //double length;
     CustomRectangle* rec;
     std::vector<std::tuple<std::string, double, double, double>> peoples;
 };
