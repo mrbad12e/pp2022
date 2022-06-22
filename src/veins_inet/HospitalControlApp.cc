@@ -63,6 +63,12 @@ void HospitalControlApp::finish()
     //if period is 0.1 => count = 1453
     //if period is 0.2 => count = 801
     EV<<"#calling traci->getPersonIds(): "<<count<<endl;
+    EV<<"As 10 AGVs => T: 2874, W: 871, %: 30%"<<endl;
+    EV<<"As 10 + 1(flow 8) AGVs => T: 2709, W: 547, %: 20%"<<endl;
+    EV<<"As 10 + 1(flow 2) AGVs => T: 3045.7, W: 875, %: 29%"<<endl;
+    //EV<<"As 11 AGVs => T: 2720.8, W: 547, %: 20%"<<endl;
+    EV<<"As 11 AGVs + 1(10) => T: 3239.9, W: 887.7, %: 27.4%"<<endl;
+
     EV<<"Total waiting time: "<<Constant::TOTAL_WAITING_TIME*0.1<<"(s)"<<endl;
     EV<<"Total travelling time: "<<Constant::TOTAL_TRAVELLING_TIME<<"(s)"<<endl;
     double percentage = Constant::TOTAL_WAITING_TIME*10/Constant::TOTAL_TRAVELLING_TIME;
