@@ -45,6 +45,8 @@ protected:
 private:
     bool sentFirstMessage = false;
     bool receivedReRouting = false;
+    double travellingTime = 0;
+    long waitingIntervals = 0;
 };
 }
 #endif /* VEINS_INET_AGVCONTROLAPP_H_ */
