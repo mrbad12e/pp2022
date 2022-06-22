@@ -30,7 +30,7 @@ public:
     static veins::Coord string2Coord(std::string point);
 //    static double triangleArea(inet::Coord A, inet::Coord B, inet::Coord C);
     static double triangleArea(veins::Coord A, veins::Coord B, veins::Coord C);
-    double rectangleArea();
+    //double rectangleArea();
 //    bool checkInside(inet::Coord I);
     bool checkInside(double x, double y);
     bool checkAround(double x, double y);
