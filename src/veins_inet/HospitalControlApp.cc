@@ -216,8 +216,10 @@ void HospitalControlApp::readLane(AGV *cur, std::string str) {
             std::string full_name = cur->itinerary->prevLaneId + "-" + str;
             mes = full_name + " " + std::to_string(stopTime);
             NodeVertex *nv = graph->searchVertex(full_name);
-            exponentialSmoothing(nv, stopTime);
-            nv->v->setW(stopTime);
+            if(nv != NULL){
+                exponentialSmoothing(nv, stopTime);
+                nv->v->setW(stopTime);
+            }
             message.push_back(mes);
         }
         if (cur->itinerary->prevLaneId.front()
