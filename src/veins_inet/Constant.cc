@@ -16,6 +16,8 @@
 #include "Constant.h"
 
 TraCIMobility* Constant::activation = NULL;
+long Constant::TOTAL_WAITING_TIME = 0;
+double Constant::TOTAL_TRAVELLING_TIME = 0;
 
 Constant::Constant() {
     // TODO Auto-generated constructor stub
