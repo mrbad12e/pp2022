@@ -43,6 +43,7 @@ void AGVControlApp::initialize(int stage)
         }
         {
             scheduleAt(simTime() + 0.1, sendBeacon);
+            this->travellingTime = simTime().dbl();
             //EV<<"Initialize AGV at "<<simTime().dbl()<<" ";
             curPosition = mobility->getPositionAt(simTime());
         }
@@ -54,6 +55,12 @@ void AGVControlApp::initialize(int stage)
 
 void AGVControlApp::finish()
 {
+    this->travellingTime = //traciVehicle->getWaitingTime();
+    //                    traciVehicle->getAccumulatedWaitingTime();
+            simTime().dbl() - this->travellingTime;
+    //EV<<"This AGV spends "<<this->travellingTime<<" for travelling"<<endl;
+    Constant::TOTAL_TRAVELLING_TIME += this->travellingTime;
+    Constant::TOTAL_WAITING_TIME += this->waitingIntervals;
     TraCIDemo11p::finish();
     if(Constant::activation == NULL){
             EV<<"Constant is helpless eventually"<<endl;
@@ -93,8 +100,12 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
            //             + std::to_string(curPosition.y);
            /*content = content +*/ /*"Lid"*/ /*" " +*/
                    traciVehicle->getLaneId();
+           double speed = traciVehicle->getSpeed();
+           if(speed == 0.0){
+               this->waitingIntervals++;
+           }
            content = content + /*"L.P"*/ " " + std::to_string(traciVehicle->getLanePosition());
-           content = content + /*"velo:"*/ " " + std::to_string(traciVehicle->getSpeed())
+           content = content + /*"velo:"*/ " " + std::to_string(speed)
                            //+ /*"/"*/ " " + std::to_string(traciVehicle->getAcceleration())
                                    ;
            //content = content + /*"dis:"*/ " " + std::to_string(traciVehicle->getDistanceTravelled());
