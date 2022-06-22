@@ -86,11 +86,11 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                 traci = Constant::activation->getCommandInterface();
             }
 
-            if(simTime().dbl() - lastUpdate >= 0.2){
+            /*if(simTime().dbl() - lastUpdate >= 0.2 && false){
                 count++;
                 std::list<std::string> allPeople = traci->getPersonIds();
                 double x, y;
-            //for(int i = 0; i < crossings.size(); i++){
+                //for(int i = 0; i < crossings.size(); i++){
                 for (auto elem: allPeople) {
                     std::string personId = elem;
                     Coord peoplePosition = traci->getPersonPosition(personId);
@@ -110,9 +110,9 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                         }
                     }
                 }
-            //}
+
                 lastUpdate = simTime().dbl();
-            }
+            }*/
 
             TraCIDemo11pMessage *rsuBeacon = new TraCIDemo11pMessage();
 
