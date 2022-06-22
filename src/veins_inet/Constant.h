@@ -37,6 +37,8 @@ public:
     Constant();
     virtual ~Constant();
     static TraCIMobility* activation;
+    static long TOTAL_WAITING_TIME;
+    static double TOTAL_TRAVELLING_TIME;
 };
 
 static char* mergeContent(long Id){
