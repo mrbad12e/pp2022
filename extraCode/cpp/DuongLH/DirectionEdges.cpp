@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <assert.h>
 
 using namespace std;
 struct Node {
@@ -174,16 +175,16 @@ int main(int argc, char const* argv[]) {
       int index = 0;
       if(directEdge[0][0] == '-')
       	index = 1;
-      string entry = "$" + it->first + "$" + (index == 0 ? "-" : "") + directEdge[0].substr(index);
+      string entry = "$" + it->first + "$" + (index == 0 ? "-" : "") + directEdge[0].substr(index) + "$";
       //cout<<entry<<endl;
       entryLanes.push_back(entry);
     }
   }
-  cout<<"Total intersections: "<<totalIntersections<<endl;
+  //cout<<"Total intersections: "<<totalIntersections<<endl;
   
   for (auto it = intersectionDirectLaneMap.begin();
        it != intersectionDirectLaneMap.end(); it++) {
-    cout << "===========================" << endl;
+    //cout << "===========================" << endl;
     //cout << "intersection id: " << it->first << endl;
     vector<vector<string> > listDirectEdge = it->second;
     totalIntersections++;
@@ -195,17 +196,24 @@ int main(int argc, char const* argv[]) {
       int k = 0;
       for(k = 0; k < entryLanes.size(); k++)
       {
-      	  if(entryLanes[k].find("$" + directEdge[lastIndex]) != std::string::npos)
+      	  if(entryLanes[k].find("$" + directEdge[lastIndex] + "$") != std::string::npos)
       	  {
       	  	found = true;
-      	  	cout<<entryLanes[k];
+      	  	cout/*<<"\t"*/
+      	  		<<entryLanes[k].substr(0, entryLanes[k].length() - 1);
       	  	lastIndex--;
       	  	break;
       	  }
       }
+      
+      
+      
+      
       if(found)
       {
-      	entryLanes.erase(entryLanes.begin() + (lastIndex + 1));
+      	entryLanes.erase(entryLanes.begin() + (k));
+      	//cout<<"\t";
+      	//cout<<"$"<<directEdge[0]<<"_"<<it->first<<endl;
       }
       for (int j = lastIndex; j >= 0; j--) {
         cout << "$"<<directEdge[j] << "";
@@ -214,7 +222,14 @@ int main(int argc, char const* argv[]) {
       
       
     }
+    
+    	
   }
+  /*for(int k = 0; k < entryLanes.size(); k++)
+  {
+  	cout<<entryLanes[k]<<endl;
+  }*/
+  assert(entryLanes.size() == 5);
 
   return 0;
 }
