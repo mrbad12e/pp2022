@@ -63,7 +63,31 @@ void HospitalControlApp::finish()
     //if period is 0.1 => count = 1453
     //if period is 0.2 => count = 801
     EV<<"#calling traci->getPersonIds(): "<<count<<endl;
-    EV<<"As 10 AGVs => T: 2874, W: 871, %: 30%"<<endl;
+    EV<<"As 10 AGVs => T: 3796, W: 1811, %: 48%"<<endl;
+    EV<<"As 10 + 1(flow 11) AGVs => T: 4521, W: 2334, %: 52%"<<endl;
+    EV<<"As 10 + 1(flow 10) + 1(flow11) AGVs => T: 4793, W: 2416, %: 50%"<<endl;
+    EV<<"As 10 + 1(flow 11) + 1(flow 2) AGVs => T: 5175, W: 2782, %: 54%"<<endl;
+    EV<<"As 10 + 1(flow10) + 1(flow 11) + 1(flow 2) AGVs => T: 5455, W: 2871, %: 53%"<<endl;
+    EV<<"As 10 + 2(flow10) + 1(flow 11) + 1(flow 2) AGVs => T: 6846, W: 3616, %: 53%"<<endl;
+    EV<<"As 10 + 2(flow10) + 2(flow 11) + 1(flow 2) AGVs => T: 5863, W: 2850, %: 49%"<<endl;
+    EV<<"As 10 + 2(flow10) + 2(flow 11) + 1(flow 2) + 1(flow0) AGVs => T: 6734, W: 3517, %: 52%"<<endl;
+    EV<<"As 10 + 2(flow10) + 2(flow 11) + 3(flow0-2) AGVs => T: 7649, W: 4202, %: 55%"<<endl;
+    EV<<"As 10 + 2(flow10) + 2(flow 11) + 4(flow0-3) AGVs => T: 7261, W: 3621, %: 50%"<<endl;
+    EV<<"As 10 + 2(flow10) + 2(flow 11) + 5(flow0-4) AGVs => T: 6488, W: 2644, %: 41%"<<endl;
+    EV<<"As 10 + 2(flow10) + 2(flow 11) + 6(flow0-5) AGVs => T: 8027, W: 3973, %: 49.5%"<<endl;
+    EV<<"As 10 + 2(flow10) + 2(flow 11) + 7(flow0-6) AGVs => T: 9578, W: 5289, %: 55%"<<endl;
+    EV<<"As 10 + 2(flow10) + 2(flow 11) + 8(flow0-7) AGVs => T: 10471, W: 5970, %: 57%"<<endl;
+    EV<<"As 10 + 2(flow10) + 2(flow 11) + 9(flow0-8) AGVs => T: 9538, W: 4830, %: 51%"<<endl;
+    EV<<"As 10 + 2(flow10) + 2(flow 11) + 10(flow0-9) AGVs => T: 9939, W: 5083, %: 51%"<<endl;
+
+    //EV<<"As 10 + 2(flow 11) + 1(flow 2) AGVs => T: 4598, W: 2012, %: 44%"<<endl;
+    //EV<<"As 10 + 2(flow 11) + 2(flow 2) AGVs => T: 5448, W: 2661, %: 49%"<<endl;
+    /*
+     * 898.9(s)
+INFO (HospitalControlApp)myHospitalNetwork.rsu[0].appl: Total travelling time: 3485.9(s)
+INFO (HospitalControlApp)myHospitalNetwork.rsu[0].appl: % of waiting time: 25.7867
+     *
+     */
     EV<<"As 10 + 1(flow 8) AGVs => T: 2709, W: 547, %: 20%"<<endl;
     EV<<"As 10 + 1(flow 2) AGVs => T: 3045.7, W: 875, %: 29%"<<endl;
     //EV<<"As 11 AGVs => T: 2720.8, W: 547, %: 20%"<<endl;
