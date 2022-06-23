@@ -12,7 +12,9 @@
   <route id="route_8" edges="-E92 -E91 -E90 -E86 -E85 -E84 -E83 E202 E203 E204 E205 E206 E207 E208 E209 E210 E211 E212 E213 E214 E215 -E109 -E108 -E107 -E106 -E105 -E104 -E103 -E102 -E101 -E100 -E99 -E98 -E97 -E96 -E95 E153 E154 E155 E156 E157 E158 E159 E160 E161 E162 E163 E164 E165 E166 E167 -E5 -E4 -E3 -E2 -E229 -E228 -E227 -E226"/>
   <route id="route_9" edges="E0 E1 -E229 -E228 E230 E231 E232 E233 E234 E235 -E378 -E377 -E376 -E375 -E374 -E373 -E372 -E371 -E370 -E369 -E368 -E367 -E366 -E365 -E364 E318 E319 E320 E321 E322 E323 E324 E325 E326 E327 E328 E329 E330 E331 E332 -E392 -E391 -E390 -E389 -E388 -E387 -E386 -E385 -E384 -E383 -E382 -E381 -E380 -E379 E290 E291 E292 E293 E294 E295 E299 E300 E90 E91 E92"/>
   <route id="route_10" edges="-E298 -E297 -E296 -E295 -E294 -E293 -E292 -E348 -E347 -E346 -E345 -E344 -E343 -E342 -E341 -E340 -E339 -E338 -E337 -E336 -E335 E349 E350 E351 E352 E353 E354 E355 E356 E357 E358 E359 E360 E361 E362 E363 -E315 -E314 -E313 -E312 -E311 -E310 -E309 -E308 -E307 -E306 -E305 E395 E396 E375 E376 E377 E378 -E235 -E234 -E233 -E232 -E231 -E230 -E227 -E226"/>
-  <flow id="flow0" type="agv" route="route_0" begin="0" minGap="1.10" maxSpeed="4.00" number="1"/>
+  <route id="route_11" edges="-E298 -E297 -E296 -E295 -E294 -E293 -E292 -E348 -E347 -E346 -E345 -E344 -E343 -E342 -E341 -E340 -E339 -E338 -E337 -E336 -E335 E349 E350 E351 E352 E353 E354 E355 E356 E357 E358 E359 E360 E361 E362 E363 -E315 -E314 -E313 -E312 -E311 -E310 -E309 -E308 -E307 -E306 -E305 E395 E396 E375 E376 E393 E394 -E302 -E301 -E233 -E232 -E231 -E230 E228 E229 -E1 -E0"/>
+ 
+  <flow id="flow0" type="agv" route="route_0" begin="0" period="60" minGap="1.10" maxSpeed="4.00" number="2"/>
   <personFlow type="pedestrian" begin="0" end="720" id="p10a" impatience="0.04" period="4">
     <walk from="E10" to="-E10"/>
   </personFlow>
@@ -381,7 +383,7 @@
     <personFlow begin="0" id="p197b" impatience="0.76941454" end="482" period="5">
         <walk from="-E197" to="E197"/>
     </personFlow>
-    <flow id="flow1" type="agv" route="route_1" begin="1" period="4" minGap="1.10" maxSpeed="4.00" number="1"/>
+    <flow id="flow1" type="agv" route="route_1" begin="1" period="60" minGap="1.10" maxSpeed="4.00" number="2"/>
  
   <personFlow begin="1" id="p98c" impatience="0.57" end="512" period="4">
     <walk from="E98" to="-E98"/>
@@ -449,6 +451,218 @@
   <personFlow begin="1" id="p144b" impatience="0.46" end="512" period="4">
     <walk from="-E144" to="E144"/>
   </personFlow>
+  <!--Them mot so personFlow de tuyen duong "roi khoi Knowledge Center"/"di vao EC Center" them dong duc-->
+  <personFlow begin="1" id="p131c" impatience="0.8505442" end="612" period="4">
+    <walk from="E131" to="-E131"/>
+  </personFlow>
+  <personFlow begin="1" id="p131d" impatience="0.52454" end="612" period="4">
+    <walk from="-E131" to="E131"/>
+  </personFlow>
+  <personFlow begin="1" id="p112c" impatience="0.6684153" end="612" period="4">
+    <walk from="E112" to="-E112"/>
+  </personFlow>
+  <personFlow begin="1" id="p112d" impatience="0.9837983" end="612" period="4">
+    <walk from="-E112" to="E112"/>
+  </personFlow>
+    <personFlow begin="1" id="p131e" impatience="0.9278469" end="582" period="4">
+        <walk from="E131" to="-E131"/>
+    </personFlow>
+    <personFlow begin="1" id="p131f" impatience="0.6246" end="612" period="4">
+        <walk from="-E131" to="E131"/>
+    </personFlow>
+    <personFlow begin="1" id="p132c" impatience="0.9278469" end="582" period="4">
+        <walk from="E132" to="-E132"/>
+    </personFlow>
+    <personFlow begin="1" id="p132d" impatience="0.6246" end="612" period="4">
+        <walk from="-E132" to="E132"/>
+    </personFlow>
+<personFlow begin="1" id="p137c" impatience="0.8505442" end="612" period="4">
+    <walk from="E137" to="-E137"/>
+  </personFlow>
+  <personFlow begin="1" id="p137d" impatience="0.52454" end="612" period="4">
+    <walk from="-E137" to="E137"/>
+  </personFlow>
+  <personFlow begin="1" id="p138c" impatience="0.6684153" end="612" period="4">
+    <walk from="E138" to="-E138"/>
+  </personFlow>
+  <personFlow begin="1" id="p138d" impatience="0.9837983" end="612" period="4">
+    <walk from="-E138" to="E138"/>
+  </personFlow>
+      <personFlow begin="1" id="p139c" impatience="0.9278469" end="582" period="4">
+        <walk from="E139" to="-E139"/>
+    </personFlow>
+    <personFlow begin="1" id="p139d" impatience="0.6246" end="612" period="4">
+        <walk from="-E139" to="E139"/>
+    </personFlow>
+    <personFlow begin="1" id="p139e" impatience="0.6246" end="612" period="2">
+        <walk from="E139" to="-E140"/>
+    </personFlow>
+    <personFlow begin="1" id="p139f" impatience="0.6246" end="612" period="2">
+        <walk from="E140" to="-E139"/>
+    </personFlow>
+    <personFlow begin="1" id="p140c" impatience="0.5586585" end="612" period="4">
+        <walk from="E140" to="-E140"/>
+    </personFlow>
+    <personFlow begin="1" id="p140d" impatience="0.6287122" end="612" period="4">
+        <walk from="-E140" to="E140"/>
+    </personFlow>
+
+    <personFlow begin="1" id="p145c" impatience="0.9869026" end="612" period="4">
+        <walk from="E145" to="-E145"/>
+    </personFlow>
+    <personFlow begin="1" id="p145d" impatience="0.97447723" end="582" period="4">
+        <walk from="-E145" to="E145"/>
+    </personFlow>
+    <personFlow begin="1" id="p146c" impatience="0.8802173" end="612" period="4">
+        <walk from="E146" to="-E146"/>
+    </personFlow>
+    <personFlow begin="1" id="p146d" impatience="0.6000878" end="612" period="4">
+        <walk from="-E146" to="E146"/>
+    </personFlow>
+    <personFlow begin="1" id="p146e" impatience="0.8802173" end="612" period="2">
+        <walk from="E146" to="-E147"/>
+    </personFlow>
+    <personFlow begin="1" id="p146f" impatience="0.6000878" end="612" period="2">
+        <walk from="-E146" to="E147"/>
+    </personFlow>
+    <personFlow begin="1" id="p147c" impatience="0.41322577" end="582" period="4">
+        <walk from="E147" to="-E147"/>
+    </personFlow>
+    <personFlow begin="1" id="p147d" impatience="0.60558" end="612" period="4">
+        <walk from="-E147" to="E147"/>
+    </personFlow>
+    <personFlow begin="1" id="p148c" impatience="0.71855" end="612" period="4">
+        <walk from="E148" to="-E148"/>
+    </personFlow>
+    <personFlow begin="1" id="p148d" impatience="0.8572092" end="612" period="4">
+        <walk from="-E148" to="E148"/>
+    </personFlow>
+    <personFlow begin="1" id="p148e" impatience="0.8802173" end="612" period="2">
+        <walk from="E148" to="-E149"/>
+    </personFlow>
+    <personFlow begin="1" id="p148f" impatience="0.6000878" end="612" period="2">
+        <walk from="-E148" to="E149"/>
+    </personFlow>
+    <personFlow begin="1" id="p149c" impatience="0.5599121" end="582" period="4">
+        <walk from="E149" to="-E149"/>
+    </personFlow>
+    <personFlow begin="1" id="p149d" impatience="0.8722746" end="612" period="4">
+        <walk from="-E149" to="E149"/>
+    </personFlow>
+    <personFlow begin="1" id="p150c" impatience="0.6882501" end="612" period="4">
+        <walk from="E150" to="-E150"/>
+    </personFlow>
+    <personFlow begin="1" id="p150d" impatience="0.94567573" end="612" period="4">
+        <walk from="-E150" to="E150"/>
+    </personFlow>
+    <personFlow begin="1" id="p150e" impatience="0.8802173" end="612" period="2">
+        <walk from="E150" to="-E22"/>
+    </personFlow>
+    <personFlow begin="1" id="p150f" impatience="0.6000878" end="612" period="2">
+        <walk from="-E150" to="E22"/>
+    </personFlow>
+    <personFlow begin="1" id="p141c" impatience="0.5123" end="612" period="4">
+    <walk from="E141" to="-E141"/>
+  </personFlow>
+  <personFlow begin="1" id="p141d" impatience="0.7731247" end="612" period="4">
+    <walk from="-E141" to="E141"/>
+  </personFlow>
+  <personFlow begin="1" id="p142c" impatience="0.5323" end="612" period="4">
+    <walk from="E142" to="-E142"/>
+  </personFlow>
+  <personFlow begin="1" id="p142d" impatience="0.6217" end="612" period="4">
+    <walk from="-E142" to="E142"/>
+  </personFlow>
+  <personFlow begin="1" id="p142e" impatience="0.6217" end="612" period="2">
+    <walk from="-E142" to="E143"/>
+  </personFlow>
+  <personFlow begin="1" id="p143c" impatience="0.61254" end="612" period="4">
+    <walk from="E143" to="-E143"/>
+  </personFlow>
+  <personFlow begin="1" id="p143d" impatience="0.64336" end="612" period="4">
+    <walk from="-E143" to="E143"/>
+  </personFlow>
+  <personFlow begin="1" id="p143e" impatience="0.61254" end="612" period="4">
+    <walk from="E143" to="-E143"/>
+  </personFlow>
+  <personFlow begin="1" id="p143f" impatience="0.61254" end="612" period="2">
+    <walk from="-E143" to="E142"/>
+  </personFlow>
+  <personFlow begin="1" id="p144c" impatience="0.654" end="612" period="4">
+    <walk from="E144" to="-E144"/>
+  </personFlow>
+  <personFlow begin="1" id="p144e" impatience="0.64456" end="612" period="2">
+    <walk from="-E144" to="E145"/>
+  </personFlow>
+  <personFlow begin="1" id="p144f" impatience="0.654" end="612" period="2">
+    <walk from="E144" to="-E145"/>
+  </personFlow>
+  <personFlow begin="1" id="p144d" impatience="0.64456" end="612" period="4">
+    <walk from="-E144" to="E144"/>
+  </personFlow>
+
+  <personFlow begin="1" id="p308a" impatience="0.58" end="512" period="4">
+    <walk from="E308" to="-E308"/>
+  </personFlow>
+  <personFlow begin="1" id="p308b" impatience="0.42" end="512" period="4">
+    <walk from="-E308" to="E308"/>
+  </personFlow>
+  <personFlow begin="1" id="p310a" impatience="0.58" end="512" period="4">
+    <walk from="E310" to="-E310"/>
+  </personFlow>
+  <personFlow begin="1" id="p310b" impatience="0.42" end="512" period="4">
+    <walk from="-E310" to="E310"/>
+  </personFlow>
+  <personFlow begin="1" id="p313c" impatience="0.8505442" end="612" period="4">
+    <walk from="E313" to="-E313"/>
+  </personFlow>
+  <personFlow begin="1" id="p313d" impatience="0.52454" end="612" period="4">
+    <walk from="-E313" to="E313"/>
+  </personFlow>
+  <personFlow begin="1" id="p314c" impatience="0.8505442" end="612" period="4">
+    <walk from="E314" to="E313"/>
+  </personFlow>
+  <personFlow begin="1" id="p314d" impatience="0.52454" end="612" period="4">
+    <walk from="-E314" to="E313"/>
+  </personFlow>
+  <personFlow begin="1" id="p362c" impatience="0.8505442" end="612" period="4">
+    <walk from="E362" to="-E362"/>
+  </personFlow>
+  <personFlow begin="1" id="p362d" impatience="0.52454" end="612" period="4">
+    <walk from="-E362" to="E362"/>
+  </personFlow>
+    <personFlow begin="1" id="p361c" impatience="0.8505442" end="612" period="4">
+    <walk from="E362" to="-E361"/>
+  </personFlow>
+  <personFlow begin="1" id="p361d" impatience="0.52454" end="612" period="4">
+    <walk from="-E362" to="E361"/>
+  </personFlow>
+  <personFlow begin="1" id="p353a" impatience="0.66" end="512" period="4">
+    <walk from="E353" to="-E353"/>
+  </personFlow>
+  <personFlow begin="1" id="p353b" impatience="0.34" end="1501" period="3">
+    <walk from="-E353" to="E353"/>
+  </personFlow>
+  <personFlow begin="1" id="p354a" impatience="0.67" end="512" period="4">
+    <walk from="E354" to="-E354"/>
+  </personFlow>
+  <personFlow begin="1" id="p354b" impatience="0.33" end="512" period="4">
+    <walk from="-E354" to="E354"/>
+  </personFlow>
+  <personFlow begin="1" id="p351a" impatience="0.65" end="512" period="4">
+    <walk from="E351" to="-E351"/>
+  </personFlow>
+  <personFlow begin="1" id="p351b" impatience="0.35" end="512" period="4">
+    <walk from="-E351" to="E351"/>
+  </personFlow>
+  <personFlow begin="1" id="p350a" impatience="0.65" end="512" period="4">
+    <walk from="E350" to="-E350"/>
+  </personFlow>
+  <personFlow begin="1" id="p350b" impatience="0.35" end="512" period="4">
+    <walk from="-E350" to="E350"/>
+  </personFlow>
+
+  <!---->
   <personFlow begin="1" id="p212a" impatience="0.55" end="512" period="4">
     <walk from="E212" to="-E212"/>
   </personFlow>
@@ -480,7 +694,7 @@
     <walk from="-E154" to="E154"/>
   </personFlow>
   <flow id="flow2" type="agv" route="route_2" begin="2" period="60" minGap="1.10" maxSpeed="4.00" number="2"/>
- 
+  <flow id="flow11" type="agv" route="route_11" begin="2" period="60" minGap="1.10" maxSpeed="4.00" number="2"/>
   <personFlow begin="2" id="p170a" impatience="0.64" end="512" period="4">
     <walk from="E170" to="-E170"/>
   </personFlow>
@@ -541,7 +755,7 @@
   <personFlow begin="2" id="p198b" impatience="0.26" end="512" period="4">
     <walk from="-E198" to="E198"/>
   </personFlow>
-  <flow id="flow3" type="agv" route="route_3" begin="3"  period="4" minGap="1.10" maxSpeed="4.00" number="1"/>
+  <flow id="flow3" type="agv" route="route_3" begin="3"  period="60" minGap="1.10" maxSpeed="4.00" number="2"/>
   <personFlow begin="3" id="p20a" impatience="0.08" end="1501" period="10">
     <walk from="E20" to="-E20"/>
   </personFlow>
@@ -585,7 +799,7 @@
     <walk from="-E221" to="E221"/>
   </personFlow>
 
-  <flow id="flow4" type="agv" route="route_4" begin="4" period="4" minGap="1.10" maxSpeed="4.00" number="1"/>    
+  <flow id="flow4" type="agv" route="route_4" begin="4" period="60" minGap="1.10" maxSpeed="4.00" number="2"/>    
   <personFlow begin="5" id="p305a" impatience="0.57" end="512" period="4">
     <walk from="E305" to="-E305"/>
   </personFlow>
@@ -604,6 +818,7 @@
   <personFlow begin="5" id="p307b" impatience="0.42" end="512" period="4">
     <walk from="-E307" to="E307"/>
   </personFlow>
+  
   <personFlow begin="5" id="p309a" impatience="0.58" end="512" period="4">
     <walk from="E309" to="-E309"/>
   </personFlow>
@@ -640,7 +855,7 @@
   <personFlow begin="5" id="p315b" impatience="0.41" end="512" period="4">
     <walk from="-E315" to="E315"/>
   </personFlow>
-  <flow id="flow5" type="agv" route="route_5" begin="5"  period="4" minGap="1.10" maxSpeed="4.00" number="1"/>
+  <flow id="flow5" type="agv" route="route_5" begin="5"  period="60" minGap="1.10" maxSpeed="4.00" number="1"/>
   <personFlow begin="6" id="p316a" impatience="0.60" end="512" period="4">
     <walk from="E316" to="-E316"/>
   </personFlow>
@@ -719,10 +934,10 @@
   <personFlow begin="6" id="p356b" impatience="0.33" end="512" period="4">
     <walk from="-E356" to="E356"/>
   </personFlow>
-  <flow id="flow6" type="agv" route="route_6" begin="6" period="4" minGap="1.10" maxSpeed="4.00" number="1"/>
-  
+  <flow id="flow6" type="agv" route="route_6" begin="6" period="60" minGap="1.10" maxSpeed="4.00" number="1"/>
+ 
 
-  <flow id="flow7" type="agv" route="route_7" begin="7" period="4" minGap="1.10" maxSpeed="4.00" number="1"/>
+  <flow id="flow7" type="agv" route="route_7" begin="7" period="60" minGap="1.10" maxSpeed="4.00" number="1"/>
  
   <personFlow begin="7" id="p360a" impatience="0.68" end="512" period="4">
     <walk from="E360" to="-E360"/>
@@ -900,7 +1115,7 @@
   <personFlow begin="8" id="p422b" impatience="0.21" end="512" period="4">
     <walk from="-E422" to="E422"/>
   </personFlow>
-  <flow id="flow9" type="agv" route="route_9" begin="9" period="4" minGap="1.10" maxSpeed="4.00" number="1"/>
+  <flow id="flow9" type="agv" route="route_9" begin="9" period="60" minGap="1.10" maxSpeed="4.00" number="1"/>
  
   <personFlow begin="9" id="p423a" impatience="0.80" end="512" period="4">
     <walk from="E423" to="-E423"/>
@@ -994,7 +1209,7 @@
   </personFlow>
   <personFlow begin="10" id="p46a" impatience="0.17" end="1501" period="10">
     <walk from="E46" to="-E46"/>
-  </personFlow>
+  </personFlow> 
   <personFlow begin="10" id="p46b" impatience="0.13" end="1021" period="15">
     <walk from="-E46" to="E46"/>
   </personFlow>
@@ -1076,8 +1291,10 @@
   <personFlow begin="10" id="p494b" impatience="0.07" end="512" period="4">
     <walk from="-E494" to="E494"/>
   </personFlow>
-  <!--flow id="flow10" type="agv" route="route_10" begin="10" period="60" minGap="1.10" maxSpeed="4.00" number="1"/--> 
-  
+  <flow id="flow10" type="agv" route="route_10" begin="10" period="60" minGap="1.10" maxSpeed="4.00" number="2"/>
+ 
+  <!--flow id="flow11" type="agv" route="route_11" begin="11" period="60" minGap="1.10" maxSpeed="4.00" number="1s"/-->
+ 
   <personFlow begin="11" id="p498a" impatience="0.94" end="512" period="4">
     <walk from="E498" to="-E498"/>
   </personFlow>
@@ -1157,5 +1374,5 @@
   <personFlow begin="12" id="p66b" impatience="0.05" end="721" period="13">
     <walk from="-E66" to="E66"/>
   </personFlow>
-  
+ 
 </routes>
