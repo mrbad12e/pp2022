@@ -43,6 +43,7 @@ public:
 
 
 private:
+    std::vector<Quad> adjList;
     std::vector<std::string> vertices;
     std::vector<int> nextIndexOfBVertices;
     std::vector<std::string> nextNameOfBVertices;
