@@ -83,7 +83,7 @@ const int numVertices = 448; // 323 vertices (107 i-vertices and 341 b-vertices)
 const int numIVertices = 107;
 vector <bool> visitedVertex(numVertices, false);
 double ShortestPath[numVertices]; // Have an array to store the shortest path
-string Trajectories[numVertices]; //an array to store the trajectory
+//string Trajectories[numVertices]; //an array to store the trajectory
 
 void createAndAddEdge(vector <Quad> adjList[], int u, double weightEdge, double weightVertex, string v, int indexOfV){
   weightVertices[u] = weightVertex;
