@@ -17,7 +17,10 @@
 
 Djisktra::Djisktra() {
     // TODO Auto-generated constructor stub
-
+    getListVertices("i-vertex.txt", "b-vertices.txt");
+    getListEdges("weightEdges.txt");
+    adjList.resize(numVertices);
+    generateAdj(/*adjList*/);
 }
 
 Djisktra::~Djisktra() {
@@ -77,12 +80,14 @@ void Djisktra::getListEdges(std::string weightEdges){
     file.close();
 }
 
-void Djisktra::createAndAddEdge(vector <Quad> adjList[], int u, double weightEdge, double weightVertex, string v, int indexOfV){
+void Djisktra::createAndAddEdge(//std::vector<Quad> adjList[],
+            int u, double weightEdge, double weightVertex, std::string v, int indexOfV){
     weightVertices[u] = weightVertex;
     adjList[u].push_back(make_tuple(weightEdge, v, indexOfV, v));
 } // createAndAddEdge
 
-void Djisktra::generateAdj(std::vector <Quad> adjList[]){
+//void Djisktra::generateAdj(std::vector<Quad> adjList[]){
+void Djisktra::generateAdj(){
     std::vector<int> locations;
     std::string src = "";
     std::string dst = "";
@@ -109,8 +114,10 @@ void Djisktra::generateAdj(std::vector <Quad> adjList[]){
                     }
                 }
                 locations.push_back(j);
-                createAndAddEdge(adjList, i, edges[j].second, 0, edges[j].first, indexOfDst);
-                createAndAddEdge(adjList, indexOfDst, 0, 0,
+                createAndAddEdge(//adjList,
+                        i, edges[j].second, 0, edges[j].first, indexOfDst);
+                createAndAddEdge(//adjList,
+                        indexOfDst, 0, 0,
                         nextNameOfBVertices[indexOfDst - numIVertices], nextIndexOfBVertices[indexOfDst - numIVertices]);
             }
         }
@@ -120,14 +127,16 @@ void Djisktra::generateAdj(std::vector <Quad> adjList[]){
         locations.clear();
     }
 }
-void Djisktra::DijkstrasAlgorithm(std::vector <Quad> adjList[], int source, int target){
-  priority_queue<Quad, vector<Quad>, greater<Quad> > PQ; // Set up priority queue
+void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
+        int source, int target){
+    std::priority_queue<Quad, std::vector<Quad>, std::greater<Quad> > PQ; // Set up priority queue
   Quad info;
   std::string trace;
   double weight;
   double tempW;
   int tempIndex;
   std::string tempTrace;
+
   ShortestPath[source] = 0; // Set source distance to zero
   std::vector <bool> visitedVertex(numVertices, false);
 
@@ -140,11 +149,11 @@ void Djisktra::DijkstrasAlgorithm(std::vector <Quad> adjList[], int source, int 
   while (!PQ.empty()){
     info = PQ.top(); // Use to get minimum weight
     PQ.pop(); // Pop before checking for cycles
-    source = get<2>(info); // get the vertex
+    source = std::get<2>(info); // get the vertex
     if(source == target)
       break;
-    weight = get<0>(info); // current distance
-    trace = get<3>(info);
+    weight = std::get<0>(info); // current distance
+    trace = std::get<3>(info);
 
 
     if (visitedVertex.at(source)) // Check for cycle
@@ -152,13 +161,13 @@ void Djisktra::DijkstrasAlgorithm(std::vector <Quad> adjList[], int source, int 
 
     visitedVertex.at(source) = true; // Else, mark the vertex so that we won't have to visit it again
 
-    for (vector<Quad>::iterator it = adjList[source].begin(); it != adjList[source].end(); it++){
-      tempW = get<0>(*it);
-      tempIndex = get<2>(*it);
+    for (std::vector<Quad>::iterator it = adjList[source].begin(); it != adjList[source].end(); it++){
+      tempW = std::get<0>(*it);
+      tempIndex = std::get<2>(*it);
 
 
       if ((weight + tempW + weightVertices[tempIndex]) < ShortestPath[tempIndex]){ // Check if we can do better
-         tempTrace = get<3>(*it);
+         tempTrace = std::get<3>(*it);
          ShortestPath[tempIndex] = weight + tempW + weightVertices[tempIndex]; // Update new distance
          traces[tempIndex] = trace; //tempTrace;
          PQ.push(make_tuple(ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
