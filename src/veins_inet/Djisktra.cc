@@ -27,13 +27,14 @@ Djisktra::~Djisktra() {
 void Djisktra::getListVertices(std::string iVertices, std::string bVertices) {
     std::ifstream file1(iVertices);
     std::string line;
-
+    numIVertices = 0;
     while (getline(file1, line)) {
         vertices.push_back(line);
         weightVertices.push_back(0);
     }
     file1.close();
-    int endOfI_Vertices = vertices.size();
+
+    numIVertices = vertices.size();
     std::ifstream file2(bVertices);
     std::string dst = "";
     while (getline(file2, line)) {
@@ -46,7 +47,7 @@ void Djisktra::getListVertices(std::string iVertices, std::string bVertices) {
                 break;
             }
         }
-        for(int u = 0; u < endOfI_Vertices; u++){
+        for(int u = 0; u < numIVertices; u++){
             if(dst.compare(vertices[u]) == 0){
                 nextIndexOfBVertices.push_back(u);
                 nextNameOfBVertices.push_back(dst);
@@ -57,6 +58,7 @@ void Djisktra::getListVertices(std::string iVertices, std::string bVertices) {
         weightVertices.push_back(0);
         traces.push_back("");
     }
+    numVertices = vertices.size();
     file2.close();
 }
 
