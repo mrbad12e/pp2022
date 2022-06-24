@@ -28,6 +28,7 @@
 #include "Crossing.h"
 #include "Graph.h"
 #include <vector>
+#include "Djisktra.h"
 using namespace omnetpp;
 
 namespace veins {
@@ -64,6 +65,7 @@ private:
     long count = 0;
     double getAvailablePerdestrian(std::string crossId, double _time);
     double getVeloOfPerdestrian(std::string crossId, double _time);
+    Djisktra* djisktra;
 };
 }
 #endif /* VEINS_INET_HOSPITALCONTROLAPP_H_ */
