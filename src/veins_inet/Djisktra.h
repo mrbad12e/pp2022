@@ -28,8 +28,8 @@
 #include <queue> // To set up priority queue
 #include <functional> // To use std::greater<T> -> This will prove to be useful in picking the minimum weight
 
-typedef pair<string, double> Pair;
-typedef tuple<double, string, int, string> Quad;
+typedef std::pair<std::string, double> Pair;
+typedef std::tuple<double, std::string, int, std::string> Quad;
 
 class Djisktra {
 public:
@@ -37,13 +37,16 @@ public:
     virtual ~Djisktra();
     void getListVertices(std::string iVertices, std::string bVertices);
     void getListEdges(std::string weightEdges);
-    void createAndAddEdge(std::vector <Quad> adjList[], int u, double weightEdge, double weightVertex, string v, int indexOfV);
-    void generateAdj(std::vector <Quad> adjList[]);
-    void DijkstrasAlgorithm(std::vector <Quad> adjList[], int source, int target);
+    void createAndAddEdge(//std::vector <Quad> adjList[],
+            int u, double weightEdge, double weightVertex, std::string v, int indexOfV);
+    //void generateAdj(std::vector<Quad> adjList[]);
+    void generateAdj();
+    void DijkstrasAlgorithm(//std::vector<Quad> adjList[],
+            int source, int target);
 
 
 private:
-    std::vector<Quad> adjList;
+    std::vector<std::vector<Quad>> adjList;
     std::vector<std::string> vertices;
     std::vector<int> nextIndexOfBVertices;
     std::vector<std::string> nextNameOfBVertices;
@@ -54,7 +57,7 @@ private:
     int numVertices = 0; // 323 vertices (107 i-vertices and 341 b-vertices)
     int numIVertices = 0;
     //std::vector <bool> visitedVertex(numVertices, false);
-    double ShortestPath[numVertices]; // Have an array to store the shortest path
+    double *ShortestPath; //[numVertices]; // Have an array to store the shortest path
 };
 
 #endif /* VEINS_INET_DJISKTRA_H_ */
