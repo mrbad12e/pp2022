@@ -281,6 +281,7 @@ void HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
         vhs.push_back(cur);
     }
     int i = 0;
+
     while (getline(streamData, str, ' ')) {
         if (i == 0) {
             readLane(cur, str);
@@ -288,6 +289,9 @@ void HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
             if (std::stod(str) == 0) {
                 cur->itinerary->stopTime++;
             }
+        }
+        if(i == 3){
+            std::string newRoute = reRoute(cur, str);
         }
         i++;
     }
@@ -371,4 +375,34 @@ double HospitalControlApp::getVeloOfPerdestrian(std::string crossId, double _tim
     return averageSpeed;
 }
 
+std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
+    int idOfI_Vertex = this->djisktra->findI_Vertex(cur->itinerary->laneId, false);
+    int src = -1, station = -1, dst = -1;
+    int i = -1;
+    if(idOfI_Vertex != cur->reRouteAt){
+        for(i = 0; i < this->djisktra->itineraries.size(); i++){
+            if(routeId.compare(std::get<0>(this->djisktra->itineraries[i])) == 0){
+                src = std::get<1>(this->djisktra->itineraries[i]);
+                station = std::get<2>(this->djisktra->itineraries[i]);
+                dst = std::get<3>(this->djisktra->itineraries[i]);
+                break;
+            }
+        }
+    }
+    else{
+        return "";
+    }
+
+    if(idOfI_Vertex == station && i != -1){
+        std::get<2>(this->djisktra->itineraries[i]) = -1;
+        station = -1;
+    }
+    int nextDst = (station == -1) ? dst : station;
+    if(nextDst > -1){
+        this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst);
+        std::string newRoute = this->djisktra->getRoute(this->djisktra->traces[nextDst]);
+        return newRoute;
+    }
+    return "";
+}
 
