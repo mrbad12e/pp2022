@@ -34,6 +34,34 @@ Djisktra::~Djisktra() {
     // TODO Auto-generated destructor stub
 }
 
+int Djisktra::findVertex(std::string name){
+    for(int i = 0; i < this->numIVertices; i++){
+        if(vertices[i].compare(name) == 0){
+            return i;
+        }
+    }
+    std::string nameOfB_Vertex = "";
+    for(int i = 0; i < edges.size(); i++){
+        if(edges[i].first.find("$" + name + "$") != std::string::npos){
+            for(int j = edges[i].first.length() - 2; j >= 0; j--){
+                if(edges[i].first[j] != '$'){
+                    nameOfB_Vertex = edges[i].first[j] + nameOfB_Vertex;
+                }
+                else{
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    for(int i = this->numIVertices; i < this->numVertices ; i++){
+        if(vertices[i].compare(nameOfB_Vertex) == 0){
+            return i;
+        }
+    }
+    return -1;
+}
+
 int Djisktra::findI_Vertex(std::string name, bool recursive){
     std::string nameOfI_Vertex = "";
     for(int i = 0; i < edges.size(); i++){
