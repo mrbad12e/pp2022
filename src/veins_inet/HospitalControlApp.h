@@ -57,7 +57,7 @@ private:
     bool hasStopped = false;
     int subscribedServiceId = 0;
     std::vector<std::string> message;
-    void readMessage(TraCIDemo11pMessage *bc);
+    std::string readMessage(TraCIDemo11pMessage *bc);
     void exponentialSmoothing(NodeVertex *nv, double stopTime);
     void readLane(AGV *cur, std::string str);
     double lastUpdate = 0.0;
