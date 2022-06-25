@@ -68,6 +68,12 @@ public:
 
         return 0;
     }
+    double getWait(int index){
+        return waitTime[index];
+    }
+    void addWait(int index, double x){
+        waitTime[index] += x;
+    }
 private:
     int* k;
     double* waitTime;
