@@ -215,7 +215,7 @@ void HospitalControlApp::readLane(AGV *cur, std::string str) {
     }
 }
 
-void HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
+std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     std::stringstream streamData(bc->getDemoData());
     std::string str;
     AGV *cur = NULL;
@@ -231,6 +231,7 @@ void HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
         vhs.push_back(cur);
     }
     int i = 0;
+    std::string newRoute = "";
 
     while (getline(streamData, str, ' ')) {
         if (i == 0) {
@@ -249,10 +250,11 @@ void HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
             }
         }
         if(i == 3){
-            std::string newRoute = reRoute(cur, str);
+            newRoute = reRoute(cur, str);
         }
         i++;
     }
+    return newRoute;
 }
 
 /*double HospitalControlApp::getAvailablePerdestrian(std::string crossId, double _time) {
