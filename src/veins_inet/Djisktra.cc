@@ -136,7 +136,7 @@ void Djisktra::getListEdges(std::string weightEdges){
         std::stringstream ss(line);
         getline(ss, name, ' ');
         getline(ss, weight, ' ');
-        w =std::stod(weight);
+        w =std::stod(weight) / Constant::MAX_SPEED;
         edges.push_back(std::make_pair(name, w));
     }
     file.close();
