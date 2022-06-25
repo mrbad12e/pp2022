@@ -22,15 +22,16 @@ Djisktra::Djisktra() {
     adjList.resize(numVertices);
     generateAdj(/*adjList*/);
     getListEdges("weightEdges.txt");//re-create edges
-    ShortestPath = malloc(numVertices*sizeof(double));
+    getItineraries("itinerary.txt");
+    ShortestPath = (double *)malloc(numVertices*sizeof(double));
 }
 
 Djisktra::~Djisktra() {
     // TODO Auto-generated destructor stub
 }
 
-int Djisktra::findI_Vertex(std::string name){
-    string nameOfI_Vertex = "";
+int Djisktra::findI_Vertex(std::string name, bool recursive){
+    std::string nameOfI_Vertex = "";
     for(int i = 0; i < edges.size(); i++){
         if(edges[i].first.find("$" + name + "$") != std::string::npos){
             for(int j = edges[i].first.length() - 2; j >= 0; j--){
@@ -48,6 +49,10 @@ int Djisktra::findI_Vertex(std::string name){
         if(vertices[i].compare(nameOfI_Vertex) == 0){
             return i;
         }
+    }
+    if(recursive){
+        name = "-" + name;
+        return findI_Vertex(name, false);
     }
     return -1;
 }
@@ -225,15 +230,18 @@ void Djisktra::getItineraries(std::string itineraryFile){
     std::string line;
     std::string nameRoute;
     std::string nameSrc, nameStation, nameDest;
-    int source, station, dest;
-    double w;
+    int source, station, dst;
+
     while (getline(file, line)) {
         std::stringstream ss(line);
         getline(ss, nameRoute, ' ');
         getline(ss, nameSrc, ' ');
         getline(ss, nameStation, ' ');
         getline(ss, nameDest, ' ');
-
+        source = findI_Vertex(nameSrc, false);
+        station = findI_Vertex(nameStation, false);
+        dst = findI_Vertex(nameDest, true);
+        itineraries.push_back(std::make_tuple(nameRoute, source, station, dst));
     }
 
 }
