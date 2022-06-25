@@ -25,7 +25,6 @@
 #include "veins/modules/application/ieee80211p/DemoBaseApplLayer.h"
 #include "veins/modules/application/traci/TraCIDemoRSU11p.h"
 #include "veins/modules/application/traci/TraCIDemo11pMessage_m.h"
-#include "Crossing.h"
 #include "Graph.h"
 #include <vector>
 #include "Djisktra.h"
@@ -49,8 +48,8 @@ protected:
     void handlePositionUpdate(cObject* obj) override;
 
 private:
-    std::vector<Crossing> crossings;
-    void readCrossing();
+    //std::vector<Crossing> crossings;
+    //void readCrossing();
     //virtual std::string getIdOfGLane(std::string str);
     //virtual int getX2(int x);
     std::vector<AGV*> vhs;
@@ -59,7 +58,7 @@ private:
     int subscribedServiceId = 0;
     std::vector<std::string> message;
     void readMessage(TraCIDemo11pMessage *bc);
-    //void exponentialSmoothing(NodeVertex *nv, double stopTime);
+    void exponentialSmoothing(NodeVertex *nv, double stopTime);
     void readLane(AGV *cur, std::string str);
     double lastUpdate = 0.0;
     long count = 0;
