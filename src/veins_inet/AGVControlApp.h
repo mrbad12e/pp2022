@@ -48,6 +48,8 @@ private:
     double travellingTime = 0;
     long waitingIntervals = 0;
     std::string originalRoute = "";
+    std::string prevRoute = "";
+    std::string expectedRoute = "";
 };
 }
 #endif /* VEINS_INET_AGVCONTROLAPP_H_ */
