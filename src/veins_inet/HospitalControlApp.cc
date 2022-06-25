@@ -38,7 +38,7 @@ void HospitalControlApp::initialize(int stage)
         //graphGenerator->readFile();
     }
     if (stage == 0) {
-        this->readCrossing();
+        //this->readCrossing();
 
         sendBeacon= new cMessage("send Beacon");
         graph = new Graph();
@@ -59,9 +59,9 @@ void HospitalControlApp::finish()
     if(Constant::activation == NULL){
             EV<<"Constant is helpless eventually"<<endl;
     }
-    for (auto it = crossings.begin(); it != crossings.end(); it++){
+    //for (auto it = crossings.begin(); it != crossings.end(); it++){
         //EV<<it->id<<" "<<it->rec->xMin<<endl;
-    }
+    //}
 
     this->djisktra->expSmoothing->printMaxWeights(this->djisktra->vertices);
 
@@ -112,7 +112,7 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
 
             if(traci == NULL){
                 if(Constant::activation != NULL)
-                traci = Constant::activation->getCommandInterface();
+                    traci = Constant::activation->getCommandInterface();
             }
 
             /*if(simTime().dbl() - lastUpdate >= 0.2 && false){
@@ -178,37 +178,7 @@ void HospitalControlApp::handlePositionUpdate(cObject* obj)
 
 }
 
-void HospitalControlApp::readCrossing(){
-    std::string line;
-    std::ifstream MyReadFile("crossing.txt");
-    getline(MyReadFile, line);
-    int numberOfCrossing =std::stoi(line);
 
-    int k = 0;
-
-    while (getline(MyReadFile, line)) {
-        size_t pos;
-        std::string token;
-        Crossing tmp;
-
-        for (int i = 0; i < 2; i++) {
-            pos = line.find(" ");
-            token = line.substr(0, pos);
-
-            if (i == 0) tmp.id = token;
-            if (i == 1) tmp.name = token; //std::atof(token.c_str());
-            //if (i == 2) tmp.from = token;
-            //if (i == 3) tmp.to = token;
-            line.erase(0, pos + 1);
-
-        }
-        tmp.rec = new CustomRectangle(line);
-        crossings.push_back(tmp);
-        k++;
-    }
-
-    MyReadFile.close();
-}
 
 /*void HospitalControlApp::exponentialSmoothing(NodeVertex *nv, double stopTime) {
     if (nv->v->k == 0) {
@@ -285,7 +255,7 @@ void HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     }
 }
 
-double HospitalControlApp::getAvailablePerdestrian(std::string crossId, double _time) {
+/*double HospitalControlApp::getAvailablePerdestrian(std::string crossId, double _time) {
     int count = 0;
     double start = 0;
 
@@ -297,37 +267,26 @@ double HospitalControlApp::getAvailablePerdestrian(std::string crossId, double _
     auto it = find_if(crossings.begin(), crossings.end(), [&crossId](const Crossing& obj) {return obj.id.compare(crossId) == 0;});
     if (it != crossings.end())
     {
-//        EV << (it->rec).A <<endl;
         double pivot = start;
         do {
             for(auto elem : it->peoples) {
                 if (pivot <= std::get<3>(elem) && std::get<3>(elem) < pivot + 0.1) {
-//                    EV << "People: " << get<0>(elem) <<endl;
-//                    EV <<pivot << " " << pivot + 0.1 <<" Count: " << count <<endl;
                     count++;
                     break;
                 }
             }
-//            EV << "Num duration: " << count <<endl;
             pivot = pivot + 0.1;
         } while(pivot < _time && count != tmp);
     }
-
-//    EV << "Num duration: " << count <<endl;
-//    EV << "Total: " << tmp <<endl;
-
-//    EV << count/tmp <<endl;
     return count/tmp;
 
-}
+}*/
 
-double HospitalControlApp::getVeloOfPerdestrian(std::string crossId, double _time) {
+/*double HospitalControlApp::getVeloOfPerdestrian(std::string crossId, double _time) {
     double start = 0;
     if (_time - Constant::DELTA_T > 0) {
         start = _time - Constant::DELTA_T;
     }
-    //EV << "Start: "<<start << " End: "<< _time <<endl;
-
     std::set < std::string > personIds;
     double sum = 0;
     int numPeople = 0;
@@ -361,7 +320,7 @@ double HospitalControlApp::getVeloOfPerdestrian(std::string crossId, double _tim
     double averageSpeed = sum / numPeople;
 
     return averageSpeed;
-}
+}*/
 
 std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
     int idOfI_Vertex = this->djisktra->findI_Vertex(cur->itinerary->laneId, false);
