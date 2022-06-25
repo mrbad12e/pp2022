@@ -23,8 +23,10 @@
 
 class ItineraryRecord {// Ban ghi hanh trinh cua xe
 public:
-    std::string laneId, prevLaneId;
-    int stopTime;
+    std::string laneId, prevLane = "";
+    int prevVertex = -1;
+    //int stopTime;
+    int localWait;
 };
 
 class AGV {
