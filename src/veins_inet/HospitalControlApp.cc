@@ -243,7 +243,7 @@ void HospitalControlApp::readLane(AGV *cur, std::string str) {
             if(cur->itinerary->prevVertex != -1){
                 this->djisktra->expSmoothing->exponentialSmooth(cur->itinerary->prevVertex,
                         this->djisktra->weightVertices[cur->itinerary->prevVertex]);
-                this->djisktra->expSmoothing->waitTime[cur->itinerary->prevVertex] -= localWait;
+                this->djisktra->expSmoothing->addWait(cur->itinerary->prevVertex, -localWait);
             }
             cur->itinerary->localWait = 0;
             cur->itinerary->prevVertex = idVertex;
@@ -276,8 +276,8 @@ void HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
             if (std::stod(str) == 0) {
                 cur->itinerary->localWait++;
                 int currentIndex = cur->itinerary->prevVertex;
-                this->djisktra->expSmoothing->waitTime[currentIndex] += 0.1;
-                if(this->djisktra->expSmoothing->waitTime[currentIndex]
+                this->djisktra->expSmoothing->addWait(currentIndex, 0.1);
+                if(this->djisktra->expSmoothing->getWait(currentIndex)
                       > this->djisktra->weightVertices[currentIndex]
                 ){
                     this->djisktra->expSmoothing->exponentialSmooth(currentIndex,
