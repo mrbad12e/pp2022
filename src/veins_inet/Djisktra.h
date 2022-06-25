@@ -43,11 +43,12 @@ public:
     void generateAdj();
     void DijkstrasAlgorithm(//std::vector<Quad> adjList[],
             int source, int target);
-
+    void getItineraries();
 
 private:
     std::vector<std::vector<Quad>> adjList;
     std::vector<std::string> vertices;
+    std::vector<std::tuple<std::string, int, int, int>> itineraries;
     std::vector<int> nextIndexOfBVertices;
     std::vector<std::string> nextNameOfBVertices;
     std::vector<Pair> edges;
