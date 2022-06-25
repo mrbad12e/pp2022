@@ -39,6 +39,7 @@ CustomRectangle::CustomRectangle(std::string points) {
 
         points.erase(0, pos + 1);
     }
+    this->area = abs((xMax - xMin)*(yMax - yMin));
     //EV<<" "<<endl;
 }
 
@@ -58,20 +59,18 @@ veins::Coord CustomRectangle::string2Coord(std::string point) {
     return p;
 }
 
-/*double CustomRectangle::rectangleArea() {
-    double x = A.distance(B);
-    double y = B.distance(C);
-    return x * y;
-}*/
+double CustomRectangle::getArea() {
+    return area;
+}
 
-double CustomRectangle::triangleArea(veins::Coord A, veins::Coord B, veins::Coord C) {
+/*double CustomRectangle::triangleArea(veins::Coord A, veins::Coord B, veins::Coord C) {
     double x = A.distance(B);
     double y = B.distance(C);
     double z = C.distance(A);
     double p = (x + y + z) / 2.0;
     double S = sqrt(p*(p - x)*(p - y)*(p - z));
     return S;
-}
+}*/
 
 /*bool CustomRectangle::checkInside(veins::Coord I) {
     if(I.x >= this->xMin && I.x <= this->xMax
