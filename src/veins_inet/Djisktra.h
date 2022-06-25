@@ -53,7 +53,7 @@ public:
             timeOfPeaks[i] = -1;
             waitTime[i] = 0;
         }
-        this->readCrossing();
+        //this->readCrossing();
     }
 
     double exponentialSmooth(int index, double oldPredict){
