@@ -388,7 +388,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
     int nextDst = (station == -1) ? dst : station;
     if(nextDst > -1){
         this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst);
-        std::string newRoute = this->djisktra->getRoute(this->djisktra->traces[nextDst]);
+        std::string newRoute = this->djisktra->getRoute(this->djisktra->traces[nextDst], cur->itinerary->laneId);
         return newRoute;
     }
     return "";
