@@ -199,10 +199,10 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       tempW = std::get<0>(*it);
       tempIndex = std::get<2>(*it);
       weightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, weightVertices[tempIndex]);
-
-      if ((weight + tempW + forecasting) < ShortestPath[tempIndex]){ // Check if we can do better
+      double newWeight = weight + tempW + weightVertices[tempIndex];
+      if (newWeight < ShortestPath[tempIndex]){ // Check if we can do better
          tempTrace = std::get<3>(*it);
-         ShortestPath[tempIndex] = weight + tempW + weightVertices[tempIndex]; // Update new distance
+         ShortestPath[tempIndex] = newWeight; // Update new distance
          traces[tempIndex] = trace; //tempTrace;
          PQ.push(make_tuple(ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
       } // Update distance
