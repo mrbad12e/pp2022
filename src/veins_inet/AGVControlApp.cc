@@ -118,6 +118,20 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
            WSM->encapsulate(carBeacon);
            populateWSM(WSM);
            send(WSM,lowerLayerOut);
+
+           if(expectedRoute.length() > 0){
+               std::string current = traciVehicle->getLaneId();
+               int x = current.find("_");
+               current = current.substr(0, x);
+               if(expectedRoute.find(current) == 0){
+                   std::vector<std::string> v = split(expectedRoute, " ");
+                   std::list<std::string> l(v.begin(), v.end());
+                   bool change = traciVehicle->changeVehicleRoute(l);
+                   if(change){
+                       expectedRoute = "";
+                   }
+               }
+           }
            return;
         }
     }
@@ -136,24 +150,26 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
     BaseFrame1609_4* WSM = check_and_cast<BaseFrame1609_4*>(msg);
     cPacket* enc = WSM->getEncapsulatedPacket();
     if(TraCIDemo11pMessage* bc = dynamic_cast<TraCIDemo11pMessage*>(enc)){
-        char *ret = mergeContent(myId);
-
-        //if(/*strcmp(ret, bc->getDemoData()) == 0 &&*/ myId == 16)
-        {
-            if(!receivedReRouting){
-                int length = strlen(bc->getDemoData());
-                std::string str = std::string(bc->getDemoData(), length);
-
-                std::vector<std::string> v = split(str, " ");
+        int length = strlen(bc->getDemoData());
+        std::string str = std::string(bc->getDemoData(), length);
+        if(str.find("$" + std::to_string(myId) + "_") != std::string::npos){
+            std::string newRoute = str.substr(std::to_string(myId).length() + 2);
+            if(prevRoute.compare(newRoute) != 0){
+                prevRoute = newRoute;
+                std::vector<std::string> v = split(newRoute, " ");
                 std::list<std::string> l(v.begin(), v.end());
-                //bool change = traciVehicle->changeVehicleRoute(l);
-                //traciVehicle->moveToXY("E1", 1, 4.3, 10.90, 1.57);
-                if(myId == 16){
-                    //EV<<str<<". Could change route? "<<change<<endl;
+                bool change = traciVehicle->changeVehicleRoute(l);
+                if(!change){
+                    std::string content = traciVehicle->getLaneId();
+                    EV<<content<<endl;
+                    expectedRoute = newRoute;
                 }
-                receivedReRouting = true;
+                else{
+                    expectedRoute = "";
+                }
             }
         }
+
     }
     else{
 
