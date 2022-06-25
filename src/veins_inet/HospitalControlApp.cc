@@ -231,7 +231,7 @@ void HospitalControlApp::readLane(AGV *cur, std::string str) {
     str.erase(str.find("_"));
     cur->itinerary->laneId = str;
     if(cur->itinerary->prevLane.compare(cur->itinerary->laneId) != 0){
-        int idVertex = this->djisktra->findI_Vertex(str, true);
+        int idVertex = this->djisktra->findVertex(str);
         if(cur->itinerary->prevVertex != idVertex){
             if(cur->itinerary->prevVertex != -1){
                 this->djisktra->expSmoothing->exponentialSmooth(cur->itinerary->prevVertex,
