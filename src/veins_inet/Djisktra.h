@@ -24,6 +24,7 @@
 #include <vector>
 #include <algorithm>
 #include <assert.h>
+#include "Constant.h"
 // Author: Aakash Prabhu
 #include <queue> // To set up priority queue
 #include <functional> // To use std::greater<T> -> This will prove to be useful in picking the minimum weight
@@ -40,7 +41,30 @@ public:
         waitTime = (double *)malloc(num*sizeof(double));
         Qt = (double *)malloc(num*sizeof(double));
         Dt = (double *)malloc(num*sizeof(double));
+        k = (int*)malloc(num*sizeof(int));
     }
+
+    double exponentialSmooth(int index, double oldPredict){
+        double predictW = 0;
+        double realData = waitTime[index];
+        if(k[index] == 0){
+            predictW = realData;
+            Qt[index] = 0;
+            Dt[index] = 0;
+            k[index] = 1;
+        }
+        else{
+            double error = realData - oldPredict;
+            Qt[index] = Constant::GAMMA * error - (1 - Constant::GAMMA) * Qt[index];
+            Dt[index] = Constant::GAMMA * abs(error)
+                            - (1 - Constant::GAMMA) * Dt[index];
+            double lambda = abs(Qt[index] / Dt[index]);
+            predictW = lambda * realData + (1 - lambda) * oldPredict;
+        }
+        return predictW;
+    }
+private:
+    int* k;
 };
 
 class Djisktra {
