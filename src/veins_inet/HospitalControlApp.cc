@@ -42,6 +42,7 @@ void HospitalControlApp::initialize(int stage)
 
         sendBeacon= new cMessage("send Beacon");
         graph = new Graph();
+        djisktra = new Djisktra();
     }
     else if (stage == 1) {
         // Initializing members that require initialized other modules goes here
