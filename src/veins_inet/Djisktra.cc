@@ -24,6 +24,8 @@ Djisktra::Djisktra() {
     getListEdges("weightEdges.txt");//re-create edges
     getItineraries("itinerary.txt");
     ShortestPath = (double *)malloc(numVertices*sizeof(double));
+    for(int i = 0; i < numVertices; i++)
+        ShortestPath[i] = 0;
 }
 
 Djisktra::~Djisktra() {
@@ -63,6 +65,7 @@ void Djisktra::getListVertices(std::string iVertices, std::string bVertices) {
     while (getline(file1, line)) {
         vertices.push_back(line);
         weightVertices.push_back(0);
+        traces.push_back("");
     }
     file1.close();
 
@@ -158,7 +161,7 @@ void Djisktra::generateAdj(){
 }
 void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
         int source, int target){
-    std::priority_queue<Quad, std::vector<Quad>, std::greater<Quad> > PQ; // Set up priority queue
+  std::priority_queue<Quad, std::vector<Quad>, std::greater<Quad> > PQ; // Set up priority queue
   Quad info;
   std::string trace;
   double weight;
