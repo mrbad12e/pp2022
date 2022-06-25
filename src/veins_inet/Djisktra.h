@@ -45,20 +45,24 @@ public:
             int source, int target);
     void getItineraries(std::string itineraryFile);
     std::vector<double> weightVertices;
+    std::vector<std::tuple<std::string, int, int, int>> itineraries;
+    std::vector<std::string> traces;
+    int findI_Vertex(std::string name, bool recursive);
+    std::string getRoute(std::string trace);
 
 private:
     std::vector<std::vector<Quad>> adjList;
     std::vector<std::string> vertices;
-    std::vector<std::tuple<std::string, int, int, int>> itineraries;
+
     std::vector<int> nextIndexOfBVertices;
     std::vector<std::string> nextNameOfBVertices;
     std::vector<Pair> edges;
 
-    std::vector<std::string> traces;
-    std::string getRoute(std::string trace);
+
+
     int numVertices = 0; // 323 vertices (107 i-vertices and 341 b-vertices)
     int numIVertices = 0;
-    int findI_Vertex(std::string name, bool recursive);
+
     //std::vector <bool> visitedVertex(numVertices, false);
     double *ShortestPath; //[numVertices]; // Have an array to store the shortest path
 };
