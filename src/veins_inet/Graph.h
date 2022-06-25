@@ -31,6 +31,8 @@ class AGV {
 public:
     std::string id;
     ItineraryRecord *itinerary;
+    int reRouteAt = -1;
+    bool passedStation = false;
 };
 
 class Edge {
