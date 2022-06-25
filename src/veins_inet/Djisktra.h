@@ -36,19 +36,26 @@ class ExponentialSmoothing{
 public:
 
     ExponentialSmoothing(int num){
+        this->num = num;
         waitTime = (double *)malloc(num*sizeof(double));
         Qt = (double *)malloc(num*sizeof(double));
         Dt = (double *)malloc(num*sizeof(double));
         k = (int*)malloc(num*sizeof(int));
         raisedTime = (double *)malloc(num*sizeof(double));
+        maxWeights = (double *)malloc(num*sizeof(double));
+        timeOfPeaks = (double *)malloc(num*sizeof(double));
         for(int i = 0; i < num; i++){
             raisedTime[i] = -1;
+            maxWeights[i] = 0;
+            timeOfPeaks[i] = -1;
+            waitTime[i] = 0;
         }
     }
 
     double exponentialSmooth(int index, double oldPredict){
         double predictW = 0;
         double realData = waitTime[index];
+        raisedTime[index] = simTime().dbl();
         if(k[index] == 0){
             predictW = realData;
             Qt[index] = 0;
@@ -63,14 +70,27 @@ public:
             double lambda = abs(Qt[index] / Dt[index]);
             predictW = lambda * realData + (1 - lambda) * oldPredict;
         }
-        raisedTime[index] = simTime().dbl();
+
+        if(predictW < 0)
+            predictW = 0;
+        if(maxWeights[index] < predictW){
+            maxWeights[index] = predictW;
+            timeOfPeaks[index] = raisedTime[index];
+        }
         return predictW;
+    }
+
+    void printMaxWeights(std::vector<std::string> vertices){
+        for(int i = 0; i < this->num; i++){
+            if(maxWeights[i] > 0.001)
+                EV<<vertices[i]<<" has max: "<<maxWeights[i]<<" at "<<timeOfPeaks[i]<<endl;
+        }
     }
 
     double getDampingValue(int index, double predictW){
         bool checkPedestrians = raisedTime[index] < 0;
         if(!checkPedestrians){
-            if(simTime.dbl() - raisedTime[index] > Constant::EXPIRED_TIME){
+            if(simTime().dbl() - raisedTime[index] > Constant::EXPIRED_TIME){
                 if(waitTime[index] > 0){
                     return exponentialSmooth(index, predictW);
                 }
@@ -100,6 +120,9 @@ private:
     double* Qt;
     double* Dt;
     double* raisedTime;
+    double* maxWeights;
+    double* timeOfPeaks;
+    int num;
 };
 
 class Djisktra {
@@ -121,10 +144,10 @@ public:
     int findI_Vertex(std::string name, bool recursive);
     std::string getRoute(std::string trace);
     ExponentialSmoothing* expSmoothing;
-
+    std::vector<std::string> vertices;
 private:
     std::vector<std::vector<Quad>> adjList;
-    std::vector<std::string> vertices;
+
 
     std::vector<int> nextIndexOfBVertices;
     std::vector<std::string> nextNameOfBVertices;
