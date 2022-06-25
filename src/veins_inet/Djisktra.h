@@ -37,8 +37,9 @@ typedef std::tuple<double, std::string, int, std::string> Quad;
 class ExponentialSmoothing{
 public:
 
-    ExponentialSmoothing(int num){
+    ExponentialSmoothing(int num, int numIVertices){
         this->num = num;
+        this->numIVertices = numIVertices;
         waitTime = (double *)malloc(num*sizeof(double));
         Qt = (double *)malloc(num*sizeof(double));
         Dt = (double *)malloc(num*sizeof(double));
@@ -52,6 +53,7 @@ public:
             timeOfPeaks[i] = -1;
             waitTime[i] = 0;
         }
+        this->readCrossing();
     }
 
     double exponentialSmooth(int index, double oldPredict){
@@ -90,7 +92,7 @@ public:
     }
 
     double getDampingValue(int index, double predictW, std::string nameVertex){
-        bool checkPedestrians = raisedTime[index] < 0;
+        bool checkPedestrians = raisedTime[index] < 0 && index < numIVertices;
         if(!checkPedestrians){
             if(simTime().dbl() - raisedTime[index] > Constant::EXPIRED_TIME){
                 if(waitTime[index] > 0){
@@ -98,12 +100,17 @@ public:
                 }
                 else{
                     waitTime[index] = 0;
-                    checkPedestrians = true;
+                    checkPedestrians = index < numIVertices;
                 }
             }
         }
         if(checkPedestrians){
-
+            if(simTime().dbl() - lastGettingPedestrians > Constant::EXPIRED_TIME){
+                lastGettingPedestrians = simTime().dbl();
+                double area = 0; int numCrossings = 0;
+                //int count = checkCrossing(nameVertex, &numCrossings, &area);
+                //return this->getDispearTime(count, numCrossings, area);
+            }
         }
         return predictW;
     }
@@ -142,7 +149,8 @@ public:
 
 
 
-    double checkCrossing(double predictW, std::string name){
+    int checkCrossing(std::string name, int *numLocalCrossing, double *area){
+        int count = 0;
         if(traci == NULL){
             if(Constant::activation != NULL)
                 traci = Constant::activation->getCommandInterface();
@@ -150,25 +158,44 @@ public:
         if(traci != NULL){
             std::list<std::string> allPeople = traci->getPersonIds();
             double x, y;
-            //for(int i = 0; i < crossings.size(); i++){
+            std::vector<Crossing> inVertex;
+            *area = 0;
+            for(int i = 0; i < crossings.size(); i++){
+                if(crossings[i].id.compare(name) == 0){
+                    inVertex.push_back(crossings[i]);
+                    *area += crossings[i].rec->getArea();
+                }
+            }
+            *numLocalCrossing = inVertex.size();
+            if(*numLocalCrossing == 0)
+                return 0;
+
             for (auto elem: allPeople) {
                 std::string personId = elem;
                 Coord peoplePosition = traci->getPersonPosition(personId);
                 std::pair<double,double> coordTraCI = traci->getTraCIXY(peoplePosition);
                 x = coordTraCI.first;
                 y = coordTraCI.second;
-                /*for(int i = 0; i < crossings->size(); i++){
-                    /*if (((Crossing)crossings[i]).rec->checkInside(x, y)) {
+                for(int i = 0; i < inVertex.size(); i++){
+                    if (inVertex[i].rec->checkInside(x, y)) {
+                        count++;
                         break;
                     }
-                    else if (crossings[i].rec->checkAround(x, y)){
-                            break;
-                    }*/
-
-                //}*/
-                            }
+                    else if (inVertex[i].rec->checkAround(x, y)){
+                        break;
+                    }
+                }
+            }
         }
-        return predictW;
+        return count;
+    }
+
+    double getDispearTime(int count, int numLocalCrossing, double area){
+        if(count == 0 || numLocalCrossing == 0)
+            return 0;
+        double density = count / area;
+        double velocity = abs(0.2*density*density - 1.1*density + 1.7);
+        return Constant::LENGTH_CROSSING*count/(2*velocity);
     }
 
     double getWait(int index){
@@ -189,9 +216,11 @@ private:
     double* maxWeights;
     double* timeOfPeaks;
     int num;
+    int numIVertices = 0;
     TraCICommandInterface* traci;
 
     std::vector<Crossing> crossings;
+    double lastGettingPedestrians = 0;
 
 };
 
