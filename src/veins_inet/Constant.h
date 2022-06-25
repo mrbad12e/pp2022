@@ -36,6 +36,7 @@ public:
     static constexpr const double DELTA_T = 1;
     static constexpr const double EXPIRED_TIME = 10;
     static constexpr const double MAX_SPEED = 4;
+    static constexpr const double LENGTH_CROSSING = 6.4;
     Constant();
     virtual ~Constant();
     static TraCIMobility* activation;
