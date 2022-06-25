@@ -34,14 +34,13 @@ typedef std::tuple<double, std::string, int, std::string> Quad;
 
 class ExponentialSmoothing{
 public:
-    double* waitTime;
-    double* Qt;
-    double* Dt;
+
     ExponentialSmoothing(int num){
         waitTime = (double *)malloc(num*sizeof(double));
         Qt = (double *)malloc(num*sizeof(double));
         Dt = (double *)malloc(num*sizeof(double));
         k = (int*)malloc(num*sizeof(int));
+        raisedTime = (double *)malloc(num*sizeof(double));
     }
 
     double exponentialSmooth(int index, double oldPredict){
@@ -61,10 +60,20 @@ public:
             double lambda = abs(Qt[index] / Dt[index]);
             predictW = lambda * realData + (1 - lambda) * oldPredict;
         }
+        raisedTime[index] = simTime().dbl();
         return predictW;
+    }
+
+    double getDampingValue(int index, double predictW){
+
+        return 0;
     }
 private:
     int* k;
+    double* waitTime;
+    double* Qt;
+    double* Dt;
+    double* raisedTime;
 };
 
 class Djisktra {
