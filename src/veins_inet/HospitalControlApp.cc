@@ -153,10 +153,40 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
             populateWSM(WSM);
             send(WSM, lowerLayerOut);
         }
-        readMessage(bc);
-
+        std::string newRoute = readMessage(bc);
+        if(newRoute.length() != 0){
+            /*if((newRoute.find("E295 -E454") != std::string::npos
+                || newRoute.find("-E454 E295") != std::string::npos)
+                && simTime().dbl() > 160
+                ){
+                std::stringstream streamData(bc->getDemoData());
+                std::string content ;
+                getline(streamData, content);
+                EV<<"Control what?"<<endl;
+            }*/
+            sendToAGV(newRoute);
+        }
     }
 
+}
+
+void HospitalControlApp::sendToAGV(std::string content){
+    if(content.length() != 0){
+        TraCIDemo11pMessage* rsuBeacon = new TraCIDemo11pMessage();
+        if(sendBeacon != NULL){
+            if (sendBeacon->isScheduled())
+            {
+                cancelEvent(sendBeacon);
+            }
+            const char *ret = content.c_str(); //mergeContent(bc->getSenderAddress());
+            rsuBeacon->setDemoData(ret);
+            rsuBeacon->setSenderAddress(myId);
+            BaseFrame1609_4* WSM = new BaseFrame1609_4();
+            WSM->encapsulate(rsuBeacon);
+            populateWSM(WSM);
+            send(WSM,lowerLayerOut);
+        }
+    }
 }
 
 void HospitalControlApp::onWSA(DemoServiceAdvertisment* wsa)
@@ -217,6 +247,11 @@ void HospitalControlApp::readLane(AGV *cur, std::string str) {
 
 std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     std::stringstream streamData(bc->getDemoData());
+    //std::string content ;
+    //getline(streamData, content);
+    //if(content.compare("E293_1 0.877388 4.388800 route_3") == 0){
+    //    EV<<"DEBUG HERRE"<<endl;
+    //}
     std::string str;
     AGV *cur = NULL;
     for (auto a : vhs) {
@@ -232,9 +267,10 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     }
     int i = 0;
     std::string newRoute = "";
-
+    //bool debugHere = true;
     while (getline(streamData, str, ' ')) {
         if (i == 0) {
+            //debugHere = (str.compare("E293_1") == 0);
             readLane(cur, str);
         } else if (i == 2) {
             if (std::stod(str) == 0) {
@@ -247,9 +283,16 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
                     this->djisktra->expSmoothing->exponentialSmooth(currentIndex,
                                             this->djisktra->weightVertices[currentIndex]);
                 }
+                //debugHere = false;
+            }
+            else{
+
             }
         }
         if(i == 3){
+            //if(debugHere && str.compare("route_3") == 0){
+            //    EV<<"dsds"<<endl;
+            //}
             newRoute = reRoute(cur, str);
         }
         i++;
@@ -348,8 +391,12 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
     }
     int nextDst = (station == -1) ? dst : station;
     if(nextDst > -1){
+        if(idOfI_Vertex == nextDst){
+            return "";
+        }
         this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst);
         std::string newRoute = this->djisktra->getRoute(this->djisktra->traces[nextDst], cur->itinerary->laneId);
+        newRoute = "$" + cur->id + "_" + newRoute;
         return newRoute;
     }
     return "";
