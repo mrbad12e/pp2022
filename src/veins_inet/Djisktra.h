@@ -41,6 +41,9 @@ public:
         Dt = (double *)malloc(num*sizeof(double));
         k = (int*)malloc(num*sizeof(int));
         raisedTime = (double *)malloc(num*sizeof(double));
+        for(int i = 0; i < num; i++){
+            raisedTime[i] = -1;
+        }
     }
 
     double exponentialSmooth(int index, double oldPredict){
@@ -65,14 +68,31 @@ public:
     }
 
     double getDampingValue(int index, double predictW){
+        bool checkPedestrians = raisedTime[index] < 0;
+        if(!checkPedestrians){
+            if(simTime.dbl() - raisedTime[index] > Constant::EXPIRED_TIME){
+                if(waitTime[index] > 0){
+                    return exponentialSmooth(index, predictW);
+                }
+                else{
+                    waitTime[index] = 0;
+                    checkPedestrians = true;
+                }
+            }
+        }
+        if(checkPedestrians){
 
-        return 0;
+        }
+        return predictW;
     }
     double getWait(int index){
+        //return getDampingValue(index, waitTime[index]);
         return waitTime[index];
     }
     void addWait(int index, double x){
         waitTime[index] += x;
+        if(waitTime[index] < 0)
+            waitTime[index] = 0;
     }
 private:
     int* k;
