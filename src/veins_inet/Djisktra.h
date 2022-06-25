@@ -44,6 +44,7 @@ public:
     void DijkstrasAlgorithm(//std::vector<Quad> adjList[],
             int source, int target);
     void getItineraries();
+    std::vector<double> weightVertices;
 
 private:
     std::vector<std::vector<Quad>> adjList;
@@ -52,11 +53,12 @@ private:
     std::vector<int> nextIndexOfBVertices;
     std::vector<std::string> nextNameOfBVertices;
     std::vector<Pair> edges;
-    std::vector<double> weightVertices;
+
     std::vector<std::string> traces;
     std::string getRoute(std::string trace);
     int numVertices = 0; // 323 vertices (107 i-vertices and 341 b-vertices)
     int numIVertices = 0;
+    int findI_Vertex(std::string name);
     //std::vector <bool> visitedVertex(numVertices, false);
     double *ShortestPath; //[numVertices]; // Have an array to store the shortest path
 };
