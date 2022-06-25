@@ -25,6 +25,8 @@
 #include <algorithm>
 #include <assert.h>
 #include "Constant.h"
+#include "Crossing.h"
+#include "veins/modules/mobility/traci/TraCICommandInterface.h"
 // Author: Aakash Prabhu
 #include <queue> // To set up priority queue
 #include <functional> // To use std::greater<T> -> This will prove to be useful in picking the minimum weight
@@ -87,7 +89,7 @@ public:
         }
     }
 
-    double getDampingValue(int index, double predictW){
+    double getDampingValue(int index, double predictW, std::string nameVertex){
         bool checkPedestrians = raisedTime[index] < 0;
         if(!checkPedestrians){
             if(simTime().dbl() - raisedTime[index] > Constant::EXPIRED_TIME){
@@ -105,6 +107,70 @@ public:
         }
         return predictW;
     }
+
+    void readCrossing(){
+        std::string line;
+        std::ifstream MyReadFile("crossing.txt");
+        getline(MyReadFile, line);
+        int numberOfCrossing =std::stoi(line);
+
+        int k = 0;
+
+        while (getline(MyReadFile, line)) {
+            size_t pos;
+            std::string token;
+            Crossing tmp;
+
+            for (int i = 0; i < 2; i++) {
+                pos = line.find(" ");
+                token = line.substr(0, pos);
+
+                if (i == 0) tmp.id = token;
+                if (i == 1) tmp.name = token; //std::atof(token.c_str());
+                //if (i == 2) tmp.from = token;
+                //if (i == 3) tmp.to = token;
+                line.erase(0, pos + 1);
+
+            }
+            tmp.rec = new CustomRectangle(line);
+            crossings.push_back(tmp);
+            k++;
+        }
+
+        MyReadFile.close();
+    }
+
+
+
+    double checkCrossing(double predictW, std::string name){
+        if(traci == NULL){
+            if(Constant::activation != NULL)
+                traci = Constant::activation->getCommandInterface();
+        }
+        if(traci != NULL){
+            std::list<std::string> allPeople = traci->getPersonIds();
+            double x, y;
+            //for(int i = 0; i < crossings.size(); i++){
+            for (auto elem: allPeople) {
+                std::string personId = elem;
+                Coord peoplePosition = traci->getPersonPosition(personId);
+                std::pair<double,double> coordTraCI = traci->getTraCIXY(peoplePosition);
+                x = coordTraCI.first;
+                y = coordTraCI.second;
+                /*for(int i = 0; i < crossings->size(); i++){
+                    /*if (((Crossing)crossings[i]).rec->checkInside(x, y)) {
+                        break;
+                    }
+                    else if (crossings[i].rec->checkAround(x, y)){
+                            break;
+                    }*/
+
+                //}*/
+                            }
+        }
+        return predictW;
+    }
+
     double getWait(int index){
         //return getDampingValue(index, waitTime[index]);
         return waitTime[index];
@@ -123,6 +189,10 @@ private:
     double* maxWeights;
     double* timeOfPeaks;
     int num;
+    TraCICommandInterface* traci;
+
+    std::vector<Crossing> crossings;
+
 };
 
 class Djisktra {
