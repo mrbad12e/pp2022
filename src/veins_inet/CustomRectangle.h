@@ -29,8 +29,8 @@ public:
 //    static inet::Coord string2Coord(std::string point);
     static veins::Coord string2Coord(std::string point);
 //    static double triangleArea(inet::Coord A, inet::Coord B, inet::Coord C);
-    static double triangleArea(veins::Coord A, veins::Coord B, veins::Coord C);
-    //double rectangleArea();
+    //static double triangleArea(veins::Coord A, veins::Coord B, veins::Coord C);
+    double getArea();
 //    bool checkInside(inet::Coord I);
     bool checkInside(double x, double y);
     bool checkAround(double x, double y);
@@ -43,11 +43,12 @@ public:
     //
 
 private:
-    static constexpr const double AROUND = 2;
+    static constexpr const double AROUND = 1;
     double xMin;
     double yMin;
     double xMax;
     double yMax;
+    double area;
 };
 
 #endif /* VEINS_INET_CUSTOMRECTANGLE_H_ */
