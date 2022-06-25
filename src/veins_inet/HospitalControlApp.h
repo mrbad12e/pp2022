@@ -66,6 +66,7 @@ private:
     double getAvailablePerdestrian(std::string crossId, double _time);
     double getVeloOfPerdestrian(std::string crossId, double _time);
     Djisktra* djisktra;
+    std::string reRoute(AGV *cur, std::string routeId);
 };
 }
 #endif /* VEINS_INET_HOSPITALCONTROLAPP_H_ */
