@@ -29,6 +29,28 @@ Djisktra::~Djisktra() {
     // TODO Auto-generated destructor stub
 }
 
+int Djisktra::findI_Vertex(std::string name){
+    string nameOfI_Vertex = "";
+    for(int i = 0; i < edges.size(); i++){
+        if(edges[i].first.find("$" + name + "$") != std::string::npos){
+            for(int j = edges[i].first.length() - 2; j >= 0; j--){
+                if(edges[i].first[j] != '_'){
+                    nameOfI_Vertex = edges[i].first[j] + nameOfI_Vertex;
+                }
+                else{
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    for(int i = 0; i < numIVertices; i++){
+        if(vertices[i].compare(nameOfI_Vertex) == 0){
+            return i;
+        }
+    }
+    return -1;
+}
 void Djisktra::getListVertices(std::string iVertices, std::string bVertices) {
     std::ifstream file1(iVertices);
     std::string line;
