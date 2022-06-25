@@ -238,22 +238,40 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   } // While Priority Queue is not empty
 } // DijkstrasAlgorithm
 
-std::string Djisktra::getRoute(std::string trace){
-  std::string route = "";
+std::string Djisktra::getRoute(std::string trace, std::string currLane){
+  std::string route = (currLane[0] == ':') ? "" : (currLane + " ");
   std::string temp = "";
-  for(int i = 1; i < trace.length(); i++){
-    //if(temp.length() == 0){
-      if(trace[i] != '$' && trace[i] != '_'){
-        temp = temp + trace[i];
+  for(int i = 0; i < edges.size(); i++){
+      if(edges[i].first.find("$" + currLane + "$") != std::string::npos){
+          std::vector<std::string> list = split(edges[i].first, "$" + currLane + "$");
+          std::string remaining = list[list.size() - 1];
+          for(int j = 0; j < remaining.length(); j++){
+              if(remaining[j] != '$' && remaining[j] != '_'){
+                  temp = temp + remaining[j];
+              }
+              else{
+
+                  if(temp[0] != ':' && route.find(temp + " ") == std::string::npos){
+                    route = route + temp + " ";
+                  }
+                  temp = "";
+              }
+          }
+          break;
       }
-      else{
+  }
+  temp = "";
+  for(int i = 1; i < trace.length(); i++){
+    if(trace[i] != '$' && trace[i] != '_'){
+        temp = temp + trace[i];
+    }
+    else{
 
         if(temp[0] != ':' && route.find(temp + " ") == std::string::npos){
           route = route + temp + " ";
         }
         temp = "";
-      }
-    //}
+    }
   }
   return route;
 }
