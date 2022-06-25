@@ -234,34 +234,16 @@ void HospitalControlApp::exponentialSmoothing(NodeVertex *nv, double stopTime) {
 }
 
 void HospitalControlApp::readLane(AGV *cur, std::string str) {
-    double stopTime = cur->itinerary->stopTime * 0.1;
+    double localWait = cur->itinerary->localWait * 0.1;
     str.erase(str.find("_"));
     cur->itinerary->laneId = str;
-    if (cur->itinerary->prevLaneId.length() == 0) {
-        cur->itinerary->prevLaneId = str;
-    } else if (cur->itinerary->laneId.compare(cur->itinerary->prevLaneId)
-            != 0) {
-        std::string mes;
-        if (cur->itinerary->prevLaneId.front() == ':') {
-            mes = cur->itinerary->laneId + " " + std::to_string(stopTime);
-            NodeVertex *nv = graph->searchVertex(cur->itinerary->prevLaneId);
-            exponentialSmoothing(nv, stopTime);
-            nv->v->setW(stopTime);
-            message.push_back(mes);
-        } else if (cur->itinerary->laneId.front() == ':') {
-            std::string full_name = cur->itinerary->prevLaneId + "-" + str;
-            mes = full_name + " " + std::to_string(stopTime);
-            NodeVertex *nv = graph->searchVertex(full_name);
-            if(nv != NULL){
-                exponentialSmoothing(nv, stopTime);
-                nv->v->setW(stopTime);
+    if(cur->itinerary->prevLane.compare(cur->itinerary->laneId) != 0){
+        int idVertex = this->djisktra->findI_Vertex(str, true);
+        if(cur->itinerary->prevVertex != idVertex){
+            if(cur->itinerary->prevVertex != -1){
+
             }
-            message.push_back(mes);
         }
-        if (cur->itinerary->prevLaneId.front()
-                != cur->itinerary->laneId.front())
-            cur->itinerary->stopTime = 0;
-        cur->itinerary->prevLaneId = cur->itinerary->laneId;
     }
 }
 
@@ -277,7 +259,7 @@ void HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
         cur = new AGV();//3 dong sau ghep thanh 1 phan ptkd cua AGV co tham so truyen vao
         cur->id = std::to_string(bc->getSenderAddress());
         cur->itinerary = new ItineraryRecord();
-        cur->itinerary->stopTime = 0;
+        cur->itinerary->localWait = 0;
         vhs.push_back(cur);
     }
     int i = 0;
@@ -287,7 +269,7 @@ void HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
             readLane(cur, str);
         } else if (i == 2) {
             if (std::stod(str) == 0) {
-                cur->itinerary->stopTime++;
+                cur->itinerary->localWait++;
             }
         }
         if(i == 3){
