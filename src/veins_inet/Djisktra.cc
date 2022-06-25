@@ -22,6 +22,7 @@ Djisktra::Djisktra() {
     adjList.resize(numVertices);
     generateAdj(/*adjList*/);
     getListEdges("weightEdges.txt");//re-create edges
+    ShortestPath = malloc(numVertices*sizeof(double));
 }
 
 Djisktra::~Djisktra() {
@@ -195,4 +196,22 @@ std::string Djisktra::getRoute(std::string trace){
     //}
   }
   return route;
+}
+
+void Djisktra::getItineraries(std::string itineraryFile){
+    std::ifstream file(itineraryFile);
+    std::string line;
+    std::string nameRoute;
+    std::string nameSrc, nameStation, nameDest;
+    int source, station, dest;
+    double w;
+    while (getline(file, line)) {
+        std::stringstream ss(line);
+        getline(ss, nameRoute, ' ');
+        getline(ss, nameSrc, ' ');
+        getline(ss, nameStation, ' ');
+        getline(ss, nameDest, ' ');
+
+    }
+
 }
