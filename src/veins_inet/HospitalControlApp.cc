@@ -62,8 +62,9 @@ void HospitalControlApp::finish()
     for (auto it = crossings.begin(); it != crossings.end(); it++){
         //EV<<it->id<<" "<<it->rec->xMin<<endl;
     }
-    //if period is 0.1 => count = 1453
-    //if period is 0.2 => count = 801
+
+    this->djisktra->expSmoothing->printMaxWeights(this->djisktra->vertices);
+
     EV<<"#calling traci->getPersonIds(): "<<count<<endl;
     EV<<"As 10 AGVs => T: 3796, W: 1811, %: 48%"<<endl;
     EV<<"As 10 + 1(flow 11) AGVs => T: 4521, W: 2334, %: 52%"<<endl;
@@ -82,14 +83,6 @@ void HospitalControlApp::finish()
     EV<<"As 10 + 2(flow10) + 2(flow 11) + 9(flow0-8) AGVs => T: 9538, W: 4830, %: 51%"<<endl;
     EV<<"As 10 + 2(flow10) + 2(flow 11) + 10(flow0-9) AGVs => T: 9939, W: 5083, %: 51%"<<endl;
 
-    //EV<<"As 10 + 2(flow 11) + 1(flow 2) AGVs => T: 4598, W: 2012, %: 44%"<<endl;
-    //EV<<"As 10 + 2(flow 11) + 2(flow 2) AGVs => T: 5448, W: 2661, %: 49%"<<endl;
-    /*
-     * 898.9(s)
-INFO (HospitalControlApp)myHospitalNetwork.rsu[0].appl: Total travelling time: 3485.9(s)
-INFO (HospitalControlApp)myHospitalNetwork.rsu[0].appl: % of waiting time: 25.7867
-     *
-     */
     EV<<"As 10 + 1(flow 8) AGVs => T: 2709, W: 547, %: 20%"<<endl;
     EV<<"As 10 + 1(flow 2) AGVs => T: 3045.7, W: 875, %: 29%"<<endl;
     //EV<<"As 11 AGVs => T: 2720.8, W: 547, %: 20%"<<endl;
