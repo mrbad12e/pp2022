@@ -47,6 +47,7 @@ private:
     bool receivedReRouting = false;
     double travellingTime = 0;
     long waitingIntervals = 0;
+    std::string originalRoute = "";
 };
 }
 #endif /* VEINS_INET_AGVCONTROLAPP_H_ */
