@@ -24,6 +24,8 @@ Djisktra::Djisktra() {
     getListEdges("weightEdges.txt");//re-create edges
     getItineraries("itinerary.txt");
     ShortestPath = (double *)malloc(numVertices*sizeof(double));
+    this->expSmoothing = new ExponentialSmoothing(numVertices);
+    //this->expSmoothing->waitTime = (double *)malloc(numVertices*sizeof(double));
     for(int i = 0; i < numVertices; i++)
         ShortestPath[i] = 0;
 }
