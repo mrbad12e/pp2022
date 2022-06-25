@@ -33,6 +33,7 @@ void AGVControlApp::initialize(int stage)
         {
             mobility = TraCIMobilityAccess().get(getParentModule());
             traciVehicle = mobility->getVehicleCommandInterface();
+            originalRoute = traciVehicle->getRouteId();
         }
     }
     else if (stage == 1) {
@@ -110,6 +111,7 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
                                    ;
            //content = content + /*"dis:"*/ " " + std::to_string(traciVehicle->getDistanceTravelled());
            //content = content + "aW: " + std::to_string(traciVehicle->getAccumulatedWaitingTime());
+           content = content + " " + originalRoute;
            carBeacon->setDemoData(content.c_str());
            carBeacon->setSenderAddress(myId);
            BaseFrame1609_4* WSM = new BaseFrame1609_4();
