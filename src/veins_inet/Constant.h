@@ -34,6 +34,7 @@ public:
     static constexpr const char* NON_CAR = "";
     static constexpr const double GAMMA = 0.3;
     static constexpr const double DELTA_T = 1;
+    static constexpr const double EXPIRED_TIME = 10;
     Constant();
     virtual ~Constant();
     static TraCIMobility* activation;
