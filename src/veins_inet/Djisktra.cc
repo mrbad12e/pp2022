@@ -227,7 +227,8 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       tempW = std::get<0>(*it);
       tempIndex = std::get<2>(*it);
       weightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, weightVertices[tempIndex], vertices[tempIndex]);
-      double newWeight = weight + tempW + weightVertices[tempIndex];
+
+      double newWeight = weight + tempW + 10*weightVertices[tempIndex];
       if (newWeight < ShortestPath[tempIndex]){ // Check if we can do better
          tempTrace = std::get<3>(*it);
          ShortestPath[tempIndex] = newWeight; // Update new distance
