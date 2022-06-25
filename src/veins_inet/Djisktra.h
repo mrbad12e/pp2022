@@ -31,6 +31,18 @@
 typedef std::pair<std::string, double> Pair;
 typedef std::tuple<double, std::string, int, std::string> Quad;
 
+class ExponentialSmoothing{
+public:
+    double* waitTime;
+    double* Qt;
+    double* Dt;
+    ExponentialSmoothing(int num){
+        waitTime = (double *)malloc(num*sizeof(double));
+        Qt = (double *)malloc(num*sizeof(double));
+        Dt = (double *)malloc(num*sizeof(double));
+    }
+};
+
 class Djisktra {
 public:
     Djisktra();
@@ -49,6 +61,7 @@ public:
     std::vector<std::string> traces;
     int findI_Vertex(std::string name, bool recursive);
     std::string getRoute(std::string trace);
+    ExponentialSmoothing* expSmoothing;
 
 private:
     std::vector<std::vector<Quad>> adjList;
