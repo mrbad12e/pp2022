@@ -217,7 +217,7 @@ void HospitalControlApp::readCrossing(){
     MyReadFile.close();
 }
 
-void HospitalControlApp::exponentialSmoothing(NodeVertex *nv, double stopTime) {
+/*void HospitalControlApp::exponentialSmoothing(NodeVertex *nv, double stopTime) {
     if (nv->v->k == 0) {
         nv->v->predictW = stopTime;
         nv->v->d = nv->v->q = 0;
@@ -231,7 +231,7 @@ void HospitalControlApp::exponentialSmoothing(NodeVertex *nv, double stopTime) {
         nv->v->predictW = lambda * stopTime + (1 - lambda) * nv->v->predictW;
 //        mes = mes + " " + std::to_string(nv->v->predictW);
     }
-}
+}*/
 
 void HospitalControlApp::readLane(AGV *cur, std::string str) {
     double localWait = cur->itinerary->localWait * 0.1;
