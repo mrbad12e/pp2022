@@ -21,6 +21,7 @@ Djisktra::Djisktra() {
     getListEdges("weightEdges.txt");
     adjList.resize(numVertices);
     generateAdj(/*adjList*/);
+    getListEdges("weightEdges.txt");//re-create edges
 }
 
 Djisktra::~Djisktra() {
