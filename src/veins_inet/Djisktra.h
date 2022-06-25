@@ -145,6 +145,7 @@ public:
     std::string getRoute(std::string trace);
     ExponentialSmoothing* expSmoothing;
     std::vector<std::string> vertices;
+    int findVertex(std::string name);
 private:
     std::vector<std::vector<Quad>> adjList;
 
