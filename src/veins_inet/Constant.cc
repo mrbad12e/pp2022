@@ -18,7 +18,7 @@
 TraCIMobility* Constant::activation = NULL;
 long Constant::TOTAL_WAITING_TIME = 0;
 double Constant::TOTAL_TRAVELLING_TIME = 0;
-
+//std::string Constant::SUPPLY_DISPOSAL = "$";
 Constant::Constant() {
     // TODO Auto-generated constructor stub
 
