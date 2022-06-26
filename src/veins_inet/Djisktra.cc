@@ -278,7 +278,9 @@ std::string Djisktra::getRoute(std::string trace, std::string currLane, bool exi
       }
   }
   temp = "";
-  for(int i = 1; i < trace.length(); i++){
+  int start = locateLast(route, trace);
+  start = (start < 0) ? 1 : start;
+  for(int i = start; i < trace.length(); i++){
     if(trace[i] != '$' && trace[i] != '_'){
         temp = temp + trace[i];
     }
