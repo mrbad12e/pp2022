@@ -67,6 +67,7 @@ private:
     Djisktra* djisktra;
     std::string reRoute(AGV *cur, std::string routeId);
     void sendToAGV(std::string content);
+    std::string removeAntidromic(std::string input);
 };
 }
 #endif /* VEINS_INET_HOSPITALCONTROLAPP_H_ */
