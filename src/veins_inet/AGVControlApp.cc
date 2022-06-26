@@ -120,7 +120,11 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
            send(WSM,lowerLayerOut);
 
            if(expectedRoute.length() > 0){
-               if(expectedRoute.find("E23 ") != std::string::npos){
+               double t = simTime().dbl();
+               if(expectedRoute.find("-E230 ") != std::string::npos && t >= 186.0
+               //if(expectedRoute.find("-E230 -E232") != std::string::npos && t >= 186.0
+                      //&& ((traciVehicle->getRouteId()).compare("route_11") == 0)
+               ){
                    EV<<"dfsdsdfdsfdsf";
                }
                std::string current = traciVehicle->getLaneId();
@@ -194,7 +198,11 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                 std::vector<std::string> v = split(newRoute, " ");
                 std::list<std::string> l(v.begin(), v.end());
                 bool change = traciVehicle->changeVehicleRoute(l);
-                if(newRoute.find("E23 ") != std::string::npos){
+                double t = simTime().dbl();
+                //if(newRoute.find("-E230 -E232") != std::string::npos && t >= 186.0
+                if(newRoute.find("-E230 ") != std::string::npos && t >= 186.0
+                        //&& ((traciVehicle->getRouteId()).compare("route_11") == 0)
+                ){
                     EV<<"fddssdffds";
                 }
                 if(!change){
