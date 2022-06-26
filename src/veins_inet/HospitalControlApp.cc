@@ -398,12 +398,13 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
             return "";
         }
         this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst);
-        if(routeId.compare("route_7") == 0){
-            EV<<"New route: "<<routeId<<endl;
+        double t = simTime().dbl();
+        if(routeId.compare("route_11") == 0){
+            EV<<"New route: "<<t<<endl;
         }
         std::string newRoute = this->djisktra->getRoute(this->djisktra->traces[nextDst], cur->itinerary->laneId, exit == nextDst);
-        if(routeId.compare("route_7") == 0 && newRoute.find("E92 -E300") != std::string::npos){
-            EV<<"New route: "<<routeId<<endl;
+        if(routeId.compare("route_11") == 0 && newRoute.find("-E230 -E233") != std::string::npos){
+            EV<<"New route: "<<t<<endl;
         }
         if(nextDst != exit){
             this->djisktra->DijkstrasAlgorithm(nextDst, exit);
@@ -418,6 +419,10 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
                 else{
                     break;
                 }
+            }
+
+            if(routeId.compare("route_11") == 0 && t >= 182.95458451){
+                EV<<"New route: "<<t<<endl;
             }
 
             std::string lastPath = this->djisktra->getRoute(this->djisktra->traces[exit], futureLane, exit == exit);
@@ -436,19 +441,34 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
             }
             //else{
                 newRoute = newRoute + " " + lastPath;
+                if((newRoute.find("-E230 -E233") != std::string::npos
+                    || newRoute.find("-E233 -E230") != std::string::npos)
+                    //&& simTime().dbl() > 160
+                    ){
+                    double t = simTime().dbl();
+                    EV<<"Control what?"<<endl;
+                }
+
             //}
         }
         //std::string lastPath = this->djisktra->getFinalSegment(this->djisktra->traces[nextDst]);
         //if(lastPath.length() > 0){
         //    EV<<"BEUF hare"<<endl;
         //}
-        double t = simTime().dbl();
+        double t1 = simTime().dbl();
         //if(t >= 26.9543){
-        if(t > 7.3){
+        if(t1 > 7.3){
             //if(newRoute)
             EV<<"sfsddsfdss";
         }
         newRoute = removeAntidromic(newRoute);
+        if((newRoute.find("-E230 -E233") != std::string::npos
+            || newRoute.find("-E233 -E230") != std::string::npos)
+            //&& simTime().dbl() > 160
+            ){
+            double t = simTime().dbl();
+            EV<<"Control what?"<<endl;
+        }
         if(newRoute.length() == 0)
             return "";
         newRoute = "$" + cur->id + "_" + newRoute;
