@@ -25,6 +25,7 @@ class ItineraryRecord {// Ban ghi hanh trinh cua xe
 public:
     std::string laneId, prevLane = "";
     int prevVertex = -1;
+    std::string station = "";
     //int stopTime;
     int localWait;
 };
