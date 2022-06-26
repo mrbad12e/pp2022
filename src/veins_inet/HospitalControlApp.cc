@@ -18,6 +18,8 @@
 #include <iostream>
 #include "Zone.h"
 #include "Graph.h"
+#include <boost/algorithm/string.hpp>
+using namespace boost::algorithm;
 
 //#include "HashAPI.cpp"
 //#include "UnitTest.cpp"
@@ -39,7 +41,6 @@ void HospitalControlApp::initialize(int stage)
     }
     if (stage == 0) {
         //this->readCrossing();
-
         sendBeacon= new cMessage("send Beacon");
         graph = new Graph();
         djisktra = new Djisktra();
@@ -155,15 +156,15 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
         }
         std::string newRoute = readMessage(bc);
         if(newRoute.length() != 0){
-            /*if((newRoute.find("E295 -E454") != std::string::npos
-                || newRoute.find("-E454 E295") != std::string::npos)
-                && simTime().dbl() > 160
+            if((newRoute.find("-E204 -E1") != std::string::npos
+                || newRoute.find("-E1 -E204") != std::string::npos)
+                //&& simTime().dbl() > 160
                 ){
                 std::stringstream streamData(bc->getDemoData());
                 std::string content ;
                 getline(streamData, content);
                 EV<<"Control what?"<<endl;
-            }*/
+            }
             sendToAGV(newRoute);
         }
     }
@@ -369,14 +370,14 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
 
 std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
     int idOfI_Vertex = this->djisktra->findI_Vertex(cur->itinerary->laneId, false);
-    int src = -1, station = -1, dst = -1;
+    int src = -1, station = -1, exit = -1;
     int i = -1;
     if(idOfI_Vertex != cur->reRouteAt){
         for(i = 0; i < this->djisktra->itineraries.size(); i++){
             if(routeId.compare(std::get<0>(this->djisktra->itineraries[i])) == 0){
                 src = std::get<1>(this->djisktra->itineraries[i]);
                 station = std::get<2>(this->djisktra->itineraries[i]);
-                dst = std::get<3>(this->djisktra->itineraries[i]);
+                exit = std::get<3>(this->djisktra->itineraries[i]);
                 break;
             }
         }
@@ -389,14 +390,55 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
         std::get<2>(this->djisktra->itineraries[i]) = -1;
         station = -1;
     }
-    int nextDst = (station == -1) ? dst : station;
+    int nextDst = (station == -1) ? exit : station;
     if(nextDst > -1){
         if(idOfI_Vertex == nextDst){
             return "";
         }
         this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst);
+        if(idOfI_Vertex == 87 && nextDst == 103 && (cur->id.compare("16") == 0))
+        {
+            EV<<"BEUF hare"<<endl;
+        }
         std::string newRoute = this->djisktra->getRoute(this->djisktra->traces[nextDst], cur->itinerary->laneId);
         newRoute = "$" + cur->id + "_" + newRoute;
+        if(nextDst != exit){
+            this->djisktra->DijkstrasAlgorithm(nextDst, exit);
+
+            std::string futureLane = ""; //this->djisktra->vertices[nextDst];
+            trim_right(newRoute);
+            //Cam xoa comment nay: O day can dam bao la newRoute khong co space o cuoi
+            for(int i = newRoute.length() - 1; i >= 0; i--){
+                if(newRoute[i] != ' '){
+                    futureLane = newRoute[i] + futureLane;
+                }
+                else{
+                    break;
+                }
+            }
+
+            std::string lastPath = this->djisktra->getRoute(this->djisktra->traces[exit], futureLane);
+            if(lastPath.find(futureLane + " ") != std::string::npos
+                    && newRoute.find(" " + futureLane) != std::string::npos
+            ){
+                /*std::string omitedLastPath = "";
+                for(int i = futureLane.length(); i < lastPath.length(); i++){
+                    omitedLastPath = omitedLastPath + lastPath[i];
+                }*/
+                //newRoute = newRoute + " " + omitedLastPath;
+                //if(futureLane.length() + 1>= lastPath.length() || simTime().dbl() > 2.35){
+                //    EV<<"Out of range";
+                //}
+                lastPath = lastPath.substr(futureLane.length() + 1);
+            }
+            //else{
+                newRoute = newRoute + " " + lastPath;
+            //}
+        }
+        //std::string lastPath = this->djisktra->getFinalSegment(this->djisktra->traces[nextDst]);
+        //if(lastPath.length() > 0){
+        //    EV<<"BEUF hare"<<endl;
+        //}
         return newRoute;
     }
     return "";
