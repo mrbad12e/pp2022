@@ -47,11 +47,13 @@ public:
         raisedTime = (double *)malloc(num*sizeof(double));
         maxWeights = (double *)malloc(num*sizeof(double));
         timeOfPeaks = (double *)malloc(num*sizeof(double));
+        fromPedestrians = (double *)malloc(num*sizeof(double));
         for(int i = 0; i < num; i++){
             raisedTime[i] = -1;
             maxWeights[i] = 0;
             timeOfPeaks[i] = -1;
             waitTime[i] = 0;
+            fromPedestrians[i] = 0;
         }
         //this->readCrossing();
     }
@@ -105,47 +107,18 @@ public:
             }
         }
         if(checkPedestrians){
-            if(simTime().dbl() - lastGettingPedestrians > Constant::EXPIRED_TIME){
-                lastGettingPedestrians = simTime().dbl();
-                double area = 0; int numCrossings = 0;
+            return fromPedestrians[index];
+            //if(simTime().dbl() - lastGettingPedestrians > Constant::EXPIRED_TIME){
+            //    lastGettingPedestrians = simTime().dbl();
+            //    double area = 0; int numCrossings = 0;
                 //int count = checkCrossing(nameVertex, &numCrossings, &area);
                 //return this->getDispearTime(count, numCrossings, area);
-            }
+            //}
         }
         return predictW;
     }
 
-    void readCrossing(){
-        std::string line;
-        std::ifstream MyReadFile("crossing.txt");
-        getline(MyReadFile, line);
-        int numberOfCrossing =std::stoi(line);
 
-        int k = 0;
-
-        while (getline(MyReadFile, line)) {
-            size_t pos;
-            std::string token;
-            Crossing tmp;
-
-            for (int i = 0; i < 2; i++) {
-                pos = line.find(" ");
-                token = line.substr(0, pos);
-
-                if (i == 0) tmp.id = token;
-                if (i == 1) tmp.name = token; //std::atof(token.c_str());
-                //if (i == 2) tmp.from = token;
-                //if (i == 3) tmp.to = token;
-                line.erase(0, pos + 1);
-
-            }
-            tmp.rec = new CustomRectangle(line);
-            crossings.push_back(tmp);
-            k++;
-        }
-
-        MyReadFile.close();
-    }
 
 
 
@@ -207,12 +180,15 @@ public:
         if(waitTime[index] < 0)
             waitTime[index] = 0;
     }
+    double* fromPedestrians;
+    double* raisedTime;
 private:
     int* k;
     double* waitTime;
     double* Qt;
     double* Dt;
-    double* raisedTime;
+
+
     double* maxWeights;
     double* timeOfPeaks;
     int num;
@@ -246,6 +222,7 @@ public:
     std::vector<std::string> vertices;
     int findVertex(std::string name);
     std::string getFinalSegment(std::string trace);
+    int numIVertices = 0;
 
 private:
     std::vector<std::vector<Quad>> adjList;
@@ -259,7 +236,7 @@ private:
     bool isAntidromic(std::string direction, std::string otherDirection);
 
     int numVertices = 0; // 323 vertices (107 i-vertices and 341 b-vertices)
-    int numIVertices = 0;
+
 
     //std::vector <bool> visitedVertex(numVertices, false);
     double *ShortestPath; //[numVertices]; // Have an array to store the shortest path
