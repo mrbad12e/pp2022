@@ -18,6 +18,7 @@
 Djisktra::Djisktra() {
     // TODO Auto-generated constructor stub
     getListVertices("i-vertex.txt", "b-vertices.txt");
+    this->getSupplyAndDisposalLocation("SupplyDisposal.txt");
     getListEdges("weightEdges.txt");
     adjList.resize(numVertices);
     generateAdj(/*adjList*/);
@@ -228,7 +229,7 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       tempIndex = std::get<2>(*it);
       weightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, weightVertices[tempIndex], vertices[tempIndex]);
 
-      double newWeight = weight + tempW + 10*weightVertices[tempIndex];
+      double newWeight = weight + tempW + 40*weightVertices[tempIndex];
       if (newWeight < ShortestPath[tempIndex]){ // Check if we can do better
          tempTrace = std::get<3>(*it);
          ShortestPath[tempIndex] = newWeight; // Update new distance
@@ -274,6 +275,12 @@ std::string Djisktra::getRoute(std::string trace, std::string currLane){
         temp = "";
     }
   }
+  route = route + this->getFinalSegment(trace);
+  /*if(simTime().dbl() > 2.35464){
+      EV<<"sdfsdfs";
+  }
+  std::string lastPath = route.substr(route.length() - 10);
+  std::string lastTrace = trace.substr(trace.length() - 10);*/
   return route;
 }
 
@@ -296,4 +303,34 @@ void Djisktra::getItineraries(std::string itineraryFile){
         itineraries.push_back(std::make_tuple(nameRoute, source, station, dst));
     }
 
+}
+
+void Djisktra::getSupplyAndDisposalLocation(std::string fileName){
+    std::ifstream file(fileName);
+    std::string line;
+    std::string name, path;
+
+    while (getline(file, line)) {
+        std::stringstream ss(line);
+        getline(ss, name, '$');
+        getline(ss, path, '$');
+        supplyDisposal.push_back(std::make_pair(name, path));
+    }
+    file.close();
+}
+
+
+std::string Djisktra::getFinalSegment(std::string trace){
+    int index = trace.length() > 10 ? (trace.length() - 10) : 0;
+    std::string lastTrace = trace.substr(index);
+    for(int i = 0; i < this->supplyDisposal.size(); i++){
+        if(lastTrace.find("_" + this->supplyDisposal[i].first + "$") != std::string::npos){
+            return (" " + this->supplyDisposal[i].second);
+        }
+    }
+    /*double t = simTime().dbl();
+    if(t > 2.35){
+          EV<<"sdfsdfs";
+      }*/
+    return "";
 }
