@@ -256,6 +256,7 @@ private:
     std::vector<Pair> edges;
 
     void getSupplyAndDisposalLocation(std::string fileName);
+    bool isAntidromic(std::string direction, std::string otherDirection);
 
     int numVertices = 0; // 323 vertices (107 i-vertices and 341 b-vertices)
     int numIVertices = 0;
