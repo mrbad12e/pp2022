@@ -48,8 +48,8 @@ protected:
     void handlePositionUpdate(cObject* obj) override;
 
 private:
-    //std::vector<Crossing> crossings;
-    //void readCrossing();
+    std::vector<Crossing> crossings;
+    void readCrossing();
     //virtual std::string getIdOfGLane(std::string str);
     //virtual int getX2(int x);
     std::vector<AGV*> vhs;
@@ -59,15 +59,19 @@ private:
     std::vector<std::string> message;
     std::string readMessage(TraCIDemo11pMessage *bc);
     void exponentialSmoothing(NodeVertex *nv, double stopTime);
+    double getAverageVelocityByDensity(double density);
     void readLane(AGV *cur, std::string str);
     double lastUpdate = 0.0;
     long count = 0;
-    double getAvailablePerdestrian(std::string crossId, double _time);
-    double getVeloOfPerdestrian(std::string crossId, double _time);
+    //double getAvailablePerdestrian(std::string crossId, double _time);
+    //double getVeloOfPerdestrian(std::string crossId, double _time);
+    void predictDispearTime();
     Djisktra* djisktra;
     std::string reRoute(AGV *cur, std::string routeId);
     void sendToAGV(std::string content);
     std::string removeAntidromic(std::string input);
+    std::vector<std::vector<int>> aroundIntersections;
+    double* areas;
 };
 }
 #endif /* VEINS_INET_HOSPITALCONTROLAPP_H_ */
