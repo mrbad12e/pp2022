@@ -243,7 +243,7 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
           newWeight = std::numeric_limits<double>::infinity();
       }
       else{
-          newWeight = weight + tempW + 40*weightVertices[tempIndex];
+          newWeight = weight + tempW + weightVertices[tempIndex];
       }
       if (newWeight < ShortestPath[tempIndex]){ // Check if we can do better
          //tempTrace = std::get<3>(*it);
