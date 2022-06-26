@@ -153,9 +153,28 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
         int length = strlen(bc->getDemoData());
         std::string str = std::string(bc->getDemoData(), length);
         if(str.find("$" + std::to_string(myId) + "_") != std::string::npos){
+            if(std::to_string(myId).compare("16") != 0){
+                EV<<"dsdssd"<<endl;
+            }
             std::string newRoute = str.substr(std::to_string(myId).length() + 2);
             if(prevRoute.compare(newRoute) != 0){
                 prevRoute = newRoute;
+                if(newRoute.find(" -E0") == std::string::npos
+                        && newRoute.find(" -E226") == std::string::npos
+                        && newRoute.find(" E92") == std::string::npos
+                        && newRoute.find(" E298") == std::string::npos
+                        ){
+                    std::string last = newRoute.substr(newRoute.length() - 10);
+                    EV<<"DEBYEG"<<endl;
+                }
+                if((newRoute.find("-E204 -E1") != std::string::npos
+                    || newRoute.find("-E1 -E204") != std::string::npos)
+                    //&& simTime().dbl() > 160
+                    ){
+                    std::string last = newRoute.substr(newRoute.length() - 10)
+                            + " " + std::to_string(simTime().dbl());
+                    EV<<"Control what?"<<myId<<endl;
+                }
                 std::vector<std::string> v = split(newRoute, " ");
                 std::list<std::string> l(v.begin(), v.end());
                 bool change = traciVehicle->changeVehicleRoute(l);
