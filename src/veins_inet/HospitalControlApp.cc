@@ -155,13 +155,15 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
             send(WSM, lowerLayerOut);
         }
         std::string newRoute = readMessage(bc);
+        //newRoute = this->removeAntidromic(newRoute);
         if(newRoute.length() != 0){
-            if((newRoute.find("-E204 -E1") != std::string::npos
-                || newRoute.find("-E1 -E204") != std::string::npos)
+            if((newRoute.find("E92 -E300") != std::string::npos
+                || newRoute.find("-E300 E92") != std::string::npos)
                 //&& simTime().dbl() > 160
                 ){
                 std::stringstream streamData(bc->getDemoData());
                 std::string content ;
+                double t = simTime().dbl();
                 getline(streamData, content);
                 EV<<"Control what?"<<endl;
             }
@@ -248,11 +250,6 @@ void HospitalControlApp::readLane(AGV *cur, std::string str) {
 
 std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     std::stringstream streamData(bc->getDemoData());
-    //std::string content ;
-    //getline(streamData, content);
-    //if(content.compare("E293_1 0.877388 4.388800 route_3") == 0){
-    //    EV<<"DEBUG HERRE"<<endl;
-    //}
     std::string str;
     AGV *cur = NULL;
     for (auto a : vhs) {
@@ -369,6 +366,7 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
 }*/
 
 std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
+
     int idOfI_Vertex = this->djisktra->findI_Vertex(cur->itinerary->laneId, false);
     int src = -1, station = -1, exit = -1;
     int i = -1;
@@ -401,7 +399,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
             EV<<"BEUF hare"<<endl;
         }
         std::string newRoute = this->djisktra->getRoute(this->djisktra->traces[nextDst], cur->itinerary->laneId);
-        newRoute = "$" + cur->id + "_" + newRoute;
+
         if(nextDst != exit){
             this->djisktra->DijkstrasAlgorithm(nextDst, exit);
 
@@ -439,8 +437,75 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
         //if(lastPath.length() > 0){
         //    EV<<"BEUF hare"<<endl;
         //}
+        double t = simTime().dbl();
+        //if(t >= 26.9543){
+        if(t > 7.3){
+            //if(newRoute)
+            EV<<"sfsddsfdss";
+        }
+        newRoute = removeAntidromic(newRoute);
+        if(newRoute.length() == 0)
+            return "";
+        newRoute = "$" + cur->id + "_" + newRoute;
         return newRoute;
     }
     return "";
+}
+
+std::string HospitalControlApp::removeAntidromic(std::string input){
+    std::vector<std::string> list = split(input, " ");
+    int i = 0;
+    std::string temp1, temp2;
+    bool foundAntidromic = false;
+    bool foundDuplication = false;
+    bool change = false;
+    int size = list.size();
+    while(i < size - 1){
+        foundAntidromic = false;
+        foundDuplication = false;
+        for(i = 0; i < list.size() - 1; i++){
+            temp1 = list[i];
+            temp2 = list[i+1];
+            if(temp1.compare(temp2) == 0){
+                foundDuplication = true;
+                break;
+            }
+            if(list[i][0] == '-' && list[i+1][0] != '-'){
+                temp2 = '-' + temp2;
+            }
+            if(list[i][0] != '-' && list[i+1][0] == '-'){
+                temp1 = '-' + temp1;
+            }
+            if(temp1.compare(temp2) == 0){
+                foundAntidromic = true;
+                break;
+            }
+        }
+        if(foundDuplication){
+            change = true;
+            list.erase(list.begin() + i);
+            size--;
+            i = 0;
+        }
+        if(foundAntidromic){
+            change = true;
+            list.erase(list.begin() + i);
+            list.erase(list.begin() + i);
+            size -= 2;
+            i = 0;
+        }
+    }
+    if(!change)
+        return input;
+    if(list.size() >= 1){
+        std::string result = list[0];
+        for(int j = 1; j < list.size(); j++){
+            result = result + " " + list[j];
+        }
+        return result;
+    }
+    else{
+        return "";
+    }
 }
 
