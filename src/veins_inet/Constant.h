@@ -42,6 +42,7 @@ public:
     static TraCIMobility* activation;
     static long TOTAL_WAITING_TIME;
     static double TOTAL_TRAVELLING_TIME;
+
 };
 
 static char* mergeContent(long Id){
@@ -71,5 +72,6 @@ static std::vector<std::string> split(const std::string& str, const std::string&
     while (pos < str.length() && prev < str.length());
     return tokens;
 }
+
 
 #endif /* VEINS_INET_CONSTANT_H_ */
