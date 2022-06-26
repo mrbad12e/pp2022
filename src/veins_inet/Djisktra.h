@@ -245,15 +245,17 @@ public:
     ExponentialSmoothing* expSmoothing;
     std::vector<std::string> vertices;
     int findVertex(std::string name);
+    std::string getFinalSegment(std::string trace);
+
 private:
     std::vector<std::vector<Quad>> adjList;
-
+    std::vector<std::pair<std::string, std::string>> supplyDisposal;
 
     std::vector<int> nextIndexOfBVertices;
     std::vector<std::string> nextNameOfBVertices;
     std::vector<Pair> edges;
 
-
+    void getSupplyAndDisposalLocation(std::string fileName);
 
     int numVertices = 0; // 323 vertices (107 i-vertices and 341 b-vertices)
     int numIVertices = 0;
