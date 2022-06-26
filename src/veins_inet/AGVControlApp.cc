@@ -120,12 +120,24 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
            send(WSM,lowerLayerOut);
 
            if(expectedRoute.length() > 0){
+               if(expectedRoute.find("E23 ") != std::string::npos){
+                   EV<<"dfsdsdfdsfdsf";
+               }
                std::string current = traciVehicle->getLaneId();
                int x = current.find("_");
-               current = current.substr(0, x);
-               if(expectedRoute.find(current) == 0){
+               if(x > 0)
+                   current = current.substr(0, x);
+               if(expectedRoute.find(current) != std::string::npos){
                    std::vector<std::string> v = split(expectedRoute, " ");
-                   std::list<std::string> l(v.begin(), v.end());
+                   int i = 0; bool found = false;
+                   for(i = 0; i < v.size(); i++){
+                       if(v[i].compare(current) == 0){
+                           found = true;
+                           break;
+                       }
+                   }
+                   if(!found) i = 0;
+                   std::list<std::string> l(v.begin() + i, v.end());
                    bool change = traciVehicle->changeVehicleRoute(l);
                    if(change){
                        expectedRoute = "";
@@ -159,25 +171,32 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
             std::string newRoute = str.substr(std::to_string(myId).length() + 2);
             if(prevRoute.compare(newRoute) != 0){
                 prevRoute = newRoute;
-                if(newRoute.find(" -E0") == std::string::npos
+                /*if(newRoute.find(" -E0") == std::string::npos
                         && newRoute.find(" -E226") == std::string::npos
                         && newRoute.find(" E92") == std::string::npos
                         && newRoute.find(" E298") == std::string::npos
                         ){
-                    std::string last = newRoute.substr(newRoute.length() - 10);
+                    if(newRoute.length() - 10 > 0){
+                        std::string last = newRoute.substr(newRoute.length() - 10);
+                    }
                     EV<<"DEBYEG"<<endl;
                 }
                 if((newRoute.find("-E204 -E1") != std::string::npos
                     || newRoute.find("-E1 -E204") != std::string::npos)
                     //&& simTime().dbl() > 160
                     ){
-                    std::string last = newRoute.substr(newRoute.length() - 10)
+                    if(newRoute.length() - 10 > 0){
+                        std::string last = newRoute.substr(newRoute.length() - 10)
                             + " " + std::to_string(simTime().dbl());
+                    }
                     EV<<"Control what?"<<myId<<endl;
-                }
+                }*/
                 std::vector<std::string> v = split(newRoute, " ");
                 std::list<std::string> l(v.begin(), v.end());
                 bool change = traciVehicle->changeVehicleRoute(l);
+                if(newRoute.find("E23 ") != std::string::npos){
+                    EV<<"fddssdffds";
+                }
                 if(!change){
                     std::string content = traciVehicle->getLaneId();
                     EV<<content<<endl;
