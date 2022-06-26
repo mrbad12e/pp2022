@@ -241,7 +241,7 @@ public:
     std::vector<std::tuple<std::string, int, int, int>> itineraries;
     std::vector<std::string> traces;
     int findI_Vertex(std::string name, bool recursive);
-    std::string getRoute(std::string trace, std::string currentLane);
+    std::string getRoute(std::string trace, std::string currentLane, bool exitOnTheWay);
     ExponentialSmoothing* expSmoothing;
     std::vector<std::string> vertices;
     int findVertex(std::string name);
