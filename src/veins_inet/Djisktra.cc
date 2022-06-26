@@ -84,7 +84,11 @@ int Djisktra::findI_Vertex(std::string name, bool recursive){
         }
     }
     if(recursive){
-        name = "-" + name;
+        if(name[0] != '-')
+            name = "-" + name;
+        else{
+            name = name.substr(1);
+        }
         return findI_Vertex(name, false);
     }
     return -1;
@@ -251,7 +255,7 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   } // While Priority Queue is not empty
 } // DijkstrasAlgorithm
 
-std::string Djisktra::getRoute(std::string trace, std::string currLane){
+std::string Djisktra::getRoute(std::string trace, std::string currLane, bool exitOnTheWay){
   std::string route = (currLane[0] == ':') ? "" : (currLane + " ");
   std::string temp = "";
   for(int i = 0; i < edges.size(); i++){
@@ -286,7 +290,8 @@ std::string Djisktra::getRoute(std::string trace, std::string currLane){
         temp = "";
     }
   }
-  route = route + this->getFinalSegment(trace);
+  if(exitOnTheWay)
+      route = route + this->getFinalSegment(trace);
   /*if(simTime().dbl() > 2.35464){
       EV<<"sdfsdfs";
   }
