@@ -67,22 +67,22 @@ void HospitalControlApp::finish()
     this->djisktra->expSmoothing->printMaxWeights(this->djisktra->vertices);
 
     EV<<"#calling traci->getPersonIds(): "<<count<<endl;
-    EV<<"As 10 AGVs => T: 3796, W: 1811, %: 48%"<<endl;
-    EV<<"As 10 + 1(flow 11) AGVs => T: 4521, W: 2334, %: 52%"<<endl;
-    EV<<"As 10 + 1(flow 10) + 1(flow11) AGVs => T: 4793, W: 2416, %: 50%"<<endl;
-    EV<<"As 10 + 1(flow 11) + 1(flow 2) AGVs => T: 5175, W: 2782, %: 54%"<<endl;
-    EV<<"As 10 + 1(flow10) + 1(flow 11) + 1(flow 2) AGVs => T: 5455, W: 2871, %: 53%"<<endl;
-    EV<<"As 10 + 2(flow10) + 1(flow 11) + 1(flow 2) AGVs => T: 6846, W: 3616, %: 53%"<<endl;
-    EV<<"As 10 + 2(flow10) + 2(flow 11) + 1(flow 2) AGVs => T: 5863, W: 2850, %: 49%"<<endl;
-    EV<<"As 10 + 2(flow10) + 2(flow 11) + 1(flow 2) + 1(flow0) AGVs => T: 6734, W: 3517, %: 52%"<<endl;
-    EV<<"As 10 + 2(flow10) + 2(flow 11) + 3(flow0-2) AGVs => T: 7649, W: 4202, %: 55%"<<endl;
-    EV<<"As 10 + 2(flow10) + 2(flow 11) + 4(flow0-3) AGVs => T: 7261, W: 3621, %: 50%"<<endl;
-    EV<<"As 10 + 2(flow10) + 2(flow 11) + 5(flow0-4) AGVs => T: 6488, W: 2644, %: 41%"<<endl;
-    EV<<"As 10 + 2(flow10) + 2(flow 11) + 6(flow0-5) AGVs => T: 8027, W: 3973, %: 49.5%"<<endl;
-    EV<<"As 10 + 2(flow10) + 2(flow 11) + 7(flow0-6) AGVs => T: 9578, W: 5289, %: 55%"<<endl;
-    EV<<"As 10 + 2(flow10) + 2(flow 11) + 8(flow0-7) AGVs => T: 10471, W: 5970, %: 57%"<<endl;
-    EV<<"As 10 + 2(flow10) + 2(flow 11) + 9(flow0-8) AGVs => T: 9538, W: 4830, %: 51%"<<endl;
-    EV<<"As 10 + 2(flow10) + 2(flow 11) + 10(flow0-9) AGVs => T: 9939, W: 5083, %: 51%"<<endl;
+    EV<<"1) As 10 AGVs => T: 3796, W: 1811, %: 48%"<<endl;
+    EV<<"2) As 10 + 1(flow 11) AGVs => T: 4521, W: 2334, %: 52%"<<endl;
+    EV<<"3) As 10 + 1(flow 10) + 1(flow11) AGVs => T: 4793, W: 2416, %: 50%"<<endl;
+    EV<<"4) As 10 + 1(flow 11) + 1(flow 2) AGVs => T: 5175, W: 2782, %: 54%"<<endl;
+    EV<<"5) As 10 + 1(flow10) + 1(flow 11) + 1(flow 2) AGVs => T: 5455, W: 2871, %: 53%"<<endl;
+    EV<<"6) As 10 + 2(flow10) + 1(flow 11) + 1(flow 2) AGVs => T: 6846, W: 3616, %: 53%"<<endl;
+    EV<<"7) As 10 + 2(flow10) + 2(flow 11) + 1(flow 2) AGVs => T: 5863, W: 2850, %: 49%"<<endl;
+    EV<<"8) As 10 + 2(flow10) + 2(flow 11) + 1(flow 2) + 1(flow0) AGVs => T: 6734, W: 3517, %: 52%"<<endl;
+    EV<<"9) As 10 + 2(flow10) + 2(flow 11) + 3(flow0-2) AGVs => T: 7649, W: 4202, %: 55%"<<endl;
+    EV<<"10) As 10 + 2(flow10) + 2(flow 11) + 4(flow0-3) AGVs => T: 7261, W: 3621, %: 50%"<<endl;
+    EV<<"11) As 10 + 2(flow10) + 2(flow 11) + 5(flow0-4) AGVs => T: 6488, W: 2644, %: 41%"<<endl;
+    EV<<"12) As 10 + 2(flow10) + 2(flow 11) + 6(flow0-5) AGVs => T: 8027, W: 3973, %: 49.5%"<<endl;
+    EV<<"13) As 10 + 2(flow10) + 2(flow 11) + 7(flow0-6) AGVs => T: 9578, W: 5289, %: 55%"<<endl;
+    EV<<"14) As 10 + 2(flow10) + 2(flow 11) + 8(flow0-7) AGVs => T: 10471, W: 5970, %: 57%"<<endl;
+    EV<<"15) As 10 + 2(flow10) + 2(flow 11) + 9(flow0-8) AGVs => T: 9538, W: 4830, %: 51%"<<endl;
+    EV<<"16) As 10 + 2(flow10) + 2(flow 11) + 10(flow0-9) AGVs => T: 9939, W: 5083, %: 51%"<<endl;
 
     EV<<"As 10 + 1(flow 8) AGVs => T: 2709, W: 547, %: 20%"<<endl;
     EV<<"As 10 + 1(flow 2) AGVs => T: 3045.7, W: 875, %: 29%"<<endl;
@@ -157,8 +157,8 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
         std::string newRoute = readMessage(bc);
         //newRoute = this->removeAntidromic(newRoute);
         if(newRoute.length() != 0){
-            if((newRoute.find("E92 -E300") != std::string::npos
-                || newRoute.find("-E300 E92") != std::string::npos)
+            if((newRoute.find("-E230 -E233") != std::string::npos
+                || newRoute.find("-E233 -E230") != std::string::npos)
                 //&& simTime().dbl() > 160
                 ){
                 std::stringstream streamData(bc->getDemoData());
@@ -249,6 +249,10 @@ void HospitalControlApp::readLane(AGV *cur, std::string str) {
 }
 
 std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
+    double t = simTime().dbl();
+    if(t > 7.25){
+        EV<<"dfdffddf";
+    }
     std::stringstream streamData(bc->getDemoData());
     std::string str;
     AGV *cur = NULL;
@@ -394,12 +398,13 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
             return "";
         }
         this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst);
-        if(idOfI_Vertex == 87 && nextDst == 103 && (cur->id.compare("16") == 0))
-        {
-            EV<<"BEUF hare"<<endl;
+        if(routeId.compare("route_7") == 0){
+            EV<<"New route: "<<routeId<<endl;
         }
-        std::string newRoute = this->djisktra->getRoute(this->djisktra->traces[nextDst], cur->itinerary->laneId);
-
+        std::string newRoute = this->djisktra->getRoute(this->djisktra->traces[nextDst], cur->itinerary->laneId, exit == nextDst);
+        if(routeId.compare("route_7") == 0 && newRoute.find("E92 -E300") != std::string::npos){
+            EV<<"New route: "<<routeId<<endl;
+        }
         if(nextDst != exit){
             this->djisktra->DijkstrasAlgorithm(nextDst, exit);
 
@@ -415,7 +420,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
                 }
             }
 
-            std::string lastPath = this->djisktra->getRoute(this->djisktra->traces[exit], futureLane);
+            std::string lastPath = this->djisktra->getRoute(this->djisktra->traces[exit], futureLane, exit == exit);
             if(lastPath.find(futureLane + " ") != std::string::npos
                     && newRoute.find(" " + futureLane) != std::string::npos
             ){
