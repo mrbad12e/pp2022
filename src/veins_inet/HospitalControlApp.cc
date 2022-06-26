@@ -40,14 +40,65 @@ void HospitalControlApp::initialize(int stage)
         //graphGenerator->readFile();
     }
     if (stage == 0) {
-        //this->readCrossing();
         sendBeacon= new cMessage("send Beacon");
         graph = new Graph();
         djisktra = new Djisktra();
+        this->readCrossing();
     }
     else if (stage == 1) {
         // Initializing members that require initialized other modules goes here
     }
+}
+
+void HospitalControlApp::readCrossing(){
+    //Always call after this->djisktra != NULL
+    std::string line;
+    std::ifstream MyReadFile("crossing.txt");
+    getline(MyReadFile, line);
+    int numberOfCrossing =std::stoi(line);
+
+    int k = 0;
+
+    while (getline(MyReadFile, line)) {
+        size_t pos;
+        std::string token;
+        Crossing tmp;
+
+        for (int i = 0; i < 2; i++) {
+            pos = line.find(" ");
+            token = line.substr(0, pos);
+
+            if (i == 0) tmp.id = token;
+            if (i == 1) tmp.name = token; //std::atof(token.c_str());
+            //if (i == 2) tmp.from = token;
+            //if (i == 3) tmp.to = token;
+            line.erase(0, pos + 1);
+
+        }
+        tmp.rec = new CustomRectangle(line);
+        crossings.push_back(tmp);
+        k++;
+    }
+
+    MyReadFile.close();
+    std::string name = "";
+    areas = (double *)malloc(this->djisktra->numIVertices*sizeof(double));
+    for(int i = 0; i < this->djisktra->numIVertices; i++){
+        areas[i] = 0;
+    }
+    this->aroundIntersections.resize(this->djisktra->numIVertices);
+    for(int i = 0; i < crossings.size(); i++){
+        for(int j = 0; j < this->djisktra->numIVertices; j++){
+            name = this->djisktra->vertices[j];
+            if(crossings[i].id.compare(name) == 0){
+                this->aroundIntersections[j].push_back(i);
+                areas[j] += crossings[i].rec->getArea();
+                break;
+            }
+        }
+
+    }
+
 }
 
 void HospitalControlApp::finish()
@@ -89,7 +140,7 @@ void HospitalControlApp::finish()
     //EV<<"As 11 AGVs => T: 2720.8, W: 547, %: 20%"<<endl;
     EV<<"As 11 AGVs + 1(10) => T: 3239.9, W: 887.7, %: 27.4%"<<endl;
 
-    EV<<"Total waiting time: "<<Constant::TOTAL_WAITING_TIME*0.1<<"(s)"<<endl;
+    EV<<"Reproduce case"<<11<<") Total waiting time: "<<Constant::TOTAL_WAITING_TIME*0.1<<"(s)"<<endl;
     EV<<"Total travelling time: "<<Constant::TOTAL_TRAVELLING_TIME<<"(s)"<<endl;
     double percentage = Constant::TOTAL_WAITING_TIME*10/Constant::TOTAL_TRAVELLING_TIME;
     EV<<"% of waiting time: "<<percentage<<endl;
@@ -116,9 +167,13 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                     traci = Constant::activation->getCommandInterface();
             }
 
-            /*if(simTime().dbl() - lastUpdate >= 0.2 && false){
+            if(simTime().dbl() - lastUpdate >= 1){
                 count++;
                 std::list<std::string> allPeople = traci->getPersonIds();
+                for(int i = 0; i < crossings.size(); i++){
+                    crossings[i].count = 0;
+                }
+
                 double x, y;
                 //for(int i = 0; i < crossings.size(); i++){
                 for (auto elem: allPeople) {
@@ -131,8 +186,7 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                     //newCoord.z = 0;
                     for(int i = 0; i < crossings.size(); i++){
                         if (crossings[i].rec->checkInside(x, y)) {
-                    //    crossings[i].peoples.push_back(std::make_tuple(personId, newCoord.x,
-                            //newCoord.y, simTime().dbl()));
+                            crossings[i].count++;
                             break;
                         }
                         else if (crossings[i].rec->checkAround(x, y)){
@@ -141,8 +195,9 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                     }
                 }
 
+                predictDispearTime();
                 lastUpdate = simTime().dbl();
-            }*/
+            }
 
             TraCIDemo11pMessage *rsuBeacon = new TraCIDemo11pMessage();
 
@@ -171,6 +226,30 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
         }
     }
 
+}
+
+void HospitalControlApp::predictDispearTime(){
+    for(int i = 0; i < this->djisktra->numIVertices; i++){
+        int sum = 0;
+        for(int j = 0; j < this->aroundIntersections[i].size(); j++)
+        {
+            int index = this->aroundIntersections[i][j];
+            sum += this->crossings[index].count;
+        }
+        double density = sum/areas[i];
+        double velocity = getAverageVelocityByDensity(density);
+        double predict = Constant::LENGTH_CROSSING*sum*0.5/velocity;
+        if(this->djisktra->weightVertices[i] < predict
+                || this->djisktra->expSmoothing->raisedTime[i] < 0
+        ){
+            this->djisktra->expSmoothing->fromPedestrians[i] = predict;
+        }
+    }
+}
+
+double HospitalControlApp::getAverageVelocityByDensity(double density) {
+//    y = 0.2 * x^2 - 1.1 * x + 1.7
+    return 0.2 * density * density - 1.1 * density + 1.7;
 }
 
 void HospitalControlApp::sendToAGV(std::string content){
