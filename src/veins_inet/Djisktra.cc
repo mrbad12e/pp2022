@@ -228,10 +228,21 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       tempW = std::get<0>(*it);
       tempIndex = std::get<2>(*it);
       weightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, weightVertices[tempIndex], vertices[tempIndex]);
-
-      double newWeight = weight + tempW + 40*weightVertices[tempIndex];
+      tempTrace = std::get<3>(*it);
+      double newWeight = 0; //weight + tempW + 40*weightVertices[tempIndex];
+      /*if(trace.find("$E9$") != std::string::npos
+            && tempTrace.find("$-E9$") != std::string::npos
+              ){
+          EV<<"fdfsf";
+      }*/
+      if(isAntidromic(trace, tempTrace)){
+          newWeight = std::numeric_limits<double>::infinity();
+      }
+      else{
+          newWeight = weight + tempW + 40*weightVertices[tempIndex];
+      }
       if (newWeight < ShortestPath[tempIndex]){ // Check if we can do better
-         tempTrace = std::get<3>(*it);
+         //tempTrace = std::get<3>(*it);
          ShortestPath[tempIndex] = newWeight; // Update new distance
          traces[tempIndex] = trace; //tempTrace;
          PQ.push(make_tuple(ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
@@ -317,6 +328,28 @@ void Djisktra::getSupplyAndDisposalLocation(std::string fileName){
         supplyDisposal.push_back(std::make_pair(name, path));
     }
     file.close();
+}
+
+bool Djisktra::isAntidromic(std::string direction, std::string otherDirection){
+    //bool antidromic = false;
+    std::vector<std::string> firstDirection = split(direction, "$");
+    std::vector<std::string> secondDirection = split(otherDirection, "$");
+    if(firstDirection.size() >= 2 && secondDirection.size() >= 2){
+        if(firstDirection[firstDirection.size() - 1].compare(secondDirection[0]) == 0){
+            std::string nextOfDirection = firstDirection[firstDirection.size() - 2];
+            std::string nextOfOtherDirection = secondDirection[1];
+            if(nextOfDirection[0] == '-' && nextOfOtherDirection[0] != '-'){
+                nextOfOtherDirection = '-' + nextOfOtherDirection;
+            }
+            if(nextOfDirection[0] != '-' && nextOfOtherDirection[0] == '-'){
+                nextOfDirection = '-' + nextOfDirection;
+            }
+            if(nextOfDirection.compare(nextOfOtherDirection) == 0){
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 
