@@ -73,5 +73,19 @@ static std::vector<std::string> split(const std::string& str, const std::string&
     return tokens;
 }
 
+static int locateLast(std::string route, std::string trace){
+    std::vector<std::string> tokens = split(route, " ");
+    int last = tokens.size() - 1;
+    std::string lastLane = tokens[last];
+
+    if(trace.find("$" + lastLane + "$") == std::string::npos){
+        return -1;//not found
+    }
+    else{
+        int location = trace.find("$" + lastLane + "$") + lastLane.length();
+        return location;
+    }
+}
+
 
 #endif /* VEINS_INET_CONSTANT_H_ */
