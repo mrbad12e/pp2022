@@ -32,6 +32,7 @@ public:
     //std::string to;
     //double length;
     CustomRectangle* rec;
+    int count = 0;
     std::vector<std::tuple<std::string, double, double, double>> peoples;
 };
 
