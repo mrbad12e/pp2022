@@ -234,6 +234,9 @@ void HospitalControlApp::readLane(AGV *cur, std::string str) {
     str.erase(str.find("_"));
     cur->itinerary->laneId = str;
     if(cur->itinerary->prevLane.compare(cur->itinerary->laneId) != 0){
+        if(cur->itinerary->prevLane.compare(cur->itinerary->station) == 0){
+            cur->passedStation = cur->itinerary->prevLane.length() > 0;
+        }
         int idVertex = this->djisktra->findVertex(str);
         if(cur->itinerary->prevVertex != idVertex){
             if(cur->itinerary->prevVertex != -1){
@@ -250,7 +253,7 @@ void HospitalControlApp::readLane(AGV *cur, std::string str) {
 
 std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     double t = simTime().dbl();
-    if(t > 7.25){
+    if(t > 187.55){
         EV<<"dfdffddf";
     }
     std::stringstream streamData(bc->getDemoData());
@@ -379,6 +382,9 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
             if(routeId.compare(std::get<0>(this->djisktra->itineraries[i])) == 0){
                 src = std::get<1>(this->djisktra->itineraries[i]);
                 station = std::get<2>(this->djisktra->itineraries[i]);
+                if(cur->itinerary->station.length() == 0){
+                    cur->itinerary->station = this->djisktra->vertices[station];
+                }
                 exit = std::get<3>(this->djisktra->itineraries[i]);
                 break;
             }
@@ -388,7 +394,8 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
         return "";
     }
 
-    if(idOfI_Vertex == station && i != -1){
+    //if((idOfI_Vertex == station && i != -1){
+    if(cur->passedStation){
         std::get<2>(this->djisktra->itineraries[i]) = -1;
         station = -1;
     }
@@ -399,11 +406,11 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
         }
         this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst);
         double t = simTime().dbl();
-        if(routeId.compare("route_11") == 0){
+        if(routeId.compare("route_11") == 0 && t >= 187.55 && (cur->id.compare("28") == 0)){
             EV<<"New route: "<<t<<endl;
         }
         std::string newRoute = this->djisktra->getRoute(this->djisktra->traces[nextDst], cur->itinerary->laneId, exit == nextDst);
-        if(routeId.compare("route_11") == 0 && newRoute.find("-E230 -E233") != std::string::npos){
+        if(routeId.compare("route_11") == 0 && newRoute.find("-E230 -E232") != std::string::npos){
             EV<<"New route: "<<t<<endl;
         }
         if(nextDst != exit){
@@ -421,7 +428,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
                 }
             }
 
-            if(routeId.compare("route_11") == 0 && t >= 182.95458451){
+            if(routeId.compare("route_11") == 0 && t >= 186.0){
                 EV<<"New route: "<<t<<endl;
             }
 
@@ -441,8 +448,8 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
             }
             //else{
                 newRoute = newRoute + " " + lastPath;
-                if((newRoute.find("-E230 -E233") != std::string::npos
-                    || newRoute.find("-E233 -E230") != std::string::npos)
+                if((newRoute.find("-E230 -E232") != std::string::npos
+                    || newRoute.find("-E232 -E230") != std::string::npos)
                     //&& simTime().dbl() > 160
                     ){
                     double t = simTime().dbl();
