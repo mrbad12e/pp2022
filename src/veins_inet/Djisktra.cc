@@ -195,7 +195,7 @@ void Djisktra::generateAdj(){
     }
 }
 void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
-        int source, int target){
+        int source, int target, std::string currLane){
   std::priority_queue<Quad, std::vector<Quad>, std::greater<Quad> > PQ; // Set up priority queue
   Quad info;
   std::string trace;
@@ -239,6 +239,9 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
               ){
           EV<<"fdfsf";
       }*/
+      if(!isValidTrace(currLane, tempTrace)){
+          continue;
+      }
       if(isAntidromic(trace, tempTrace)){
           newWeight = std::numeric_limits<double>::infinity();
       }
@@ -262,14 +265,7 @@ std::string Djisktra::getRoute(std::string trace, std::string currLane, int curr
   std::string strCurrVertex = this->vertices[currentVertex];
   std::string strNextVertex = this->vertices[nextVertex];
   for(int i = 0; i < edges.size(); i++){
-      if(edges[i].first.find("$" + currLane + "$") != std::string::npos
-      //&&
-      //    (edges[i].first.find("_" + strCurrVertex + "$") != std::string::npos
-       //       ||
-       //firstLanes.find("$" + currLane + "$") != std::string::npos
-          //)
-      //&& edges[i].first.find("_" + strNextVertex + "$") != std::string::npos
-      ){
+      if(edges[i].first.find("$" + currLane + "$") != std::string::npos){
           std::vector<std::string> list = split(edges[i].first, "$" + currLane + "$");
           std::string remaining = list[list.size() - 1];
           for(int j = 0; j < remaining.length(); j++){
@@ -304,11 +300,7 @@ std::string Djisktra::getRoute(std::string trace, std::string currLane, int curr
   }
   if(nextVertex == exitVertex)
       route = route + this->getFinalSegment(trace);
-  /*if(simTime().dbl() > 2.35464){
-      EV<<"sdfsdfs";
-  }
-  std::string lastPath = route.substr(route.length() - 10);
-  std::string lastTrace = trace.substr(trace.length() - 10);*/
+
   return route;
 }
 
@@ -367,6 +359,20 @@ bool Djisktra::isAntidromic(std::string direction, std::string otherDirection){
         }
     }
     return false;
+}
+
+bool Djisktra::isValidTrace(std::string currLane, std::string trace){
+    std::string otherLane = "";
+    if(currLane[0] == '-'){
+        otherLane = currLane.substr(1);
+    }
+    else{
+        otherLane = "-" + currLane;
+    }
+    if(otherLane.length() > 0){
+        return (trace.find("$" + otherLane + "$") == std::string::npos);
+    }
+    return true;
 }
 
 
