@@ -76,6 +76,8 @@ static std::vector<std::string> split(const std::string& str, const std::string&
 static int locateLast(std::string route, std::string trace){
     std::vector<std::string> tokens = split(route, " ");
     int last = tokens.size() - 1;
+    if(last < 0)
+        return -1;
     std::string lastLane = tokens[last];
 
     if(trace.find("$" + lastLane + "$") == std::string::npos){
