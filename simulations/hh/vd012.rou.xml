@@ -14,7 +14,7 @@
   <route id="route_10" edges="-E298 -E297 -E296 -E295 -E294 -E293 -E292 -E348 -E347 -E346 -E345 -E344 -E343 -E342 -E341 -E340 -E339 -E338 -E337 -E336 -E335 E349 E350 E351 E352 E353 E354 E355 E356 E357 E358 E359 E360 E361 E362 E363 -E315 -E314 -E313 -E312 -E311 -E310 -E309 -E308 -E307 -E306 -E305 E395 E396 E375 E376 E377 E378 -E235 -E234 -E233 -E232 -E231 -E230 -E227 -E226"/>
   <route id="route_11" edges="-E298 -E297 -E296 -E295 -E294 -E293 -E292 -E348 -E347 -E346 -E345 -E344 -E343 -E342 -E341 -E340 -E339 -E338 -E337 -E336 -E335 E349 E350 E351 E352 E353 E354 E355 E356 E357 E358 E359 E360 E361 E362 E363 -E315 -E314 -E313 -E312 -E311 -E310 -E309 -E308 -E307 -E306 -E305 E395 E396 E375 E376 E393 E394 -E302 -E301 -E233 -E232 -E231 -E230 E228 E229 -E1 -E0"/>
  
-  <flow id="flow0" type="agv" route="route_0" begin="0" period="60" minGap="1.10" maxSpeed="4.00" number="0"/>
+  <flow id="flow0" type="agv" route="route_0" begin="0" period="60" minGap="1.10" maxSpeed="4.00" number="1"/>
   <personFlow type="pedestrian" begin="0" end="720" id="p10a" impatience="0.04" period="4">
     <walk from="E10" to="-E10"/>
   </personFlow>
@@ -383,7 +383,7 @@
     <personFlow begin="0" id="p197b" impatience="0.76941454" end="482" period="5">
         <walk from="-E197" to="E197"/>
     </personFlow>
-    <flow id="flow1" type="agv" route="route_1" begin="1" period="60" minGap="1.10" maxSpeed="4.00" number="0"/>
+    <flow id="flow1" type="agv" route="route_1" begin="1" period="60" minGap="1.10" maxSpeed="4.00" number="1"/>
  
   <personFlow begin="1" id="p98c" impatience="0.57" end="512" period="4">
     <walk from="E98" to="-E98"/>
@@ -693,8 +693,8 @@
   <personFlow begin="1" id="p154b" impatience="0.42" end="512" period="4">
     <walk from="-E154" to="E154"/>
   </personFlow>
-  <flow id="flow2" type="agv" route="route_2" begin="2" period="60" minGap="1.10" maxSpeed="4.00" number="1"/>
-  <flow id="flow11" type="agv" route="route_11" begin="2" period="60" minGap="1.10" maxSpeed="4.00" number="0"/>
+  <flow id="flow2" type="agv" route="route_2" begin="2" period="60" minGap="1.10" maxSpeed="4.00" number="2"/>
+  <flow id="flow11" type="agv" route="route_11" begin="2" period="60" minGap="1.10" maxSpeed="4.00" number="2"/>
   <personFlow begin="2" id="p170a" impatience="0.64" end="512" period="4">
     <walk from="E170" to="-E170"/>
   </personFlow>
@@ -755,7 +755,7 @@
   <personFlow begin="2" id="p198b" impatience="0.26" end="512" period="4">
     <walk from="-E198" to="E198"/>
   </personFlow>
-  <flow id="flow3" type="agv" route="route_3" begin="3"  period="60" minGap="1.10" maxSpeed="4.00" number="0"/>
+  <flow id="flow3" type="agv" route="route_3" begin="3"  period="60" minGap="1.10" maxSpeed="4.00" number="1"/>
   <personFlow begin="3" id="p20a" impatience="0.08" end="1501" period="10">
     <walk from="E20" to="-E20"/>
   </personFlow>
@@ -799,7 +799,7 @@
     <walk from="-E221" to="E221"/>
   </personFlow>
 
-  <flow id="flow4" type="agv" route="route_4" begin="4" period="60" minGap="1.10" maxSpeed="4.00" number="0"/>    
+  <flow id="flow4" type="agv" route="route_4" begin="4" period="60" minGap="1.10" maxSpeed="4.00" number="1"/>    
   <personFlow begin="5" id="p305a" impatience="0.57" end="512" period="4">
     <walk from="E305" to="-E305"/>
   </personFlow>
@@ -855,7 +855,7 @@
   <personFlow begin="5" id="p315b" impatience="0.41" end="512" period="4">
     <walk from="-E315" to="E315"/>
   </personFlow>
-  <flow id="flow5" type="agv" route="route_5" begin="5"  period="60" minGap="1.10" maxSpeed="4.00" number="0"/>
+  <flow id="flow5" type="agv" route="route_5" begin="5"  period="60" minGap="1.10" maxSpeed="4.00" number="1"/>
   <personFlow begin="6" id="p316a" impatience="0.60" end="512" period="4">
     <walk from="E316" to="-E316"/>
   </personFlow>
@@ -934,10 +934,10 @@
   <personFlow begin="6" id="p356b" impatience="0.33" end="512" period="4">
     <walk from="-E356" to="E356"/>
   </personFlow>
-  <flow id="flow6" type="agv" route="route_6" begin="6" period="60" minGap="1.10" maxSpeed="4.00" number="0"/>
+  <flow id="flow6" type="agv" route="route_6" begin="6" period="60" minGap="1.10" maxSpeed="4.00" number="1"/>
  
 
-  <flow id="flow7" type="agv" route="route_7" begin="7" period="60" minGap="1.10" maxSpeed="4.00" number="0"/>
+  <flow id="flow7" type="agv" route="route_7" begin="7" period="60" minGap="1.10" maxSpeed="4.00" number="1"/>
  
   <personFlow begin="7" id="p360a" impatience="0.68" end="512" period="4">
     <walk from="E360" to="-E360"/>
@@ -1023,7 +1023,7 @@
   <personFlow begin="7" id="p388b" impatience="0.27" end="512" period="4">
     <walk from="-E388" to="E388"/>
   </personFlow>
-  <flow id="flow8" type="agv" route="route_8" begin="8" period="60" minGap="1.10" maxSpeed="4.00" number="0"/>
+  <flow id="flow8" type="agv" route="route_8" begin="8" period="60" minGap="1.10" maxSpeed="4.00" number="1"/>
  
   <personFlow begin="8" id="p389a" impatience="0.73" end="512" period="4">
     <walk from="E389" to="-E389"/>
@@ -1115,7 +1115,7 @@
   <personFlow begin="8" id="p422b" impatience="0.21" end="512" period="4">
     <walk from="-E422" to="E422"/>
   </personFlow>
-  <flow id="flow9" type="agv" route="route_9" begin="9" period="60" minGap="1.10" maxSpeed="4.00" number="0"/>
+  <flow id="flow9" type="agv" route="route_9" begin="9" period="60" minGap="1.10" maxSpeed="4.00" number="1"/>
  
   <personFlow begin="9" id="p423a" impatience="0.80" end="512" period="4">
     <walk from="E423" to="-E423"/>
@@ -1291,7 +1291,7 @@
   <personFlow begin="10" id="p494b" impatience="0.07" end="512" period="4">
     <walk from="-E494" to="E494"/>
   </personFlow>
-  <flow id="flow10" type="agv" route="route_10" begin="10" period="60" minGap="1.10" maxSpeed="4.00" number="0"/>
+  <flow id="flow10" type="agv" route="route_10" begin="10" period="60" minGap="1.10" maxSpeed="4.00" number="2"/>
  
  
   <personFlow begin="11" id="p498a" impatience="0.94" end="512" period="4">
