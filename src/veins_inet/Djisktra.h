@@ -211,7 +211,7 @@ public:
     //void generateAdj(std::vector<Quad> adjList[]);
     void generateAdj();
     void DijkstrasAlgorithm(//std::vector<Quad> adjList[],
-            int source, int target);
+            int source, int target, std::string currLane);
     void getItineraries(std::string itineraryFile);
     std::vector<double> weightVertices;
     std::vector<std::tuple<std::string, int, int, int>> itineraries;
@@ -234,9 +234,10 @@ private:
 
     void getSupplyAndDisposalLocation(std::string fileName);
     bool isAntidromic(std::string direction, std::string otherDirection);
+    bool isValidTrace(std::string currLane, std::string trace);
 
     int numVertices = 0; // 323 vertices (107 i-vertices and 341 b-vertices)
-    std::string firstLanes = "$E0$E1$E226$E227$-E92$-E91$-E90$-E298$-E297$-E296$:J3$:J203$:J272$:J273$:J92$:J91$";
+    //std::string firstLanes = "$E0$E1$E226$E227$-E92$-E91$-E90$-E298$-E297$-E296$:J3$:J203$:J272$:J273$:J92$:J91$";
 
     //std::vector <bool> visitedVertex(numVertices, false);
     double *ShortestPath; //[numVertices]; // Have an array to store the shortest path
