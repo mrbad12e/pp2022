@@ -217,7 +217,7 @@ public:
     std::vector<std::tuple<std::string, int, int, int>> itineraries;
     std::vector<std::string> traces;
     int findI_Vertex(std::string name, bool recursive);
-    std::string getRoute(std::string trace, std::string currentLane, bool exitOnTheWay);
+    std::string getRoute(std::string trace, std::string currentLane, int currentVertex, int nextVertex, int exitVertex);
     ExponentialSmoothing* expSmoothing;
     std::vector<std::string> vertices;
     int findVertex(std::string name);
@@ -236,7 +236,7 @@ private:
     bool isAntidromic(std::string direction, std::string otherDirection);
 
     int numVertices = 0; // 323 vertices (107 i-vertices and 341 b-vertices)
-
+    std::string firstLanes = "$E0$E1$E226$E227$-E92$-E91$-E90$-E298$-E297$-E296$:J3$:J203$:J272$:J273$:J92$:J91$";
 
     //std::vector <bool> visitedVertex(numVertices, false);
     double *ShortestPath; //[numVertices]; // Have an array to store the shortest path
