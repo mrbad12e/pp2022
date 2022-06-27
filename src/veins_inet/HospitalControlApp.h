@@ -61,7 +61,7 @@ private:
     void exponentialSmoothing(NodeVertex *nv, double stopTime);
     double getAverageVelocityByDensity(double density);
     void readLane(AGV *cur, std::string str);
-    double lastUpdate = 0.0;
+    double lastUpdate = -2.0;
     long count = 0;
     //double getAvailablePerdestrian(std::string crossId, double _time);
     //double getVeloOfPerdestrian(std::string crossId, double _time);
