@@ -126,7 +126,7 @@ void HospitalControlApp::finish()
     EV<<"6) As 10 + 2(flow10) + 1(flow 11) + 1(flow 2) AGVs => T: 3409(6846), W: 81(3616), %: 2.4(53)%"<<endl;
     EV<<"7) As 10 + 2(flow10) + 2(flow 11) + 1(flow 2) AGVs => T: 3988(5863), W: 133(2850), %: 3.3(49)%"<<endl;
     EV<<"8) As 10 + 2(flow10) + 2(flow 11) + 1(flow 2) + 1(flow0) AGVs => T: 4096(6734), W: 83.1(3517), %: 2(52)%"<<endl;
-    EV<<"9) As 10 + 2(flow10) + 2(flow 11) + 3(flow0-2) AGVs => T: 7649, W: 4202, %: 55%"<<endl;
+    EV<<"9) As 10 + 2(flow10) + 2(flow 11) + 3(flow0-2) AGVs => T: 4271(7649), W: 87(4202), %: 2(55)%"<<endl;
     EV<<"10) As 10 + 2(flow10) + 2(flow 11) + 4(flow0-3) AGVs => T: 7261, W: 3621, %: 50%"<<endl;
     EV<<"11) As 10 + 2(flow10) + 2(flow 11) + 5(flow0-4) AGVs => T: 4900(6488), W: 203(2644), %: 4(41)%"<<endl;
     EV<<"12) As 10 + 2(flow10) + 2(flow 11) + 6(flow0-5) AGVs => T: 8027, W: 3973, %: 49.5%"<<endl;
