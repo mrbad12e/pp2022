@@ -34,7 +34,7 @@ public:
     static constexpr const char* NON_CAR = "";
     static constexpr const double GAMMA = 0.3;
     static constexpr const double DELTA_T = 1;
-    static constexpr const double EXPIRED_TIME = 10;
+    static constexpr const double EXPIRED_TIME = 2;
     static constexpr const double MAX_SPEED = 4;
     static constexpr const double LENGTH_CROSSING = 6.4;
     Constant();
@@ -71,6 +71,28 @@ static std::vector<std::string> split(const std::string& str, const std::string&
     }
     while (pos < str.length() && prev < str.length());
     return tokens;
+}
+
+static std::string getLane(std::vector<std::string> list, bool wantLast){
+    if(wantLast){
+        for(int i = list.size() - 1; i >= 0; i--){
+            if(list[i][0] != ':' &&
+                    list[i].find("_") == std::string::npos
+            ){
+                return list[i];
+            }
+        }
+    }
+    else{
+        for(int i = 1; i < list.size(); i++){
+            if(list[i][0] != ':' &&
+                    list[i].find("_") == std::string::npos
+            ){
+                return list[i];
+            }
+        }
+    }
+    return "";
 }
 
 static int locateLast(std::string route, std::string trace){
