@@ -212,8 +212,9 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
         std::string newRoute = readMessage(bc);
         //newRoute = this->removeAntidromic(newRoute);
         if(newRoute.length() != 0){
-            if((newRoute.find("-E230 -E233") != std::string::npos
-                || newRoute.find("-E233 -E230") != std::string::npos)
+            if((newRoute.find("-E234 -E235") != std::string::npos
+                || newRoute.find("-E230 -E232") != std::string::npos
+                    )
                 //&& simTime().dbl() > 160
                 ){
                 std::stringstream streamData(bc->getDemoData());
@@ -238,6 +239,10 @@ void HospitalControlApp::predictDispearTime(){
         }
         double density = sum/areas[i];
         double velocity = getAverageVelocityByDensity(density);
+        //if(i == 88){
+        if(velocity < 0){
+            EV<<"sdsfsdfsdf";
+        }
         double predict = Constant::LENGTH_CROSSING*sum*0.5/velocity;
         if(this->djisktra->weightVertices[i] < predict
                 || this->djisktra->expSmoothing->raisedTime[i] < 0
@@ -332,7 +337,7 @@ void HospitalControlApp::readLane(AGV *cur, std::string str) {
 
 std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     double t = simTime().dbl();
-    if(t > 187.55){
+    if(t > 185.754){
         EV<<"dfdffddf";
     }
     std::stringstream streamData(bc->getDemoData());
@@ -454,6 +459,14 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
 std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
 
     int idOfI_Vertex = this->djisktra->findI_Vertex(cur->itinerary->laneId, false);
+    if(this->djisktra->vertices[idOfI_Vertex].compare(cur->itinerary->laneId) == 0){
+        return "";//skip this case, too complex
+    }
+    else{
+        if(this->djisktra->vertices[idOfI_Vertex][0] == cur->itinerary->laneId[0]){
+            return "";//skip as well
+        }
+    }
     int src = -1, station = -1, exit = -1;
     int i = -1;
     if(idOfI_Vertex != cur->reRouteAt){
@@ -485,10 +498,18 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
         }
         this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst);
         double t = simTime().dbl();
-        if(routeId.compare("route_11") == 0 && t >= 187.55 && (cur->id.compare("28") == 0)){
+        if(routeId.compare("route_2") == 0 && t >= 87.15 //&& (cur->id.compare("28") == 0)
+                ){
             EV<<"New route: "<<t<<endl;
         }
-        std::string newRoute = this->djisktra->getRoute(this->djisktra->traces[nextDst], cur->itinerary->laneId, exit == nextDst);
+        if(routeId.compare("route_11") == 0 && t >= 185.754 && (cur->id.compare("28") == 0)
+                ){
+            EV<<"New route: "<<t<<endl;
+        }
+        std::string newRoute = this->djisktra->getRoute(this->djisktra->traces[nextDst], cur->itinerary->laneId, idOfI_Vertex, nextDst, exit);
+        if(routeId.compare("route_2") == 0 && newRoute.find("-E234 -E235") != std::string::npos){
+            EV<<"New route: "<<t<<endl;
+        }
         if(routeId.compare("route_11") == 0 && newRoute.find("-E230 -E232") != std::string::npos){
             EV<<"New route: "<<t<<endl;
         }
@@ -507,11 +528,12 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
                 }
             }
 
-            if(routeId.compare("route_11") == 0 && t >= 186.0){
+            if(routeId.compare("route_0") == 0 && t >= 7.0){
                 EV<<"New route: "<<t<<endl;
             }
 
-            std::string lastPath = this->djisktra->getRoute(this->djisktra->traces[exit], futureLane, exit == exit);
+            std::string lastPath =
+                    this->djisktra->getRoute(this->djisktra->traces[exit], futureLane, nextDst, exit, exit);
             if(lastPath.find(futureLane + " ") != std::string::npos
                     && newRoute.find(" " + futureLane) != std::string::npos
             ){
@@ -548,7 +570,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
             EV<<"sfsddsfdss";
         }
         newRoute = removeAntidromic(newRoute);
-        if((newRoute.find("-E230 -E233") != std::string::npos
+        if((newRoute.find("-E81 E202") != std::string::npos
             || newRoute.find("-E233 -E230") != std::string::npos)
             //&& simTime().dbl() > 160
             ){
