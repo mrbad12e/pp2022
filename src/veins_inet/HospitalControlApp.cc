@@ -118,17 +118,17 @@ void HospitalControlApp::finish()
     this->djisktra->expSmoothing->printMaxWeights(this->djisktra->vertices);
 
     EV<<"#calling traci->getPersonIds(): "<<count<<endl;
-    EV<<"1) As 10 AGVs => T: 3796, W: 1811, %: 48%"<<endl;
-    EV<<"2) As 10 + 1(flow 11) AGVs => T: 4521, W: 2334, %: 52%"<<endl;
-    EV<<"3) As 10 + 1(flow 10) + 1(flow11) AGVs => T: 4793, W: 2416, %: 50%"<<endl;
-    EV<<"4) As 10 + 1(flow 11) + 1(flow 2) AGVs => T: 5175, W: 2782, %: 54%"<<endl;
-    EV<<"5) As 10 + 1(flow10) + 1(flow 11) + 1(flow 2) AGVs => T: 5455, W: 2871, %: 53%"<<endl;
-    EV<<"6) As 10 + 2(flow10) + 1(flow 11) + 1(flow 2) AGVs => T: 6846, W: 3616, %: 53%"<<endl;
+    EV<<"1) As 10 AGVs => T: 3022(3796), W: 241(1811), %: 8(48)%"<<endl;
+    EV<<"2) As 10 + 1(flow 11) AGVs => T: 3177(4521), W: 463(2334), %: 15(52)%"<<endl;
+    EV<<"3) As 10 + 1(flow 10) + 1(flow11) AGVs => T: 2982(4793), W: 76(2416), %: 3(50)%"<<endl;
+    EV<<"4) As 10 + 1(flow 11) + 1(flow 2) AGVs => T: 3020(5175), W: 119(2782), %: 4(54)%"<<endl;
+    EV<<"5) As 10 + 1(flow10) + 1(flow 11) + 1(flow 2) AGVs => T: 3220(5455), W: 76(2871), %: 2.3(53)%"<<endl;
+    EV<<"6) As 10 + 2(flow10) + 1(flow 11) + 1(flow 2) AGVs => T: 3409(6846), W: 81(3616), %: 2.4(53)%"<<endl;
     EV<<"7) As 10 + 2(flow10) + 2(flow 11) + 1(flow 2) AGVs => T: 5863, W: 2850, %: 49%"<<endl;
     EV<<"8) As 10 + 2(flow10) + 2(flow 11) + 1(flow 2) + 1(flow0) AGVs => T: 6734, W: 3517, %: 52%"<<endl;
     EV<<"9) As 10 + 2(flow10) + 2(flow 11) + 3(flow0-2) AGVs => T: 7649, W: 4202, %: 55%"<<endl;
     EV<<"10) As 10 + 2(flow10) + 2(flow 11) + 4(flow0-3) AGVs => T: 7261, W: 3621, %: 50%"<<endl;
-    EV<<"11) As 10 + 2(flow10) + 2(flow 11) + 5(flow0-4) AGVs => T: 6488, W: 2644, %: 41%"<<endl;
+    EV<<"11) As 10 + 2(flow10) + 2(flow 11) + 5(flow0-4) AGVs => T: 4900(6488), W: 203(2644), %: 4(41)%"<<endl;
     EV<<"12) As 10 + 2(flow10) + 2(flow 11) + 6(flow0-5) AGVs => T: 8027, W: 3973, %: 49.5%"<<endl;
     EV<<"13) As 10 + 2(flow10) + 2(flow 11) + 7(flow0-6) AGVs => T: 9578, W: 5289, %: 55%"<<endl;
     EV<<"14) As 10 + 2(flow10) + 2(flow 11) + 8(flow0-7) AGVs => T: 10471, W: 5970, %: 57%"<<endl;
@@ -140,7 +140,7 @@ void HospitalControlApp::finish()
     //EV<<"As 11 AGVs => T: 2720.8, W: 547, %: 20%"<<endl;
     EV<<"As 11 AGVs + 1(10) => T: 3239.9, W: 887.7, %: 27.4%"<<endl;
 
-    EV<<"Reproduce case"<<11<<") Total waiting time: "<<Constant::TOTAL_WAITING_TIME*0.1<<"(s)"<<endl;
+    EV<<"Reproduce case "<<7<<") Total waiting time: "<<Constant::TOTAL_WAITING_TIME*0.1<<"(s)"<<endl;
     EV<<"Total travelling time: "<<Constant::TOTAL_TRAVELLING_TIME<<"(s)"<<endl;
     double percentage = Constant::TOTAL_WAITING_TIME*10/Constant::TOTAL_TRAVELLING_TIME;
     EV<<"% of waiting time: "<<percentage<<endl;
@@ -247,7 +247,12 @@ void HospitalControlApp::predictDispearTime(){
         if(this->djisktra->weightVertices[i] < predict
                 || this->djisktra->expSmoothing->raisedTime[i] < 0
         ){
-            this->djisktra->expSmoothing->fromPedestrians[i] = predict;
+            if(predict == predict){
+                this->djisktra->expSmoothing->fromPedestrians[i] = predict;
+            }
+            else{
+                this->djisktra->expSmoothing->fromPedestrians[i] = 0;
+            }
         }
     }
 }
