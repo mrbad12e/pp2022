@@ -242,8 +242,9 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       if(isAntidromic(trace, tempTrace)){
           newWeight = std::numeric_limits<double>::infinity();
       }
-      else{
-          newWeight = weight + tempW + weightVertices[tempIndex];
+      else
+      {
+          newWeight = weight + tempW + 100*weightVertices[tempIndex];
       }
       if (newWeight < ShortestPath[tempIndex]){ // Check if we can do better
          //tempTrace = std::get<3>(*it);
@@ -255,11 +256,20 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   } // While Priority Queue is not empty
 } // DijkstrasAlgorithm
 
-std::string Djisktra::getRoute(std::string trace, std::string currLane, bool exitOnTheWay){
+std::string Djisktra::getRoute(std::string trace, std::string currLane, int currentVertex, int nextVertex, int exitVertex){
   std::string route = (currLane[0] == ':') ? "" : (currLane + " ");
   std::string temp = "";
+  std::string strCurrVertex = this->vertices[currentVertex];
+  std::string strNextVertex = this->vertices[nextVertex];
   for(int i = 0; i < edges.size(); i++){
-      if(edges[i].first.find("$" + currLane + "$") != std::string::npos){
+      if(edges[i].first.find("$" + currLane + "$") != std::string::npos
+      //&&
+      //    (edges[i].first.find("_" + strCurrVertex + "$") != std::string::npos
+       //       ||
+       //firstLanes.find("$" + currLane + "$") != std::string::npos
+          //)
+      //&& edges[i].first.find("_" + strNextVertex + "$") != std::string::npos
+      ){
           std::vector<std::string> list = split(edges[i].first, "$" + currLane + "$");
           std::string remaining = list[list.size() - 1];
           for(int j = 0; j < remaining.length(); j++){
@@ -292,7 +302,7 @@ std::string Djisktra::getRoute(std::string trace, std::string currLane, bool exi
         temp = "";
     }
   }
-  if(exitOnTheWay)
+  if(nextVertex == exitVertex)
       route = route + this->getFinalSegment(trace);
   /*if(simTime().dbl() > 2.35464){
       EV<<"sdfsdfs";
