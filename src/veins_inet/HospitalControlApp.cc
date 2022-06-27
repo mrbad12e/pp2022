@@ -458,15 +458,17 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
 
 std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
 
+    if(this->djisktra->vertices[0][0] == cur->itinerary->laneId[0]){
+        return "";//skip this case, too complex as AGV is on an intersection
+    }
+
     int idOfI_Vertex = this->djisktra->findI_Vertex(cur->itinerary->laneId, false);
-    if(this->djisktra->vertices[idOfI_Vertex].compare(cur->itinerary->laneId) == 0){
+    /*if(this->djisktra->vertices[idOfI_Vertex].compare(cur->itinerary->laneId) == 0){
         return "";//skip this case, too complex
     }
     else{
-        if(this->djisktra->vertices[idOfI_Vertex][0] == cur->itinerary->laneId[0]){
-            return "";//skip as well
-        }
-    }
+
+    }*/
     int src = -1, station = -1, exit = -1;
     int i = -1;
     if(idOfI_Vertex != cur->reRouteAt){
@@ -496,7 +498,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
         if(idOfI_Vertex == nextDst){
             return "";
         }
-        this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst);
+        this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst, cur->itinerary->laneId);
         double t = simTime().dbl();
         if(routeId.compare("route_2") == 0 && t >= 87.15 //&& (cur->id.compare("28") == 0)
                 ){
@@ -514,7 +516,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
             EV<<"New route: "<<t<<endl;
         }
         if(nextDst != exit){
-            this->djisktra->DijkstrasAlgorithm(nextDst, exit);
+
 
             std::string futureLane = ""; //this->djisktra->vertices[nextDst];
             trim_right(newRoute);
@@ -527,6 +529,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId){
                     break;
                 }
             }
+            this->djisktra->DijkstrasAlgorithm(nextDst, exit, futureLane);
 
             if(routeId.compare("route_0") == 0 && t >= 7.0){
                 EV<<"New route: "<<t<<endl;
