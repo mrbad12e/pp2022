@@ -55,6 +55,7 @@ public:
             waitTime[i] = 0;
             fromPedestrians[i] = 0;
         }
+        this->readCycicalData();
         //this->readCrossing();
     }
 
@@ -94,9 +95,10 @@ public:
     }
 
     double getDampingValue(int index, double predictW, std::string nameVertex){
-        bool checkPedestrians = raisedTime[index] < 0 && index < numIVertices;
+        double timeOflastSmoothing = raisedTime[index];
+        bool checkPedestrians = timeOflastSmoothing < 0 && index < numIVertices;
         if(!checkPedestrians){
-            if(simTime().dbl() - raisedTime[index] > Constant::EXPIRED_TIME){
+            if(simTime().dbl() - timeOflastSmoothing > Constant::EXPIRED_TIME){
                 if(waitTime[index] > 0){
                     return exponentialSmooth(index, predictW);
                 }
@@ -107,6 +109,10 @@ public:
             }
         }
         if(checkPedestrians){
+            double x = fromPedestrians[index];
+            if(x != x){
+                fromPedestrians[index] = 0;
+            }
             return fromPedestrians[index];
             //if(simTime().dbl() - lastGettingPedestrians > Constant::EXPIRED_TIME){
             //    lastGettingPedestrians = simTime().dbl();
@@ -118,50 +124,24 @@ public:
         return predictW;
     }
 
-
-
-
-
-    int checkCrossing(std::string name, int *numLocalCrossing, double *area){
-        int count = 0;
-        if(traci == NULL){
-            if(Constant::activation != NULL)
-                traci = Constant::activation->getCommandInterface();
+    void readCycicalData(){
+        std::string line;
+        std::ifstream MyReadFile("cyclicalData.txt");
+        while(getline(MyReadFile, line)){
+            allNoisyIntersections = allNoisyIntersections + "$" + line + "$";
         }
-        if(traci != NULL){
-            std::list<std::string> allPeople = traci->getPersonIds();
-            double x, y;
-            std::vector<Crossing> inVertex;
-            *area = 0;
-            for(int i = 0; i < crossings.size(); i++){
-                if(crossings[i].id.compare(name) == 0){
-                    inVertex.push_back(crossings[i]);
-                    *area += crossings[i].rec->getArea();
-                }
-            }
-            *numLocalCrossing = inVertex.size();
-            if(*numLocalCrossing == 0)
-                return 0;
-
-            for (auto elem: allPeople) {
-                std::string personId = elem;
-                Coord peoplePosition = traci->getPersonPosition(personId);
-                std::pair<double,double> coordTraCI = traci->getTraCIXY(peoplePosition);
-                x = coordTraCI.first;
-                y = coordTraCI.second;
-                for(int i = 0; i < inVertex.size(); i++){
-                    if (inVertex[i].rec->checkInside(x, y)) {
-                        count++;
-                        break;
-                    }
-                    else if (inVertex[i].rec->checkAround(x, y)){
-                        break;
-                    }
-                }
-            }
-        }
-        return count;
+        MyReadFile.close();
     }
+
+    double useCycicalData(double incommingTime, std::string name, double weightSmoothing){
+        if(incommingTime > this->beginWalking && incommingTime < this->endWalking){
+            if(allNoisyIntersections.find("$" + name + "$") != std::string::npos){
+                return 0.5;
+            }
+        }
+        return weightSmoothing;
+    }
+
 
     double getDispearTime(int count, int numLocalCrossing, double area){
         if(count == 0 || numLocalCrossing == 0)
@@ -182,11 +162,15 @@ public:
     }
     double* fromPedestrians;
     double* raisedTime;
+
 private:
     int* k;
     double* waitTime;
     double* Qt;
     double* Dt;
+    int beginWalking = 0;
+    int endWalking = 400;
+    std::string allNoisyIntersections = "";
 
 
     double* maxWeights;
