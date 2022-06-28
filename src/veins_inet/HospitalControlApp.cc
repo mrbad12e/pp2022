@@ -131,9 +131,9 @@ void HospitalControlApp::finish()
     EV<<"10) As 10 + 2(flow10) + 2(flow 11) + 4(flow0-3) AGVs => T: 5214(7261), W: 492(3621), %: 9.5(50)%"<<endl;
     EV<<"11) As 10 + 2(flow10) + 2(flow 11) + 5(flow0-4) AGVs => T: 4900(6488), W: 203(2644), %: 4(41)%"<<endl;
     EV<<"12) As 10 + 2(flow10) + 2(flow 11) + 6(flow0-5) AGVs => T: 5255(8027), W: 270(3973), %: 5(49.5)%"<<endl;
-    EV<<"13) As 10 + 2(flow10) + 2(flow 11) + 7(flow0-6) AGVs => T: 9578, W: 5289, %: 55%"<<endl;
-    EV<<"14) As 10 + 2(flow10) + 2(flow 11) + 8(flow0-7) AGVs => T: 10471, W: 5970, %: 57%"<<endl;
-    EV<<"15) As 10 + 2(flow10) + 2(flow 11) + 9(flow0-8) AGVs => T: 9538, W: 4830, %: 51%"<<endl;
+    EV<<"13) As 10 + 2(flow10) + 2(flow 11) + 7(flow0-6) AGVs => T: 5808(9578), W: 583(5289), %: 10(55)%"<<endl;
+    EV<<"14) As 10 + 2(flow10) + 2(flow 11) + 8(flow0-7) AGVs => T: 6569(10471), W: 1049(5970), %: 16(57)%"<<endl;
+    EV<<"15) As 10 + 2(flow10) + 2(flow 11) + 9(flow0-8) AGVs => T: 6439(9538), W: 694(4830), %: 11(51)%"<<endl;
     EV<<"16) As 10 + 2(flow10) + 2(flow 11) + 10(flow0-9) AGVs => T: 9939, W: 5083, %: 51%"<<endl;
 
     EV<<"As 10 + 1(flow 8) AGVs => T: 2709, W: 547, %: 20%"<<endl;
