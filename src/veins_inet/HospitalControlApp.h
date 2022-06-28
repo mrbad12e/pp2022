@@ -67,7 +67,7 @@ private:
     //double getVeloOfPerdestrian(std::string crossId, double _time);
     void predictDispearTime();
     Djisktra* djisktra;
-    std::string reRoute(AGV *cur, std::string routeId);
+    std::string reRoute(AGV *cur, std::string routeId/*, double t*/);
     void sendToAGV(std::string content);
     std::string removeAntidromic(std::string input);
     std::vector<std::vector<int>> aroundIntersections;
