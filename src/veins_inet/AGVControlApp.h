@@ -50,6 +50,7 @@ private:
     std::string originalRoute = "";
     std::string prevRoute = "";
     std::string expectedRoute = "";
+    std::string content = "";
 };
 }
 #endif /* VEINS_INET_AGVCONTROLAPP_H_ */
