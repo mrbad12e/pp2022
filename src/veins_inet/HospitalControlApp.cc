@@ -51,6 +51,8 @@ void HospitalControlApp::initialize(int stage)
 }
 
 void HospitalControlApp::readCrossing(){
+    if(Constant::SHORTEST_PATH)
+        return;
     //Always call after this->djisktra != NULL
     std::string line;
     std::ifstream MyReadFile("crossing.txt");
@@ -134,14 +136,14 @@ void HospitalControlApp::finish()
     EV<<"13) As 10 + 2(flow10) + 2(flow 11) + 7(flow0-6) AGVs => T: 5808(9578), W: 583(5289), %: 10(55)%"<<endl;
     EV<<"14) As 10 + 2(flow10) + 2(flow 11) + 8(flow0-7) AGVs => T: 6569(10471), W: 1049(5970), %: 16(57)%"<<endl;
     EV<<"15) As 10 + 2(flow10) + 2(flow 11) + 9(flow0-8) AGVs => T: 6439(9538), W: 694(4830), %: 11(51)%"<<endl;
-    EV<<"16) As 10 + 2(flow10) + 2(flow 11) + 10(flow0-9) AGVs => T: 9939, W: 5083, %: 51%"<<endl;
-
+    EV<<"16) As 10 + 2(flow10) + 2(flow 11) + 10(flow0-9) AGVs => T: 6709(9939), W: 895(5083), %: 13(51)%"<<endl;
+    EV<<"17) As case 16 + 24(flow 12) AGVs => T: 7168(10482), W: 622(5369), %: 9(51)%"<<endl;
     EV<<"As 10 + 1(flow 8) AGVs => T: 2709, W: 547, %: 20%"<<endl;
     EV<<"As 10 + 1(flow 2) AGVs => T: 3045.7, W: 875, %: 29%"<<endl;
     //EV<<"As 11 AGVs => T: 2720.8, W: 547, %: 20%"<<endl;
     EV<<"As 11 AGVs + 1(10) => T: 3239.9, W: 887.7, %: 27.4%"<<endl;
 
-    EV<<"Reproduce case "<<13<<") Total waiting time: "<<Constant::TOTAL_WAITING_TIME*0.1<<"(s)"<<endl;
+    EV<<"Reproduce case "<<17<<") Total waiting time: "<<Constant::TOTAL_WAITING_TIME*0.1<<"(s)"<<endl;
     EV<<"Total travelling time: "<<Constant::TOTAL_TRAVELLING_TIME<<"(s)"<<endl;
     double percentage = Constant::TOTAL_WAITING_TIME*10/Constant::TOTAL_TRAVELLING_TIME;
     EV<<"% of waiting time: "<<percentage<<endl;
@@ -168,7 +170,7 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                     traci = Constant::activation->getCommandInterface();
             }
 
-            if(simTime().dbl() - lastUpdate >= 1 /*&& false*/){
+            if(simTime().dbl() - lastUpdate >= 1 && !Constant::SHORTEST_PATH){
                 count++;
                 try{
                     std::list<std::string> allPeople = traci->getPersonIds();
@@ -225,31 +227,33 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                 EV<<e.what()<<endl;
             }
         }
-        std::string newRoute = readMessage(bc);
-        //newRoute = this->removeAntidromic(newRoute);
-        if(newRoute.length() != 0){
-            /*if((newRoute.find("-E234 -E235") != std::string::npos
-                || newRoute.find("-E230 -E232") != std::string::npos
-                    )
-                ){
-                std::stringstream streamData(bc->getDemoData());
-                std::string content ;
-                double t = simTime().dbl();
-                getline(streamData, content);
-                EV<<"Control what?"<<endl;
-            }*/
-            EV<<"237";
-            try{
-                /*double t = simTime().dbl();
-                if(t > 216.4){
-                    EV<<"ehree"<<endl;
+        if(!Constant::SHORTEST_PATH){
+            std::string newRoute = readMessage(bc);
+            //newRoute = this->removeAntidromic(newRoute);
+            if(newRoute.length() != 0){
+                /*if((newRoute.find("-E234 -E235") != std::string::npos
+                    || newRoute.find("-E230 -E232") != std::string::npos
+                        )
+                    ){
+                    std::stringstream streamData(bc->getDemoData());
+                    std::string content ;
+                    double t = simTime().dbl();
+                    getline(streamData, content);
+                    EV<<"Control what?"<<endl;
                 }*/
-                sendToAGV(newRoute);
+                //EV<<"237";
+                try{
+                    /*double t = simTime().dbl();
+                    if(t > 216.4){
+                        EV<<"ehree"<<endl;
+                    }*/
+                    sendToAGV(newRoute);
+                }
+                catch(std::exception& e1){
+                    EV<<e1.what()<<endl;
+                }
+                //EV<<"239"<<endl;
             }
-            catch(std::exception& e1){
-                EV<<e1.what()<<endl;
-            }
-            EV<<"239"<<endl;
         }
     }
 
@@ -327,24 +331,6 @@ void HospitalControlApp::handlePositionUpdate(cObject* obj)
 }
 
 
-
-/*void HospitalControlApp::exponentialSmoothing(NodeVertex *nv, double stopTime) {
-    if (nv->v->k == 0) {
-        nv->v->predictW = stopTime;
-        nv->v->d = nv->v->q = 0;
-        nv->v->k++;
-    } else {
-        double error = stopTime - nv->v->predictW;
-        nv->v->q = Constant::GAMMA * error - (1 - Constant::GAMMA) * nv->v->q;
-        nv->v->d = Constant::GAMMA * abs(error)
-                - (1 - Constant::GAMMA) * nv->v->d;
-        double lambda = abs(nv->v->q / nv->v->d);
-        nv->v->predictW = lambda * stopTime + (1 - lambda) * nv->v->predictW;
-//        mes = mes + " " + std::to_string(nv->v->predictW);
-    }
-}*/
-
-
 void HospitalControlApp::readLane(AGV *cur, std::string str) {
     double localWait = cur->itinerary->localWait * 0.1;
     str.erase(str.find("_"));
@@ -372,6 +358,8 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     //if(t > 216.4){
         //EV<<"dfdffddf";
     //}
+    if(Constant::SHORTEST_PATH)
+        return "";
     std::stringstream streamData(bc->getDemoData());
     std::string str;
     AGV *cur = NULL;
@@ -421,75 +409,11 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     return newRoute;
 }
 
-/*double HospitalControlApp::getAvailablePerdestrian(std::string crossId, double _time) {
-    int count = 0;
-    double start = 0;
-
-    if (_time - Constant::DELTA_T > 0) {
-        start = _time - Constant::DELTA_T;
-    }
-    double tmp = (_time - start)/0.1;
-    EV << "Start: "<<start << " End: "<< _time <<endl;
-    auto it = find_if(crossings.begin(), crossings.end(), [&crossId](const Crossing& obj) {return obj.id.compare(crossId) == 0;});
-    if (it != crossings.end())
-    {
-        double pivot = start;
-        do {
-            for(auto elem : it->peoples) {
-                if (pivot <= std::get<3>(elem) && std::get<3>(elem) < pivot + 0.1) {
-                    count++;
-                    break;
-                }
-            }
-            pivot = pivot + 0.1;
-        } while(pivot < _time && count != tmp);
-    }
-    return count/tmp;
-
-}*/
-
-/*double HospitalControlApp::getVeloOfPerdestrian(std::string crossId, double _time) {
-    double start = 0;
-    if (_time - Constant::DELTA_T > 0) {
-        start = _time - Constant::DELTA_T;
-    }
-    std::set < std::string > personIds;
-    double sum = 0;
-    int numPeople = 0;
-    auto it = find_if(crossings.begin(), crossings.end(), [&crossId](const Crossing& obj) {return obj.id.compare(crossId) == 0;});
-    if (it != crossings.end())
-    {
-        for(auto elem : it->peoples) {
-            if (start <= std::get<3>(elem) && std::get<3>(elem) < _time) {
-                personIds.insert(std::get<0>(elem));
-            }
-        }
-        numPeople = personIds.size();
-        for(auto person : personIds) {
-            std::vector<std::tuple<std::string, double, double, double>> tmp;
-            for(auto elem : it->peoples) {
-                if(std::get<0>(elem).compare(person) == 0 && start <= std::get<3>(elem) && std::get<3>(elem) <= _time) {
-                    tmp.push_back(elem);
-                }
-            }
-            int n = tmp.size();
-            if (n > 1){
-                sum += sqrt(
-                    (std::get<1>(tmp[n-1]) - std::get<1>(tmp[0]))*(std::get<1>(tmp[n-1]) - std::get<1>(tmp[0]))
-                    + (std::get<2>(tmp[n-1]) - std::get<2>(tmp[0]))*(std::get<2>(tmp[n-1]) - std::get<2>(tmp[0]))
-                    ) / (std::get<3>(tmp[n-1]) - std::get<3>(tmp[0]));
-            }
-
-        }
-    }
-
-    double averageSpeed = sum / numPeople;
-
-    return averageSpeed;
-}*/
 
 std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double t*/){
 
+    if(Constant::SHORTEST_PATH)
+        return "";
     if(this->djisktra->vertices[0][0] == cur->itinerary->laneId[0]){
         return "";//skip this case, too complex as AGV is on an intersection
     }
@@ -513,7 +437,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
                 station = std::get<2>(this->djisktra->itineraries[i]);
                 if(cur->itinerary->station.length() == 0){
                     if(station == -1){
-                        EV<<"dfdsfsfsdf"<<endl;
+                        //EV<<"dfdsfsfsdf"<<endl;
                     }
                     cur->itinerary->station = this->djisktra->vertices[station];
                 }
@@ -598,16 +522,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
 
             //}
         }
-        //std::string lastPath = this->djisktra->getFinalSegment(this->djisktra->traces[nextDst]);
-        //if(lastPath.length() > 0){
-        //    EV<<"BEUF hare"<<endl;
-        //}
-        /*double t1 = simTime().dbl();
-        //if(t >= 26.9543){
-        if(t1 > 7.3){
-            //if(newRoute)
-            EV<<"sfsddsfdss";
-        }*/
+
         newRoute = removeAntidromic(newRoute);
         /*if((newRoute.find("-E81 E202") != std::string::npos
             || newRoute.find("-E233 -E230") != std::string::npos)
