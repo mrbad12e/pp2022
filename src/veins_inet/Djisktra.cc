@@ -232,11 +232,13 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
     for (std::vector<Quad>::iterator it = adjList[source].begin(); it != adjList[source].end(); it++){
       tempW = std::get<0>(*it);
       tempTrace = std::get<3>(*it);
-      if(tempTrace.compare(":J8") == 0){
+      /*if(tempTrace.compare(":J8") == 0){
           EV<<"qqqqq"<<endl;
-      }
+      }*/
       tempIndex = std::get<2>(*it);
-      weightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, weightVertices[tempIndex], vertices[tempIndex]);
+      if(!Constant::SHORTEST_PATH){
+          weightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, weightVertices[tempIndex], vertices[tempIndex]);
+      }
 
       double newWeight = 0; //weight + tempW + 40*weightVertices[tempIndex];
       /*if(trace.find("$E9$") != std::string::npos
@@ -251,15 +253,17 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
           continue;
       }
       newWeight = weight + tempW;
-      double weightSmoothing = weightVertices[tempIndex];
-      if(weightSmoothing < 0.1 && tempIndex < this->numIVertices){
-          newWeight += 100*(this->expSmoothing->useCycicalData(newWeight, vertices[tempIndex], weightSmoothing));
+      if(!Constant::SHORTEST_PATH){
+          double weightSmoothing = weightVertices[tempIndex];
+          if(weightSmoothing < 0.1 && tempIndex < this->numIVertices){
+              newWeight += 100*(this->expSmoothing->useCycicalData(newWeight, vertices[tempIndex], weightSmoothing));
+          }
+          else{
+              newWeight += 100*weightSmoothing;
+          }
       }
-      else{
-          newWeight += 100*weightSmoothing;
-      }
+
       if (newWeight < ShortestPath[tempIndex]){ // Check if we can do better
-         //tempTrace = std::get<3>(*it);
          ShortestPath[tempIndex] = newWeight; // Update new distance
          traces[tempIndex] = trace; //tempTrace;
          PQ.push(make_tuple(ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
