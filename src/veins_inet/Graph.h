@@ -36,6 +36,7 @@ public:
     ItineraryRecord *itinerary;
     int reRouteAt = -1;
     bool passedStation = false;
+    double atStation = 0;
 };
 
 class Edge {
