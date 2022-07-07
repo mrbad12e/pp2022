@@ -448,7 +448,19 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
     }
 
     //if((idOfI_Vertex == station && i != -1){
-    if(cur->passedStation){
+    if(cur->passedStation ){
+        bool stop = false;
+        if(cur->atStation == 0){
+            cur->atStation = simTime().dbl();
+            stop = true;
+        }
+        else if(cur->atStation + 10 < simTime().dbl()){
+            stop = true;
+
+        }
+        if(stop){
+            return "$" + cur->id + "_" + "0";
+        }
         //std::get<2>(this->djisktra->itineraries[i]) = -1;
         //station = -1;
     }
