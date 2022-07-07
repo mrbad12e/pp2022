@@ -436,9 +436,6 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
                 src = std::get<1>(this->djisktra->itineraries[i]);
                 station = std::get<2>(this->djisktra->itineraries[i]);
                 if(cur->itinerary->station.length() == 0){
-                    if(station == -1){
-                        //EV<<"dfdsfsfsdf"<<endl;
-                    }
                     cur->itinerary->station = this->djisktra->vertices[station];
                 }
                 exit = std::get<3>(this->djisktra->itineraries[i]);
