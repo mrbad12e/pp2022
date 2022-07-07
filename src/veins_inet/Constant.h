@@ -43,7 +43,7 @@ public:
     static long TOTAL_WAITING_TIME;
     static double TOTAL_TRAVELLING_TIME;
     static constexpr const bool SHORTEST_PATH = false;
-
+    static constexpr const bool STOP_AT_STATION = true;
 };
 
 static char* mergeContent(long Id){
