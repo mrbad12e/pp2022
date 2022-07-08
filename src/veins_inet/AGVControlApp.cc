@@ -183,48 +183,25 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
             }*/
             std::string newRoute = str.substr(std::to_string(myId).length() + 2);
             if(prevRoute.compare(newRoute) != 0){
-                prevRoute = newRoute;
-                /*if(newRoute.find(" -E0") == std::string::npos
-                        && newRoute.find(" -E226") == std::string::npos
-                        && newRoute.find(" E92") == std::string::npos
-                        && newRoute.find(" E298") == std::string::npos
-                        ){
-                    if(newRoute.length() - 10 > 0){
-                        std::string last = newRoute.substr(newRoute.length() - 10);
-                    }
-                    EV<<"DEBYEG"<<endl;
-                }
-                if((newRoute.find("-E204 -E1") != std::string::npos
-                    || newRoute.find("-E1 -E204") != std::string::npos)
-                    //&& simTime().dbl() > 160
-                    ){
-                    if(newRoute.length() - 10 > 0){
-                        std::string last = newRoute.substr(newRoute.length() - 10)
-                            + " " + std::to_string(simTime().dbl());
-                    }
-                    EV<<"Control what?"<<myId<<endl;
-                }*/
-                std::vector<std::string> v = split(newRoute, " ");
-                std::list<std::string> l(v.begin(), v.end());
-                bool change = traciVehicle->changeVehicleRoute(l);
-                //double t = simTime().dbl();
-                //if(newRoute.find("-E230 -E232") != std::string::npos && t >= 186.0
-                //if(newRoute.find("-E230 ") != std::string::npos && t >= 186.0
-                        //&& ((traciVehicle->getRouteId()).compare("route_11") == 0)
-                //){
-                    //EV<<"fddssdffds";
-                //}
-                if(!change){
-                    //std::string content = traciVehicle->getLaneId();
-                    //EV<<content<<endl;
-                    expectedRoute = newRoute;
+                if(newRoute.compare("0") == 0){
+                   //force AGV to stop
+                    traciVehicle->setSpeed(0);
                 }
                 else{
-                   expectedRoute = "";
-                   v.clear();
-                   v.shrink_to_fit();
-                   l.clear();
-                   //l.shrink_to_fit();
+                    prevRoute = newRoute;
+
+                    std::vector<std::string> v = split(newRoute, " ");
+                    std::list<std::string> l(v.begin(), v.end());
+                    bool change = traciVehicle->changeVehicleRoute(l);
+                    if(!change){
+                        expectedRoute = newRoute;
+                    }
+                    else{
+                       expectedRoute = "";
+                       v.clear();
+                       v.shrink_to_fit();
+                       l.clear();
+                    }
                 }
             }
         }
