@@ -185,11 +185,25 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
             if(prevRoute.compare(newRoute) != 0){
                 if(newRoute.compare("0") == 0){
                    //force AGV to stop
+                    if(velocityBeforeHalt == -1){
+                        velocityBeforeHalt = traciVehicle->getSpeed();
+                    }
                     traciVehicle->setSpeed(0);
+                    //halt = true;
                 }
                 else{
-                    prevRoute = newRoute;
 
+                    if(newRoute.compare(Constant::CARRY_ON) == 0){
+                        newRoute = prevRoute;
+                        //prevRoute = prevRoute;//a smart compiler would ignore this statement
+                    }
+                    //else{
+                        prevRoute = newRoute;
+                    //}
+                    if(velocityBeforeHalt != -1){
+                        traciVehicle->setSpeed(velocityBeforeHalt);
+                        velocityBeforeHalt = -1;
+                    }
                     std::vector<std::string> v = split(newRoute, " ");
                     std::list<std::string> l(v.begin(), v.end());
                     bool change = traciVehicle->changeVehicleRoute(l);
