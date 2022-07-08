@@ -195,11 +195,8 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
 
                     if(newRoute.compare(Constant::CARRY_ON) == 0){
                         newRoute = prevRoute;
-                        //prevRoute = prevRoute;//a smart compiler would ignore this statement
                     }
-                    //else{
-                        prevRoute = newRoute;
-                    //}
+                    prevRoute = newRoute;
                     if(velocityBeforeHalt != -1){
                         traciVehicle->setSpeed(velocityBeforeHalt);
                         velocityBeforeHalt = -1;
