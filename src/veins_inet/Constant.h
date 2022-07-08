@@ -29,6 +29,7 @@ class Constant {
 public:
     static constexpr const char* FIRST = "First vehicle";
     static constexpr const char* RSU_IDENTIFY = "RSU";
+    static constexpr const char* CARRY_ON = "CARRY-ON";
     static constexpr const long WANTED_ID = 52;
     static constexpr const double ZONE_LENGTH = 1.1;
     static constexpr const char* NON_CAR = "";
@@ -44,6 +45,7 @@ public:
     static double TOTAL_TRAVELLING_TIME;
     static constexpr const bool SHORTEST_PATH = false;
     static constexpr const bool STOP_AT_STATION = true;
+    static constexpr const int PAUSING_TIME = 10;
 };
 
 static char* mergeContent(long Id){
