@@ -451,7 +451,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
                 stop = true;
             }
             else{
-                if(cur->atStation + 70 > simTime().dbl()){
+                if(cur->atStation + Constant::PAUSING_TIME > simTime().dbl()){
                     stop = true;
                 }
                 else{
@@ -461,8 +461,9 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
             if(stop){
                 return "$" + cur->id + "_" + "0";
             }
-            //std::get<2>(this->djisktra->itineraries[i]) = -1;
-            //station = -1;
+            else{
+                return "$" + cur->id + "_" + Constant::CARRY_ON;
+            }
         }
         return "";
     }
