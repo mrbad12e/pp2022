@@ -444,26 +444,31 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         }
     }
     else{
+        if(cur->passedStation ){
+            bool stop = cur->atStation > 0;
+            if(cur->atStation == 0){
+                cur->atStation = simTime().dbl();
+                stop = true;
+            }
+            else{
+                if(cur->atStation + 70 > simTime().dbl()){
+                    stop = true;
+                }
+                else{
+                    stop = false;
+                }
+            }
+            if(stop){
+                return "$" + cur->id + "_" + "0";
+            }
+            //std::get<2>(this->djisktra->itineraries[i]) = -1;
+            //station = -1;
+        }
         return "";
     }
 
     //if((idOfI_Vertex == station && i != -1){
-    if(cur->passedStation ){
-        bool stop = false;
-        if(cur->atStation == 0){
-            cur->atStation = simTime().dbl();
-            stop = true;
-        }
-        else if(cur->atStation + 10 < simTime().dbl()){
-            stop = true;
 
-        }
-        if(stop){
-            return "$" + cur->id + "_" + "0";
-        }
-        //std::get<2>(this->djisktra->itineraries[i]) = -1;
-        //station = -1;
-    }
     int nextDst = (cur->passedStation) ? exit : station;
     if(nextDst > -1){
         if(idOfI_Vertex == nextDst){
