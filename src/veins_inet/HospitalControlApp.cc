@@ -444,7 +444,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         }
     }
     else{
-        if(cur->passedStation ){
+        if(cur->passedStation && Constant::STOP_AT_STATION){
             bool stop = cur->atStation > 0;
             if(cur->atStation == 0){
                 cur->atStation = simTime().dbl();
