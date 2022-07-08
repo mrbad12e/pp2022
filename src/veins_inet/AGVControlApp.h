@@ -51,6 +51,7 @@ private:
     std::string prevRoute = "";
     std::string expectedRoute = "";
     std::string content = "";
+    double velocityBeforeHalt = -1;
 };
 }
 #endif /* VEINS_INET_AGVCONTROLAPP_H_ */
