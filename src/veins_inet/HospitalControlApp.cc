@@ -243,8 +243,11 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                 }*/
                 //EV<<"237";
                 try{
-                    /*double t = simTime().dbl();
-                    if(t > 216.4){
+                    if(checkCycle(newRoute)){
+                        double t = simTime().dbl();
+                        EV<<t<<endl;
+                    }
+                    /*if(t > 216.cc4){
                         EV<<"ehree"<<endl;
                     }*/
                     sendToAGV(newRoute);
@@ -354,7 +357,7 @@ void HospitalControlApp::readLane(AGV *cur, std::string str) {
 }
 
 std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
-    //double t = simTime().dbl();
+    double t = simTime().dbl();
     //if(t > 216.4){
         //EV<<"dfdffddf";
     //}
@@ -373,6 +376,9 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
         cur->itinerary = new ItineraryRecord();
         cur->itinerary->localWait = 0;
         vhs.push_back(cur);
+    }
+    if(cur->id.compare("22") == 0 && t > 169.754){ //=> cycle
+        EV<<"Cycle"<<endl;
     }
     int i = 0;
     std::string newRoute = "";
@@ -407,6 +413,19 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
         i++;
     }
     return newRoute;
+}
+
+bool HospitalControlApp::checkCycle(std::string route){
+    std::vector<std::string> v = split(route, " ");
+    for(int i = 0; i < v.size(); i++){
+        for(int j = i + 1; j < v.size(); j++){
+            if(v[j].compare(v[i]) == 0){
+                return true;
+            }
+        }
+    }
+    return false;
+
 }
 
 
@@ -444,30 +463,31 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         }
     }
     else{
-        if(cur->passedStation && Constant::STOP_AT_STATION){
-            bool stop = cur->atStation > 0;
-            if(cur->atStation == 0){
-                cur->atStation = simTime().dbl();
-                stop = true;
-            }
-            else{
-                if(cur->atStation + Constant::PAUSING_TIME > simTime().dbl()){
-                    stop = true;
-                }
-                else{
-                    stop = false;
-                }
-            }
-            if(stop){
-                return "$" + cur->id + "_" + "0";
-            }
-            else{
-                return "$" + cur->id + "_" + Constant::CARRY_ON;
-            }
-        }
+        //cut from here
         return "";
     }
 
+    if(cur->passedStation && Constant::STOP_AT_STATION){
+        bool stop = cur->atStation > 0;
+        if(cur->atStation == 0){
+            cur->atStation = simTime().dbl();
+            stop = true;
+        }
+        else{
+            if(cur->atStation + Constant::PAUSING_TIME > simTime().dbl()){
+                stop = true;
+            }
+            else{
+                stop = false;
+            }
+        }
+        if(stop){
+            return "$" + cur->id + "_" + "0";
+        }
+        else{
+            return "$" + cur->id + "_" + Constant::CARRY_ON;
+        }
+    }
     //if((idOfI_Vertex == station && i != -1){
 
     int nextDst = (cur->passedStation) ? exit : station;
@@ -539,6 +559,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         }
 
         newRoute = removeAntidromic(newRoute);
+        newRoute = removeLoop(newRoute);
         /*if((newRoute.find("-E81 E202") != std::string::npos
             || newRoute.find("-E233 -E230") != std::string::npos)
             //&& simTime().dbl() > 160
