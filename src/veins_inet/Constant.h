@@ -76,6 +76,30 @@ static std::vector<std::string> split(const std::string& str, const std::string&
     return tokens;
 }
 
+static std::string removeLoop(const std::string& str)
+{
+    std::vector<std::string> tokens = split(str, " ");
+    int i = 0, j = 0; int found = 0;
+    for(i = 0; i < tokens.size(); i++){
+        for(j = i+1; j < tokens.size(); j++){
+            if(tokens[i].compare(tokens[j])== 0){
+                found = 1;
+                break;
+            }
+        }
+        if(found) break;
+    }
+    if(found){
+        tokens.erase(tokens.begin() + i, tokens.begin() + j);
+        std::string result = tokens[0];
+        for(int i = 1; i < tokens.size(); i++){
+            result = result + " " + tokens[i];
+        }
+        return result;
+    }
+    return str;
+}
+
 static std::string getLane(std::vector<std::string> list, bool wantLast){
     if(wantLast){
         for(int i = list.size() - 1; i >= 0; i--){
