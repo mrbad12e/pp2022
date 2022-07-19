@@ -71,6 +71,7 @@ private:
     void sendToAGV(std::string content);
     std::string removeAntidromic(std::string input);
     std::vector<std::vector<int>> aroundIntersections;
+    bool checkCycle(std::string route);
     double* areas;
 };
 }
