@@ -42,12 +42,12 @@ void AGVControlApp::initialize(int stage)
         {
             cancelEvent(sendBeacon);
         }
-        {
-            scheduleAt(simTime() + 0.1, sendBeacon);
-            this->travellingTime = simTime().dbl();
-            //EV<<"Initialize AGV at "<<simTime().dbl()<<" ";
-            curPosition = mobility->getPositionAt(simTime());
-        }
+
+        scheduleAt(simTime() + 0.1, sendBeacon);
+        this->travellingTime = simTime().dbl();
+        //EV<<"Initialize AGV at "<<simTime().dbl()<<" ";
+        curPosition = mobility->getPositionAt(simTime());
+
         if(Constant::activation == NULL){
             Constant::activation = mobility;
         }
