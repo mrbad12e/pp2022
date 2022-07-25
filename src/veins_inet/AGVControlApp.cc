@@ -56,6 +56,7 @@ void AGVControlApp::initialize(int stage)
 
 void AGVControlApp::finish()
 {
+    EV<<myId<<endl;
     this->travellingTime = //traciVehicle->getWaitingTime();
     //                    traciVehicle->getAccumulatedWaitingTime();
             simTime().dbl() - this->travellingTime;
@@ -187,6 +188,8 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                    //force AGV to stop
                     if(velocityBeforeHalt == -1){
                         velocityBeforeHalt = traciVehicle->getSpeed();
+                        if(velocityBeforeHalt == 0)
+                            velocityBeforeHalt = 2;
                     }
                     traciVehicle->setSpeed(0);
                     //halt = true;
