@@ -435,7 +435,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         return "";
     if(this->djisktra->vertices[0][0] == cur->itinerary->laneId[0]){
         if(cur->id.compare("112") == 0){
-            std::string currLaneID = traciVehicle->getLaneId();
+            std::string currLaneID = cur->itinerary->laneId;
             EV_TRACE<<"Pausing here"<<endl;
         }
         return "";//skip this case, too complex as AGV is on an intersection
