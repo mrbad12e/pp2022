@@ -104,8 +104,10 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
                    traciVehicle->getLaneId();
            double speed = traciVehicle->getSpeed();
            if(speed == 0.0){
+
                this->waitingIntervals++;
            }
+
            content = content + /*"L.P"*/ " " + std::to_string(traciVehicle->getLanePosition());
            content = content + /*"velo:"*/ " " + std::to_string(speed)
                            //+ /*"/"*/ " " + std::to_string(traciVehicle->getAcceleration())
@@ -191,6 +193,10 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                         if(velocityBeforeHalt == 0)
                             velocityBeforeHalt = 2;
                     }
+                    if(myId == 112){
+                        std::string currLaneID = traciVehicle->getLaneId();
+                        EV_TRACE<<"Pausing here"<<endl;
+                    }
                     traciVehicle->setSpeed(0);
                     //halt = true;
                 }
@@ -198,6 +204,10 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
 
                     if(newRoute.compare(Constant::CARRY_ON) == 0){
                         newRoute = prevRoute;
+                        if(myId == 112){
+                            std::string currLaneID = traciVehicle->getLaneId();
+                            EV_TRACE<<"Pausing here"<<endl;
+                        }
                     }
 
                     prevRoute = newRoute;
