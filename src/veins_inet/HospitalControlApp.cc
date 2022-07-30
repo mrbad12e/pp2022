@@ -434,6 +434,10 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
     if(Constant::SHORTEST_PATH)
         return "";
     if(this->djisktra->vertices[0][0] == cur->itinerary->laneId[0]){
+        if(cur->id.compare("112") == 0){
+            std::string currLaneID = traciVehicle->getLaneId();
+            EV_TRACE<<"Pausing here"<<endl;
+        }
         return "";//skip this case, too complex as AGV is on an intersection
     }
 
@@ -493,7 +497,11 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
     int nextDst = (cur->passedStation) ? exit : station;
     if(nextDst > -1){
         if(idOfI_Vertex == nextDst){
-            return "";
+            //if(cur->passedStation){
+                return "";
+            //}else{
+            //    nextDst = exit;
+            //}
         }
         this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst, cur->itinerary->laneId);
         /*double t = simTime().dbl();
