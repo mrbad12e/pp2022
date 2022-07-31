@@ -518,8 +518,6 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
             }
             this->djisktra->DijkstrasAlgorithm(nextDst, exit, futureLane);
 
-
-
             std::string lastPath =
                     this->djisktra->getRoute(this->djisktra->traces[exit], futureLane, nextDst, exit, exit);
             if(lastPath.find(futureLane + " ") != std::string::npos
