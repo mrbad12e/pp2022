@@ -217,33 +217,18 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
         }
         if(!Constant::SHORTEST_PATH){
             std::string newRoute = readMessage(bc);
-            //newRoute = this->removeAntidromic(newRoute);
             if(newRoute.length() != 0){
-                /*if((newRoute.find("-E234 -E235") != std::string::npos
-                    || newRoute.find("-E230 -E232") != std::string::npos
-                        )
-                    ){
-                    std::stringstream streamData(bc->getDemoData());
-                    std::string content ;
-                    double t = simTime().dbl();
-                    getline(streamData, content);
-                    EV<<"Control what?"<<endl;
-                }*/
-                //EV<<"237";
                 try{
                     if(checkCycle(newRoute)){
                         double t = simTime().dbl();
                         EV<<t<<endl;
                     }
-                    /*if(t > 216.cc4){
-                        EV<<"ehree"<<endl;
-                    }*/
                     sendToAGV(newRoute);
                 }
                 catch(std::exception& e1){
                     EV<<e1.what()<<endl;
                 }
-                //EV<<"239"<<endl;
+
             }
         }
     }
