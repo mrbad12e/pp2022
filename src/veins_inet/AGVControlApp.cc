@@ -110,10 +110,9 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
 
            content = content + /*"L.P"*/ " " + std::to_string(traciVehicle->getLanePosition());
            content = content + /*"velo:"*/ " " + std::to_string(speed)
-                           //+ /*"/"*/ " " + std::to_string(traciVehicle->getAcceleration())
+
                                    ;
-           //content = content + /*"dis:"*/ " " + std::to_string(traciVehicle->getDistanceTravelled());
-           //content = content + "aW: " + std::to_string(traciVehicle->getAccumulatedWaitingTime());
+
            content = content + " " + originalRoute;
            carBeacon->setDemoData(content.c_str());
            carBeacon->setSenderAddress(myId);
@@ -124,12 +123,7 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
 
            if(expectedRoute.length() > 0){
                double t = simTime().dbl();
-               /*if(expectedRoute.find("-E230 ") != std::string::npos && t >= 186.0
-               //if(expectedRoute.find("-E230 -E232") != std::string::npos && t >= 186.0
-                      //&& ((traciVehicle->getRouteId()).compare("route_11") == 0)
-               ){
-                   EV<<"dfsdsdfdsfdsf";
-               }*/
+
                std::string current = traciVehicle->getLaneId();
                int x = current.find("_");
                if(x > 0)
@@ -150,9 +144,7 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
                        if(change){
                            expectedRoute = "";
                            v.clear();
-                           //v.shrink_to_fit();
-                           //l.clear();
-                           //l.shrink_to_fit();
+
                        }
                    }catch(std::exception &e){
                        const char* x= e.what();
@@ -193,21 +185,14 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                         if(velocityBeforeHalt == 0)
                             velocityBeforeHalt = 2;
                     }
-                    /*if(myId == 112){
-                        std::string currLaneID = traciVehicle->getLaneId();
-                        EV_TRACE<<"Pausing here"<<endl;
-                    }*/
                     traciVehicle->setSpeed(0);
-                    //halt = true;
+
                 }
                 else{
 
                     if(newRoute.compare(Constant::CARRY_ON) == 0){
                         newRoute = prevRoute;
-                        /*if(myId == 112){
-                            std::string currLaneID = traciVehicle->getLaneId();
-                            EV_TRACE<<"Pausing here"<<endl;
-                        }*/
+
                     }
 
                     prevRoute = newRoute;
