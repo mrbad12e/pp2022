@@ -136,7 +136,7 @@ void HospitalControlApp::finish()
     EV<<"13) As 10 + 2(flow10) + 2(flow 11) + 7(flow0-6) AGVs => T: 5808(9578), W: 583(5289), %: 10(55)%"<<endl;
     EV<<"14) As 10 + 2(flow10) + 2(flow 11) + 8(flow0-7) AGVs => T: 6569(10471), W: 1049(5970), %: 16(57)%"<<endl;
     EV<<"15) As 10 + 2(flow10) + 2(flow 11) + 9(flow0-8) AGVs => T: 6439(9538), W: 694(4830), %: 11(51)%"<<endl;
-    EV<<"16) As 10 + 2(flow10) + 2(flow 11) + 10(flow0-9) AGVs => T: 6709(9939), W: 895(5083), %: 13(51)%"<<endl;
+    EV<<"16) As 10 + 2(flow10) + 2(flow 11) + 10(flow0-9) AGVs => T: 11155(12158), W: 3914(5910), %: 35(49)%"<<endl;
     EV<<"17) As case 16 + 24(flow 12) AGVs => T: 7168(10482), W: 622(5369), %: 9(51)%"<<endl;
     EV<<"As 10 + 1(flow 8) AGVs => T: 2709, W: 547, %: 20%"<<endl;
     EV<<"As 10 + 1(flow 2) AGVs => T: 3045.7, W: 875, %: 29%"<<endl;
@@ -353,6 +353,9 @@ void HospitalControlApp::readLane(AGV *cur, std::string str) {
             cur->itinerary->prevVertex = idVertex;
         }
         cur->itinerary->prevLane = str;
+        if(cur->itinerary->prevLane[0] != ':'){
+            cur->itinerary->prevEdge = str;
+        }
     }
 }
 
@@ -434,14 +437,32 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
     if(Constant::SHORTEST_PATH)
         return "";
     if(this->djisktra->vertices[0][0] == cur->itinerary->laneId[0]){
-        if(cur->id.compare("112") == 0){
-            std::string currLaneID = cur->itinerary->laneId;
-            EV_TRACE<<"Pausing here"<<endl;
+        //if(cur->id.compare("112") == 0)
+        std::string currLaneID = cur->itinerary->laneId;
+        currLaneID = cur->itinerary->prevEdge + "_" + currLaneID;
+        EV_TRACE<<"Pausing here"<<endl;
+        if(!cur->passedStation ||
+             (cur->atStation + Constant::PAUSING_TIME > simTime().dbl())
+             //|| cur->itinerary->prevEdge.size() == 0
+             //|| cur->id.compare("112") != 0
+        )
+        {
+            return "";//skip this case, too complex as AGV is on an intersection
         }
-        return "";//skip this case, too complex as AGV is on an intersection
+        else{
+            /*if(cur->id.compare("112") == 0){
+                EV_TRACE<<"RTTTTTT"<<endl;
+            }*/
+        }
     }
 
-    int idOfI_Vertex = this->djisktra->findI_Vertex(cur->itinerary->laneId, false);
+    int idOfI_Vertex = 0;
+    if(cur->itinerary->laneId[0] == ':'){
+        idOfI_Vertex = this->djisktra->findI_Vertex(cur->itinerary->prevEdge, false);
+    }
+    else{
+        idOfI_Vertex = this->djisktra->findI_Vertex(cur->itinerary->laneId, false);
+    }
     /*if(this->djisktra->vertices[idOfI_Vertex].compare(cur->itinerary->laneId) == 0){
         return "";//skip this case, too complex
     }
