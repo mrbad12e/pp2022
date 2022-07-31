@@ -114,11 +114,6 @@ void HospitalControlApp::finish()
     if(Constant::activation == NULL){
             EV<<"Constant is helpless eventually"<<endl;
     }
-    //for (auto it = crossings.begin(); it != crossings.end(); it++){
-        //EV<<it->id<<" "<<it->rec->xMin<<endl;
-    //}
-
-    //this->djisktra->expSmoothing->printMaxWeights(this->djisktra->vertices);
 
     EV<<"#calling traci->getPersonIds(): "<<count<<endl;
     EV<<"1) As 10 AGVs => T: 3022(3796), W: 241(1811), %: 8(48)%"<<endl;
@@ -179,12 +174,10 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                     }
 
                     double x, y;
-                    //for(int i = 0; i < crossings.size(); i++){
                     for (auto elem: allPeople) {
                         std::string personId = elem;
                         Coord peoplePosition = traci->getPersonPosition(personId);
                         std::pair<double,double> coordTraCI = traci->getTraCIXY(peoplePosition);
-                        //veins::Coord newCoord;
                         x = coordTraCI.first;
                         y = coordTraCI.second;
                         //newCoord.z = 0;
@@ -212,16 +205,11 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
             rsuBeacon->setDemoData(ret);
             rsuBeacon->setSenderAddress(myId);
             try{
-                //EV<<"213";
-                /*double t = simTime().dbl();
-                if(t > 216.4){
-                    EV<<"ehree"<<endl;
-                }*/
                 BaseFrame1609_4 *WSM = new BaseFrame1609_4();
                 WSM->encapsulate(rsuBeacon);
                 populateWSM(WSM);
                 send(WSM, lowerLayerOut);
-                //EV<<" 218"<<endl;
+
             }
             catch(std::exception& e){
                 EV<<e.what()<<endl;
@@ -361,9 +349,6 @@ void HospitalControlApp::readLane(AGV *cur, std::string str) {
 
 std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     double t = simTime().dbl();
-    //if(t > 216.4){
-        //EV<<"dfdffddf";
-    //}
     if(Constant::SHORTEST_PATH)
         return "";
     std::stringstream streamData(bc->getDemoData());
@@ -385,10 +370,8 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     }
     int i = 0;
     std::string newRoute = "";
-    //bool debugHere = true;
     while (getline(streamData, str, ' ')) {
         if (i == 0) {
-            //debugHere = (str.compare("E293_1") == 0);
             readLane(cur, str);
         } else if (i == 2) {
             if (std::stod(str) == 0) {
@@ -401,16 +384,13 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
                     this->djisktra->expSmoothing->exponentialSmooth(currentIndex,
                                             this->djisktra->weightVertices[currentIndex]);
                 }
-                //debugHere = false;
+
             }
             else{
 
             }
         }
         if(i == 3){
-            //if(debugHere && str.compare("route_3") == 0){
-            //    EV<<"dsds"<<endl;
-            //}
             newRoute = reRoute(cur, str/*, t*/);
         }
         i++;
@@ -437,14 +417,8 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
     if(Constant::SHORTEST_PATH)
         return "";
     if(this->djisktra->vertices[0][0] == cur->itinerary->laneId[0]){
-        //if(cur->id.compare("112") == 0)
-        std::string currLaneID = cur->itinerary->laneId;
-        currLaneID = cur->itinerary->prevEdge + "_" + currLaneID;
-        EV_TRACE<<"Pausing here"<<endl;
         if(!cur->passedStation ||
              (cur->atStation + Constant::PAUSING_TIME > simTime().dbl())
-             //|| cur->itinerary->prevEdge.size() == 0
-             //|| cur->id.compare("112") != 0
         )
         {
             return "";//skip this case, too complex as AGV is on an intersection
@@ -471,9 +445,6 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
     }*/
     int src = -1, station = -1, exit = -1;
     int i = -1;
-    //if(t > 216.4){
-        //EV<<"dfdffddf";
-    //}
     if(idOfI_Vertex != cur->reRouteAt){
         for(i = 0; i < this->djisktra->itineraries.size(); i++){
             if(routeId.compare(std::get<0>(this->djisktra->itineraries[i])) == 0){
@@ -525,15 +496,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
             //}
         }
         this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst, cur->itinerary->laneId);
-        /*double t = simTime().dbl();
-        if(routeId.compare("route_2") == 0 && t >= 87.15 //&& (cur->id.compare("28") == 0)
-                ){
-            EV<<"New route: "<<t<<endl;
-        }
-        if(routeId.compare("route_11") == 0 && t >= 185.754 && (cur->id.compare("28") == 0)
-                ){
-            EV<<"New route: "<<t<<endl;
-        }*/
+
         std::string newRoute = this->djisktra->getRoute(this->djisktra->traces[nextDst], cur->itinerary->laneId, idOfI_Vertex, nextDst, exit);
         /*if(routeId.compare("route_2") == 0 && newRoute.find("-E234 -E235") != std::string::npos){
             EV<<"New route: "<<t<<endl;
@@ -555,47 +518,23 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
             }
             this->djisktra->DijkstrasAlgorithm(nextDst, exit, futureLane);
 
-            //if(routeId.compare("route_0") == 0 && t >= 7.0){
-            //    EV<<"New route: "<<t<<endl;
-            //}
+
 
             std::string lastPath =
                     this->djisktra->getRoute(this->djisktra->traces[exit], futureLane, nextDst, exit, exit);
             if(lastPath.find(futureLane + " ") != std::string::npos
                     && newRoute.find(" " + futureLane) != std::string::npos
             ){
-                /*std::string omitedLastPath = "";
-                for(int i = futureLane.length(); i < lastPath.length(); i++){
-                    omitedLastPath = omitedLastPath + lastPath[i];
-                }*/
-                //newRoute = newRoute + " " + omitedLastPath;
-                //if(futureLane.length() + 1>= lastPath.length() || simTime().dbl() > 2.35){
-                //    EV<<"Out of range";
-                //}
+
                 lastPath = lastPath.substr(futureLane.length() + 1);
             }
             //else{
                 newRoute = newRoute + " " + lastPath;
-                /*if((newRoute.find("-E230 -E232") != std::string::npos
-                    || newRoute.find("-E232 -E230") != std::string::npos)
-                    //&& simTime().dbl() > 160
-                    ){
-                    double t = simTime().dbl();
-                    EV<<"Control what?"<<endl;
-                }*/
-
-            //}
         }
 
         newRoute = removeAntidromic(newRoute);
         newRoute = removeLoop(newRoute);
-        /*if((newRoute.find("-E81 E202") != std::string::npos
-            || newRoute.find("-E233 -E230") != std::string::npos)
-            //&& simTime().dbl() > 160
-            ){
-            double t = simTime().dbl();
-            EV<<"Control what?"<<endl;
-        }*/
+
         if(newRoute.length() == 0)
             return "";
         newRoute = "$" + cur->id + "_" + newRoute;
