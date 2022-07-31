@@ -245,10 +245,6 @@ void HospitalControlApp::predictDispearTime(){
         }
         double density = sum/areas[i];
         double velocity = getAverageVelocityByDensity(density);
-        //if(i == 88){
-        /*if(velocity < 0){
-            EV<<"sdsfsdfsdf";
-        }*/
         double predict = Constant::LENGTH_CROSSING*sum*0.5/velocity;
         if(this->djisktra->weightVertices[i] < predict
                 || this->djisktra->expSmoothing->raisedTime[i] < 0
@@ -350,9 +346,7 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
         cur->itinerary->localWait = 0;
         vhs.push_back(cur);
     }
-    if(cur->id.compare("22") == 0 && t > 169.754){ //=> cycle
-        EV<<"Cycle"<<endl;
-    }
+
     int i = 0;
     std::string newRoute = "";
     while (getline(streamData, str, ' ')) {
