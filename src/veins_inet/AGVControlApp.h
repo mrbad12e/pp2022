@@ -23,6 +23,7 @@
 
 #include "veins/modules/application/ieee80211p/DemoBaseApplLayer.h"
 #include "veins/modules/application/traci/TraCIDemo11p.h"
+#include <float.h>
 
 using namespace omnetpp;
 
@@ -52,6 +53,7 @@ private:
     std::string expectedRoute = "";
     std::string content = "";
     double velocityBeforeHalt = -1;
+    double pausingTime = DBL_MAX;
 };
 }
 #endif /* VEINS_INET_AGVCONTROLAPP_H_ */
