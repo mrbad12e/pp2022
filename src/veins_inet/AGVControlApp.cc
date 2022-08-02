@@ -185,14 +185,16 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                         if(velocityBeforeHalt == 0)
                             velocityBeforeHalt = 2;
                     }
+                    pausingTime = simTime().dbl();
                     traciVehicle->setSpeed(0);
 
                 }
                 else{
 
-                    if(newRoute.compare(Constant::CARRY_ON) == 0
-                            && prevRoute.length() > 0
-                    ){
+                    if(newRoute.compare(Constant::CARRY_ON) == 0){
+                        if(prevRoute.length() == 0){
+                            return;
+                        }
                         newRoute = prevRoute;
 
                     }
@@ -202,8 +204,19 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                         traciVehicle->setSpeed(velocityBeforeHalt);
                         velocityBeforeHalt = -1;
                     }
+                    else{
+                        if(pausingTime + Constant::PAUSING_TIME < simTime().dbl()){
+                            return;
+                        }
+                        if(traciVehicle->getSpeed() == 0){
+                            traciVehicle->setSpeed(2);
+                        }
+                    }
                     std::vector<std::string> v = split(newRoute, " ");
                     std::list<std::string> l(v.begin(), v.end());
+                    if(l.size() == 0){
+                        EV_TRACE<<"ERRR";
+                    }
                     bool change = traciVehicle->changeVehicleRoute(l);
                     if(!change){
                         expectedRoute = newRoute;
