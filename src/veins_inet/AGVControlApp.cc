@@ -190,7 +190,9 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                 }
                 else{
 
-                    if(newRoute.compare(Constant::CARRY_ON) == 0){
+                    if(newRoute.compare(Constant::CARRY_ON) == 0
+                            && prevRoute.length() > 0
+                    ){
                         newRoute = prevRoute;
 
                     }
