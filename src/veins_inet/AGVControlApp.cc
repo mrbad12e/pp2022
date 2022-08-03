@@ -167,6 +167,7 @@ void AGVControlApp::handlePositionUpdate(cObject* obj)
 
 void AGVControlApp::handleLowerMsg(cMessage* msg)
 {
+    try{
     BaseFrame1609_4* WSM = check_and_cast<BaseFrame1609_4*>(msg);
     cPacket* enc = WSM->getEncapsulatedPacket();
     if(TraCIDemo11pMessage* bc = dynamic_cast<TraCIDemo11pMessage*>(enc)){
@@ -234,5 +235,8 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
     }
     else{
 
+    }
+    }catch(char *exp){
+        EV_TRACE<<exp<<endl;
     }
 }
