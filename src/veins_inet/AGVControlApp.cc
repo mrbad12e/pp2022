@@ -113,7 +113,7 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
 
                                    ;
 
-           content = content + " " + originalRoute;
+           //content = content + " " + originalRoute;
            carBeacon->setDemoData(content.c_str());
            carBeacon->setSenderAddress(myId);
            BaseFrame1609_4* WSM = new BaseFrame1609_4();
