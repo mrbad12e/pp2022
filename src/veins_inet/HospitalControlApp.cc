@@ -18,6 +18,7 @@
 #include <iostream>
 #include "Zone.h"
 #include "Graph.h"
+#include "jute.h"
 #include <boost/algorithm/string.hpp>
 using namespace boost::algorithm;
 
@@ -337,7 +338,7 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     if(Constant::SHORTEST_PATH)
         return "";
     std::stringstream streamData(bc->getDemoData());
-    std::string str;
+    std::string str = "";
     AGV *cur = NULL;
     for (auto a : vhs) {
         if (a->id.compare(std::to_string(bc->getSenderAddress())) == 0)
@@ -353,6 +354,13 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
 
     int i = 0;
     std::string newRoute = "";
+    std::string tmp;
+    while(getline(streamData, tmp)) str += tmp;
+    jute::jValue v = jute::parser::parse(str);
+    std::string speed = v["speed"].as_string();
+    std::string laneId = v["laneId"].as_string();
+    std::string originalRouteId = v["originalRouteId"].as_string();
+
     while (getline(streamData, str, ' ')) {
         if (i == 0) {
             readLane(cur, str);
