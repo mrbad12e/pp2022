@@ -42,6 +42,7 @@ OBJS = \
     $O/veins_inet/Graph.o \
     $O/veins_inet/HospitalControlApp.o \
     $O/veins_inet/IPerson.o \
+    $O/veins_inet/jute.o \
     $O/veins_inet/RouteDirection.o \
     $O/veins_inet/RSUControlApp.o \
     $O/veins_inet/TraCITestApp.o \
