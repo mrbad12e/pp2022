@@ -167,9 +167,15 @@ void AGVControlApp::handlePositionUpdate(cObject* obj)
 
 void AGVControlApp::handleLowerMsg(cMessage* msg)
 {
-    try{
+    //if(msg == NULL){
+    //    return;
+    //}
+    //try{
     BaseFrame1609_4* WSM = check_and_cast<BaseFrame1609_4*>(msg);
     cPacket* enc = WSM->getEncapsulatedPacket();
+    //if(enc == NULL){
+    //    return;
+    //}
     if(TraCIDemo11pMessage* bc = dynamic_cast<TraCIDemo11pMessage*>(enc)){
         int length = strlen(bc->getDemoData());
         std::string str = std::string(bc->getDemoData(), length);
@@ -236,7 +242,7 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
     else{
 
     }
-    }catch(char *exp){
-        EV_TRACE<<exp<<endl;
-    }
+    //}catch(std::exception& e1){
+    //    EV_TRACE<<"ffffff"<<endl;
+    //}
 }
