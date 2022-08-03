@@ -216,10 +216,10 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
             }
         }
         if(!Constant::SHORTEST_PATH){
-            double t = simTime().dbl();
-            if(t > 440.3){
-                EV_TRACE<<t<<endl;
-            }
+            //double t = simTime().dbl();
+            //if(t > 440.3){
+            //    EV_TRACE<<t<<endl;
+            //}
             std::string newRoute = readMessage(bc);
             if(newRoute.length() != 0){
                 try{
