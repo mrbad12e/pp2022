@@ -101,19 +101,22 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
            //             std::to_string(curPosition.x) + " "
            //             + std::to_string(curPosition.y);
            /*content = content +*/ /*"Lid"*/ /*" " +*/
-                   traciVehicle->getLaneId();
+                   "{\"laneId\" : \"" +
+                   traciVehicle->getLaneId() + "\", ";
            double speed = traciVehicle->getSpeed();
            if(speed == 0.0){
-
                this->waitingIntervals++;
            }
 
-           content = content + /*"L.P"*/ " " + std::to_string(traciVehicle->getLanePosition());
-           content = content + /*"velo:"*/ " " + std::to_string(speed)
-
+           content = content + "\"lanePos\" : " + /*"L.P"*/ "\""
+                   + std::to_string(traciVehicle->getLanePosition())
+                   + "\", ";
+           content = content + "\"speed\" : " + "\""
+                   /*"velo:"*/ + std::to_string(speed)
+                               + "\", "
                                    ;
 
-           //content = content + " " + originalRoute;
+           content = content + "\"originalRouteId\" : " + "\"" + originalRoute + "\"}";
            carBeacon->setDemoData(content.c_str());
            carBeacon->setSenderAddress(myId);
            BaseFrame1609_4* WSM = new BaseFrame1609_4();
