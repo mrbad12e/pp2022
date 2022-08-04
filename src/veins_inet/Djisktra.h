@@ -21,6 +21,7 @@
 #include <map>
 #include <sstream>
 #include <string>
+#include <string.h>
 #include <vector>
 #include <algorithm>
 #include <assert.h>
@@ -225,6 +226,8 @@ private:
 
     //std::vector <bool> visitedVertex(numVertices, false);
     double *ShortestPath; //[numVertices]; // Have an array to store the shortest path
+    std::string getTime(std::string route, double rate);
+
 };
 
 #endif /* VEINS_INET_DJISKTRA_H_ */
