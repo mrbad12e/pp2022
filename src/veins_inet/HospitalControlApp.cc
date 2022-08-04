@@ -360,8 +360,21 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     std::string speed = v["speed"].as_string();
     std::string laneId = v["laneId"].as_string();
     std::string originalRouteId = v["originalRouteId"].as_string();
+    readLane(cur, laneId);
+    if(std::stod(speed) == 0){
+        cur->itinerary->localWait++;
+        int currentIndex = cur->itinerary->prevVertex;
+        this->djisktra->expSmoothing->addWait(currentIndex, 0.1);
+        if(this->djisktra->expSmoothing->getWait(currentIndex)
+              > this->djisktra->weightVertices[currentIndex]
+        ){
+            this->djisktra->expSmoothing->exponentialSmooth(currentIndex,
+                                    this->djisktra->weightVertices[currentIndex]);
+        }
+    }
+    newRoute = reRoute(cur, originalRouteId);
 
-    while (getline(streamData, str, ' ')) {
+    /*while (getline(streamData, str, ' ')) {
         if (i == 0) {
             readLane(cur, str);
         } else if (i == 2) {
@@ -382,10 +395,10 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
             }
         }
         if(i == 3){
-            newRoute = reRoute(cur, str/*, t*/);
+            newRoute = reRoute(cur, str);
         }
         i++;
-    }
+    }*/
     return newRoute;
 }
 
