@@ -448,10 +448,12 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
             }
         }
         if(stop){
-            return "$" + cur->id + "_" + "0";
+            //return "$" + cur->id + "_" + "0";
+            return "{\"id\" : \"" + cur->id + "\", \"newRoute\" : \"0\"}";
         }
         else{
-            return "$" + cur->id + "_" + Constant::CARRY_ON;
+            //return "$" + cur->id + "_" + Constant::CARRY_ON;
+            return "{\"id\" : \"" + cur->id + "\", \"newRoute\" : \"" + Constant::CARRY_ON + "\"}";
         }
     }
 
@@ -504,7 +506,8 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
 
         if(newRoute.length() == 0)
             return "";
-        newRoute = "$" + cur->id + "_" + newRoute;
+        //newRoute = "$" + cur->id + "_" + newRoute;
+        newRoute = "{\"id\" : \"" + cur->id + "\", \"newRoute\" : \"" + newRoute + "\"}";
         return newRoute;
     }
     return "";
