@@ -16,6 +16,7 @@
 #include "AGVControlApp.h"
 //#include "HospitalControlApp.h"
 #include "Constant.h"
+#include "jute.h"
 #include "veins/modules/application/traci/TraCIDemo11pMessage_m.h"
 
 
@@ -180,13 +181,22 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
     //    return;
     //}
     if(TraCIDemo11pMessage* bc = dynamic_cast<TraCIDemo11pMessage*>(enc)){
-        int length = strlen(bc->getDemoData());
-        std::string str = std::string(bc->getDemoData(), length);
-        if(str.find("$" + std::to_string(myId) + "_") != std::string::npos){
+        //int length = strlen(bc->getDemoData());
+        std::stringstream streamData(bc->getDemoData());
+        std::string tmp;
+        std::string str = "";
+        while(getline(streamData, tmp)) str += tmp;
+        jute::jValue v = jute::parser::parse(str);
+        std::string id = v["id"].as_string();
+        //std::string str = std::string(bc->getDemoData(), length);
+        if(//str.find("$" + std::to_string(myId) + "_") != std::string::npos
+             std::to_string(myId).compare(id) == 0
+        ){
             /*if(std::to_string(myId).compare("16") != 0){
                 EV<<"dsdssd"<<endl;
             }*/
-            std::string newRoute = str.substr(std::to_string(myId).length() + 2);
+            std::string newRoute = //str.substr(std::to_string(myId).length() + 2);
+                    v["newRoute"].as_string();
             if(prevRoute.compare(newRoute) != 0){
                 if(newRoute.compare("0") == 0){
                    //force AGV to stop
