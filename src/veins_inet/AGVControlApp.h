@@ -48,6 +48,12 @@ private:
     bool receivedReRouting = false;
     double travellingTime = 0;
     long waitingIntervals = 0;
+    //attributes for adaptive responsive rate
+    double lambda = 0;
+    int k = 0;
+    double Qt = 0;
+    double Dt = 0;
+
     std::string originalRoute = "";
     std::string prevRoute = "";
     std::string expectedRoute = "";
