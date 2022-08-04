@@ -374,31 +374,6 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     }
     newRoute = reRoute(cur, originalRouteId);
 
-    /*while (getline(streamData, str, ' ')) {
-        if (i == 0) {
-            readLane(cur, str);
-        } else if (i == 2) {
-            if (std::stod(str) == 0) {
-                cur->itinerary->localWait++;
-                int currentIndex = cur->itinerary->prevVertex;
-                this->djisktra->expSmoothing->addWait(currentIndex, 0.1);
-                if(this->djisktra->expSmoothing->getWait(currentIndex)
-                      > this->djisktra->weightVertices[currentIndex]
-                ){
-                    this->djisktra->expSmoothing->exponentialSmooth(currentIndex,
-                                            this->djisktra->weightVertices[currentIndex]);
-                }
-
-            }
-            else{
-
-            }
-        }
-        if(i == 3){
-            newRoute = reRoute(cur, str);
-        }
-        i++;
-    }*/
     return newRoute;
 }
 
@@ -427,11 +402,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         {
             return "";//skip this case, too complex as AGV is on an intersection
         }
-        else{
-            /*if(cur->id.compare("112") == 0){
-                EV_TRACE<<"RTTTTTT"<<endl;
-            }*/
-        }
+
     }
 
     int idOfI_Vertex = 0;
@@ -441,12 +412,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
     else{
         idOfI_Vertex = this->djisktra->findI_Vertex(cur->itinerary->laneId, false);
     }
-    /*if(this->djisktra->vertices[idOfI_Vertex].compare(cur->itinerary->laneId) == 0){
-        return "";//skip this case, too complex
-    }
-    else{
 
-    }*/
     int src = -1, station = -1, exit = -1;
     int i = -1;
     if(idOfI_Vertex != cur->reRouteAt){
@@ -488,7 +454,6 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
             return "$" + cur->id + "_" + Constant::CARRY_ON;
         }
     }
-    //if((idOfI_Vertex == station && i != -1){
 
     int nextDst = (cur->passedStation) ? exit : station;
     if(nextDst > -1){
