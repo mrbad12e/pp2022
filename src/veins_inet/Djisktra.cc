@@ -407,6 +407,28 @@ bool Djisktra::isValidTrace(std::string currLane, std::string trace){
     return true;
 }
 
+std::string getTime(std::string route, double rate){
+    //std::vector<std::string> cost;
+    std::string cost = "";
+    std::vector<std::string> v = split(route, " ");
+    int index = -1;
+    int prevIndex = -1;
+    for(int i = 0; i < std::min(v.size() - 1, 5); i++){
+        index = findI_Vertex(v[i], false);
+        if(index != prevIndex){
+            cost = cost + "\"" + vertices[index] + "_" + (to_string(rate * ShortestPath[index])) + "\",";
+            prevIndex = index;
+        }
+    }
+    if(v.size() > 2){
+        index = findI_Vertex(v[v.size() - 1], true);
+        if(index != prevIndex){
+            cost.push_back(to_string(rate * ShortestPath[index]));
+        }
+    }
+    return "";
+}
+
 
 std::string Djisktra::getFinalSegment(std::string trace){
     int index = trace.length() > 10 ? (trace.length() - 10) : 0;
