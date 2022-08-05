@@ -407,26 +407,53 @@ bool Djisktra::isValidTrace(std::string currLane, std::string trace){
     return true;
 }
 
-std::string getTime(std::string route, double rate){
+std::string Djisktra::getTime(std::string route, std::string laneId, double rate){
     //std::vector<std::string> cost;
     std::string cost = "";
     std::vector<std::string> v = split(route, " ");
+    if(v.size() == 0)
+        return "";
     int index = -1;
     int prevIndex = -1;
-    for(int i = 0; i < std::min(v.size() - 1, 5); i++){
+    index = findI_Vertex(v[0], false);
+    prevIndex = index;
+
+
+    /*if(laneId[0] != ':' && ShortestPath[index] == 0){
+        bool found = false;
+        for(int i = 0; i < this->adjList.size(); i++){
+            for (std::vector<Quad>::iterator it = adjList[i].begin(); it != adjList[i].end(); it++){
+                  double tempW = std::get<0>(*it);
+                  std::string tempTrace = std::get<3>(*it);
+                  if(tempTrace.find("$" + laneId + "$") != std::string::npos){
+                      found = true;
+                      break;
+                  }
+            }
+            if(found)
+                break;
+        }
+    }*/
+
+    int min = v.size() > 6 ? 6 : v.size();
+    for(int i = 1; i < min - 1; i++){
         index = findI_Vertex(v[i], false);
         if(index != prevIndex){
-            cost = cost + "\"" + vertices[index] + "_" + (to_string(rate * ShortestPath[index])) + "\",";
+            cost = cost + "\"" + vertices[index] + "_" + (std::to_string(rate * ShortestPath[index])) + "\",";
             prevIndex = index;
         }
     }
     if(v.size() > 2){
         index = findI_Vertex(v[v.size() - 1], true);
         if(index != prevIndex){
-            cost.push_back(to_string(rate * ShortestPath[index]));
+            //cost.push_back(std::to_string(rate * ShortestPath[index]));
+            cost = cost + "\"" + vertices[index] + "_" + (std::to_string(rate * ShortestPath[index])) + "\",";
         }
     }
-    return "";
+    if(cost.length() > 1)
+        cost = cost.substr(0, cost.length() - 1);
+    cost = "[" + cost + "]";
+    return cost;
 }
 
 
