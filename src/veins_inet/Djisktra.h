@@ -208,6 +208,7 @@ public:
     int findVertex(std::string name);
     std::string getFinalSegment(std::string trace);
     int numIVertices = 0;
+    std::string getTime(std::string route, std::string laneId, double rate);
 
 private:
     std::vector<std::vector<Quad>> adjList;
@@ -226,8 +227,6 @@ private:
 
     //std::vector <bool> visitedVertex(numVertices, false);
     double *ShortestPath; //[numVertices]; // Have an array to store the shortest path
-    std::string getTime(std::string route, double rate);
-
 };
 
 #endif /* VEINS_INET_DJISKTRA_H_ */
