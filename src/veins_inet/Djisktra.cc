@@ -415,8 +415,8 @@ std::string Djisktra::getTime(std::string route, std::string laneId, double rate
         return "";
     int index = -1;
     int prevIndex = -1;
-    index = findI_Vertex(v[0], false);
-    prevIndex = index;
+    //index = findI_Vertex(v[0], false);
+    //prevIndex = index;
 
 
     /*if(laneId[0] != ':' && ShortestPath[index] == 0){
