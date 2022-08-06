@@ -503,12 +503,17 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
 
         newRoute = removeAntidromic(newRoute);
         newRoute = removeLoop(newRoute);
-        std::string expectedTime = this->djisktra->getTime(newRoute, cur->itinerary->laneId, cur->rate);
+        std::string expectedTime = "";
+        expectedTime = this->djisktra->getTime(newRoute, cur->itinerary->laneId, cur->rate);
 
         if(newRoute.length() == 0)
             return "";
+        if(expectedTime.length() > 2){
+            expectedTime = ", \"expectedTime\" : " + expectedTime;
+        }
+        //newRoute = newRoute.substr(newRoute.length() - 3, 3);
         //newRoute = "$" + cur->id + "_" + newRoute;
-        newRoute = "{\"id\" : \"" + cur->id + "\", \"newRoute\" : \"" + newRoute + "\"}";
+        newRoute = "{\"id\" : \"" + cur->id + "\", \"newRoute\" : \"" + newRoute + "\"" + expectedTime + "}";
         return newRoute;
     }
     return "";
