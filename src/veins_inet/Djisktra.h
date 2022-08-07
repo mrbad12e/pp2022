@@ -208,7 +208,7 @@ public:
     int findVertex(std::string name);
     std::string getFinalSegment(std::string trace);
     int numIVertices = 0;
-    std::string getTime(std::string route, std::string laneId, double rate);
+    std::string getWeights(std::string route);
 
 private:
     std::vector<std::vector<Quad>> adjList;
