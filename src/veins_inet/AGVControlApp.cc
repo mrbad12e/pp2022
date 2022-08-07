@@ -169,6 +169,37 @@ void AGVControlApp::handlePositionUpdate(cObject* obj)
 
 }
 
+void AGVControlApp::addExpectedTime(std::string str){
+    std::vector<std::string> list = split(str, "_");
+    if(list[1].compare("0") != 0 && list[0].length() > 0){
+        dict[list[0]] = std::stod(list[1]);
+    }
+}
+
+void AGVControlApp::exponentialSmooth(std::string key, double realTime){
+
+    std::map<std::string, double>::iterator it;
+    it = dict.find(key);
+    if(it == dict.end())
+        return;
+    double weight = dict[key];
+    if(weight == 0)
+        return;
+
+    double realRatio = realTime / weight;
+
+    double error = realRatio - predictRatio;
+    Qt = Constant::GAMMA * error - (1 - Constant::GAMMA) * Qt;
+    Dt = Constant::GAMMA * abs(error)
+                    - (1 - Constant::GAMMA) * Dt;
+    Dt = (Dt == 0) ? 1 : Dt;
+    double lambda = abs(Qt / Dt);
+    predictRatio = lambda * realRatio + (1 - lambda) * predictRatio;
+
+    if(predictRatio <= 0)
+        predictRatio = 1;
+}
+
 void AGVControlApp::handleLowerMsg(cMessage* msg)
 {
     //if(msg == NULL){
@@ -192,11 +223,12 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
         if(//str.find("$" + std::to_string(myId) + "_") != std::string::npos
              std::to_string(myId).compare(id) == 0
         ){
-            /*if(std::to_string(myId).compare("16") != 0){
-                EV<<"dsdssd"<<endl;
-            }*/
             std::string newRoute = //str.substr(std::to_string(myId).length() + 2);
                     v["newRoute"].as_string();
+            int size = v["weights"].size();
+            for(int i = 0; i < size; i++){
+                addExpectedTime(v["weights"][i].as_string());
+            }
             if(prevRoute.compare(newRoute) != 0){
                 if(newRoute.compare("0") == 0){
                    //force AGV to stop
