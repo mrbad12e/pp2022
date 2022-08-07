@@ -24,11 +24,14 @@
 #include "veins/modules/application/ieee80211p/DemoBaseApplLayer.h"
 #include "veins/modules/application/traci/TraCIDemo11p.h"
 #include <float.h>
+#include <map>
+#include <string>
 
 using namespace omnetpp;
 
 namespace veins {
 
+typedef std::map<std::string, double> Dictionary;
 class AGVControlApp: public veins::TraCIDemo11p {
 public:
     void initialize(int stage) override;
@@ -44,6 +47,8 @@ protected:
     void handlePositionUpdate(cObject* obj) override;
     void handleLowerMsg(cMessage* msg) override;
 private:
+    void addExpectedTime(std::string str);
+    void exponentialSmooth(std::string key, double realTime);
     bool sentFirstMessage = false;
     bool receivedReRouting = false;
     double travellingTime = 0;
@@ -53,6 +58,7 @@ private:
     int k = 0;
     double Qt = 0;
     double Dt = 0;
+    double predictRatio = 1.1;
 
     std::string originalRoute = "";
     std::string prevRoute = "";
@@ -60,6 +66,7 @@ private:
     std::string content = "";
     double velocityBeforeHalt = -1;
     double pausingTime = DBL_MAX;
+    Dictionary dict;
 };
 }
 #endif /* VEINS_INET_AGVCONTROLAPP_H_ */
