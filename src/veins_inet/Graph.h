@@ -38,7 +38,7 @@ public:
     int reRouteAt = -1;
     bool passedStation = false;
     double atStation = 0;
-    double rate = 1.1; //rate = real time of movement / weight of path
+
 };
 
 class Edge {
