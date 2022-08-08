@@ -310,7 +310,7 @@ void HospitalControlApp::handlePositionUpdate(cObject* obj)
 
 void HospitalControlApp::readLane(AGV *cur, std::string str) {
     double localWait = cur->itinerary->localWait * 0.1;
-    str.erase(str.find("_"));
+    //str.erase(str.find("_"));
     cur->itinerary->laneId = str;
     if(cur->itinerary->prevLane.compare(cur->itinerary->laneId) != 0){
         if(cur->itinerary->prevLane.compare(cur->itinerary->station) == 0){
