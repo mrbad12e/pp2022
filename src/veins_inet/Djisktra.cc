@@ -407,7 +407,20 @@ bool Djisktra::isValidTrace(std::string currLane, std::string trace){
     return true;
 }
 
-std::string Djisktra::getWeights(std::string route){
+double Djisktra::timeForVeryNextVertex(std::string currLane, std::string veryNextVertex){
+    double result = 0;
+    for(int i = 0; i < this->edges.size(); i++ ){
+        std::string path = this->edges[i].first;
+        if(path.find(currLane + "$") != std::string::npos
+            && path.find("$" + veryNextVertex) != std::string::npos
+            ){
+            return 1;
+        }
+    }
+    return result;
+}
+
+std::string Djisktra::getWeights(std::string route, std::string currLane){
     //std::vector<std::string> cost;
     std::string cost = "";
     std::vector<std::string> v = split(route, " ");
@@ -416,6 +429,11 @@ std::string Djisktra::getWeights(std::string route){
     int index = -1;
     int prevIndex = -1;
     int count = 0;
+    index = findI_Vertex(v[0], false);
+    if(index != -1){
+        double x = timeForVeryNextVertex(currLane, vertices[index]);
+        x++;
+    }
 
     int min = v.size() > 6 ? 6 : v.size();
     for(int i = 1; count < min - 1 && i < v.size() - 1; i++){
