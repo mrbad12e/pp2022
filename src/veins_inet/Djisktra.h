@@ -208,7 +208,7 @@ public:
     int findVertex(std::string name);
     std::string getFinalSegment(std::string trace);
     int numIVertices = 0;
-    std::string getWeights(std::string route);
+    std::string getWeights(std::string route, std::string currLane);
 
 private:
     std::vector<std::vector<Quad>> adjList;
@@ -218,6 +218,7 @@ private:
     std::vector<std::string> nextNameOfBVertices;
     std::vector<Pair> edges;
 
+    double timeForVeryNextVertex(std::string currLane, std::string veryNextVertex);
     void getSupplyAndDisposalLocation(std::string fileName);
     bool isAntidromic(std::string direction, std::string otherDirection);
     bool isValidTrace(std::string currLane, std::string trace);
