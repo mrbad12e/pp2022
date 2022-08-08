@@ -506,7 +506,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         newRoute = removeAntidromic(newRoute);
         newRoute = removeLoop(newRoute);
         std::string weights = "";
-        weights = this->djisktra->getWeights(newRoute);
+        weights = this->djisktra->getWeights(newRoute, cur->itinerary->laneId);
 
         if(newRoute.length() == 0)
             return "";
