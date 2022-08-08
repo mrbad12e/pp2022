@@ -104,6 +104,7 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
            /*content = content +*/ /*"Lid"*/ /*" " +*/
                    "{\"laneId\" : \"" +
                    traciVehicle->getLaneId() + "\", ";
+
            double speed = traciVehicle->getSpeed();
            if(speed == 0.0){
                this->waitingIntervals++;
@@ -112,6 +113,7 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
            content = content + "\"lanePos\" : " + /*"L.P"*/ "\""
                    + std::to_string(traciVehicle->getLanePosition())
                    + "\", ";
+           this->exponentialSmooth(traciVehicle->getLaneId(), simTime().dbl());
            content = content + "\"speed\" : " + "\""
                    /*"velo:"*/ + std::to_string(speed)
                                + "\", "
@@ -179,6 +181,7 @@ void AGVControlApp::addExpectedTime(std::string str){
 
 void AGVControlApp::exponentialSmooth(std::string key, double realTime){
 
+    key.erase(key.find("_"));
     std::map<std::string, double>::iterator it;
     it = dict.find(key);
     if(it == dict.end())
