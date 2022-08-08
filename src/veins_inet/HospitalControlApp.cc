@@ -360,6 +360,8 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     std::string speed = v["speed"].as_string();
     std::string laneId = v["laneId"].as_string();
     std::string originalRouteId = v["originalRouteId"].as_string();
+    double ratio = std::stod(v["ratio"].as_string());
+    cur->ratio = ratio;
     readLane(cur, laneId);
     if(std::stod(speed) == 0){
         cur->itinerary->localWait++;
