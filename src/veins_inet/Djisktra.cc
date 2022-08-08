@@ -415,13 +415,18 @@ std::string Djisktra::getWeights(std::string route){
         return "";
     int index = -1;
     int prevIndex = -1;
+    int count = 0;
 
     int min = v.size() > 6 ? 6 : v.size();
-    for(int i = 1; i < min - 1; i++){
+    for(int i = 1; count < min - 1 && i < v.size() - 1; i++){
         index = findI_Vertex(v[i], false);
         if(index != prevIndex){
             cost = cost + "\"" + vertices[index] + "_" + (std::to_string(ShortestPath[index])) + "\",";
             prevIndex = index;
+            count++;
+            if(cost.find(":J5_") != std::string::npos){
+                EV_TRACE<<"DEBUYG HEREE"<<endl;
+            }
         }
     }
     if(v.size() > 2){
