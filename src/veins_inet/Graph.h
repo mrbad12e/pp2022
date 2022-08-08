@@ -38,7 +38,7 @@ public:
     int reRouteAt = -1;
     bool passedStation = false;
     double atStation = 0;
-
+    double ratio = 1.1;
 };
 
 class Edge {
