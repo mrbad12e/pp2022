@@ -67,6 +67,8 @@ private:
     double velocityBeforeHalt = -1;
     double pausingTime = DBL_MAX;
     Dictionary dict;
+    double APE = 0;
+    int T = 0;
 };
 }
 #endif /* VEINS_INET_AGVCONTROLAPP_H_ */
