@@ -362,6 +362,8 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     std::string originalRouteId = v["originalRouteId"].as_string();
     double ratio = std::stod(v["ratio"].as_string());
     cur->ratio = ratio;
+    double now = std::stod(v["now"].as_string());
+    cur->now = now;
     readLane(cur, laneId);
     if(std::stod(speed) == 0){
         cur->itinerary->localWait++;
@@ -506,7 +508,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         newRoute = removeAntidromic(newRoute);
         newRoute = removeLoop(newRoute);
         std::string weights = "";
-        weights = this->djisktra->getWeights(newRoute, cur->itinerary->laneId);
+        weights = this->djisktra->getWeights(newRoute, cur);//->ratio, cur->now, cur->itinerary->laneId);
 
         if(newRoute.length() == 0)
             return "";
