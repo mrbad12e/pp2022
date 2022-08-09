@@ -412,7 +412,7 @@ double Djisktra::timeForVeryNextVertex(std::string currLane, std::string veryNex
     int count = 0;
     for(int i = 0; i < this->edges.size(); i++ ){
         std::string path = this->edges[i].first;
-        if(path.find(currLane + "$") != std::string::npos
+        if(path.find("$" + currLane + "$") != std::string::npos
             && path.find(veryNextVertex + "$") != std::string::npos
             ){
             result += this->edges[i].second;
@@ -438,8 +438,10 @@ std::string Djisktra::getWeights(std::string route, std::string currLane){
     if(index != -1){
         firstCost = timeForVeryNextVertex(currLane, vertices[index]);
         prevIndex = index;
-        cost = cost + "\"" + vertices[index] + "_"
+        if(firstCost > 0){
+            cost = cost + "\"" + vertices[index] + "_"
                 + std::to_string(firstCost) + "\",";
+        }
     }
 
     int min = v.size() > 6 ? 6 : v.size();
