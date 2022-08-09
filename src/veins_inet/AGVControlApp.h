@@ -69,6 +69,7 @@ private:
     Dictionary dict;
     double APE = 0;
     int T = 0;
+    std::string station = "";
 };
 }
 #endif /* VEINS_INET_AGVCONTROLAPP_H_ */
