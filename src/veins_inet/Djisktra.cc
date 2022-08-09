@@ -421,26 +421,33 @@ double Djisktra::timeForVeryNextVertex(std::string currLane, std::string veryNex
     }
     if(count > 1)
         result /= count;
+    result /= Constant::MAX_SPEED;
     return result;
 }
 
-std::string Djisktra::getWeights(std::string route, std::string currLane){
+std::string Djisktra::getWeights(std::string route, AGV* cur
+        //double ratio, double now, std::string currLane
+        ){
     //std::vector<std::string> cost;
     std::string cost = "";
     std::vector<std::string> v = split(route, " ");
     if(v.size() == 0)
         return "";
+    double ratio = cur->ratio;
+    double now = cur->now;
+    std::string currLane = cur->itinerary->laneId;
     int index = -1;
     int prevIndex = -1;
     int count = 0;
     index = findI_Vertex(v[0], false);
     double firstCost = 0;
+    //double now = simTime().dbl();
     if(index != -1){
         firstCost = timeForVeryNextVertex(currLane, vertices[index]);
         prevIndex = index;
         if(firstCost > 0){
             cost = cost + "\"" + vertices[index] + "_"
-                + std::to_string(firstCost) + "\",";
+                + std::to_string(ratio * firstCost + now) + "\",";
         }
     }
 
@@ -449,7 +456,7 @@ std::string Djisktra::getWeights(std::string route, std::string currLane){
         index = findI_Vertex(v[i], false);
         if(index != prevIndex && index != -1){
             cost = cost + "\"" + vertices[index] + "_" +
-                    (std::to_string(ShortestPath[index] + firstCost)) + "\",";
+                    (std::to_string(now + ratio * (ShortestPath[index] + firstCost))) + "\",";
             prevIndex = index;
             count++;
             if(cost.find(":J10_") != std::string::npos){
@@ -461,7 +468,8 @@ std::string Djisktra::getWeights(std::string route, std::string currLane){
         index = findI_Vertex(v[v.size() - 1], true);
         if(index != prevIndex){
             //cost.push_back(std::to_string(rate * ShortestPath[index]));
-            cost = cost + "\"" + vertices[index] + "_" + (std::to_string(ShortestPath[index])) + "\",";
+            cost = cost + "\"" + vertices[index] + "_" +
+                    (std::to_string(now + ratio * (ShortestPath[index] + firstCost))) + "\",";
         }
     }
     if(cost.length() > 1)
