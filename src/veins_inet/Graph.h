@@ -39,6 +39,7 @@ public:
     bool passedStation = false;
     double atStation = 0;
     double ratio = 1.1;
+    double now = 0;
 };
 
 class Edge {
