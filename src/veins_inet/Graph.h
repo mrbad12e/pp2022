@@ -31,6 +31,30 @@ public:
     int localWait;
 };
 
+class Station{
+public:
+    std::string name;
+    double bestTime = -1;
+    double amplitude = -1;
+    double period = -1;
+    int count = 0;
+    double getHarmfulness(double reachedTime){
+        if(bestTime + count*period - amplitude <= reachedTime &&
+                bestTime + count*period + amplitude >= reachedTime
+        ){
+            return 0;
+        }
+        if(bestTime + count*period - amplitude > reachedTime){
+            double delta = bestTime + count*period - amplitude - reachedTime;
+            return (delta*0.1 + 4);
+        }
+        else{
+            double delta = reachedTime - (bestTime + count*period + amplitude);
+            return (delta*delta + 2*delta + 1);
+        }
+    }
+};
+
 class AGV {
 public:
     std::string id;
