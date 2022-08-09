@@ -434,17 +434,20 @@ std::string Djisktra::getWeights(std::string route, std::string currLane){
     int prevIndex = -1;
     int count = 0;
     index = findI_Vertex(v[0], false);
+    double firstCost = 0;
     if(index != -1){
-        double x = timeForVeryNextVertex(currLane, vertices[index]);
+        firstCost = timeForVeryNextVertex(currLane, vertices[index]);
         prevIndex = index;
-        cost = cost + "\"" + vertices[index] + "_" + std::to_string(x) + "\",";
+        cost = cost + "\"" + vertices[index] + "_"
+                + std::to_string(firstCost) + "\",";
     }
 
     int min = v.size() > 6 ? 6 : v.size();
     for(int i = 1; count < min - 1 && i < v.size() - 1; i++){
         index = findI_Vertex(v[i], false);
         if(index != prevIndex && index != -1){
-            cost = cost + "\"" + vertices[index] + "_" + (std::to_string(ShortestPath[index])) + "\",";
+            cost = cost + "\"" + vertices[index] + "_" +
+                    (std::to_string(ShortestPath[index] + firstCost)) + "\",";
             prevIndex = index;
             count++;
             if(cost.find(":J10_") != std::string::npos){
