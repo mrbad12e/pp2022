@@ -64,6 +64,9 @@ void AGVControlApp::finish()
     //EV<<"This AGV spends "<<this->travellingTime<<" for travelling"<<endl;
     Constant::TOTAL_TRAVELLING_TIME += this->travellingTime;
     Constant::TOTAL_WAITING_TIME += this->waitingIntervals;
+    Constant::TOTAL_AGV++;
+    if(T != 0)
+        Constant::TOTAL_APE += (APE/T);
     TraCIDemo11p::finish();
     if(Constant::activation == NULL){
             EV<<"Constant is helpless eventually"<<endl;
@@ -201,6 +204,8 @@ void AGVControlApp::exponentialSmooth(std::string key, double realTime){
     double realRatio = realTime / weight;
 
     double error = realRatio - predictRatio;
+    APE += abs(realTime - weight)/weight;
+    T++;
     Qt = Constant::GAMMA * error - (1 - Constant::GAMMA) * Qt;
     Dt = Constant::GAMMA * abs(error)
                     - (1 - Constant::GAMMA) * Dt;
