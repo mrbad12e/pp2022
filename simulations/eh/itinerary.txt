@@ -1,15 +1,16 @@
-route_0 E0 E83 E92 60
-route_1 E226 E216 E92 60
-route_2 -E92 E180 -E0 60
-route_3 E0 E359 E298 60
-route_4 E226 E404 E298 60
-route_5 E0 -E216 E92 
-route_6 E226 E202 E298 
-route_7 E0 E83 E298 
-route_8 -E92 -E5 -E226 
-route_9 E0 E290 E92 
-route_10 -E298 -E235 -E226 
-route_11 -E298 -E302 -E0 30
-route_12 -E298 -E99 -E0 
-route_13 E226 E48 E298 9
-route_14 E0 E327 E92 30
+route_0 E0 E83 E92 60 180 30
+route_1 E226 E216 E92 60 160 30
+route_2 -E92 E180 -E0 60 170 30
+route_3 E0 E359 E298 60 190 30
+route_4 E226 E404 E298 60 200 30
+route_5 E0 -E216 E92 60 180 30
+route_6 E226 E202 E298 60 140 30
+route_7 E0 E83 E298 60 152 30
+route_8 -E92 -E5 -E226 60 171 30
+route_9 E0 E290 E92 60 183 30
+route_10 -E298 -E235 -E226 60 159 30
+route_11 -E298 -E302 -E0 30 122 30
+route_12 -E298 -E99 -E0 13 110 30
+route_13 E226 E48 E298 9 145 30
+route_14 E0 E327 E92 30 139 30
+#ten route, bat dau, giao/nhan hang, ket thuc, chu ky xuat hien AGV, thoi diem toi uu, bien do
