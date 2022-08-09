@@ -143,7 +143,7 @@ void HospitalControlApp::finish()
     EV<<"Total travelling time: "<<Constant::TOTAL_TRAVELLING_TIME<<"(s)"<<endl;
     double percentage = Constant::TOTAL_WAITING_TIME*10/Constant::TOTAL_TRAVELLING_TIME;
     EV<<"% of waiting time: "<<percentage<<endl;
-    EV<<"Mean absolute percentage error: "<<100*Constant::TOTAL_APE/Constant::TOTAL_AGV<<endl;
+    EV<<"Average Mean Absolute Percentage Error: "<<100*Constant::TOTAL_APE/Constant::TOTAL_AGV<<endl;
     // statistics recording goes here
 }
 
@@ -218,10 +218,6 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
             }
         }
         if(!Constant::SHORTEST_PATH){
-            //double t = simTime().dbl();
-            //if(t > 440.3){
-            //    EV_TRACE<<t<<endl;
-            //}
             std::string newRoute = readMessage(bc);
             if(newRoute.length() != 0){
                 try{
@@ -454,11 +450,14 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         }
         if(stop){
             //return "$" + cur->id + "_" + "0";
-            return "{\"id\" : \"" + cur->id + "\", \"newRoute\" : \"0\"}";
+            return "{\"id\" : \"" + cur->id +
+                        "\", \"station\" : \"" + cur->itinerary->station + "\", \"newRoute\" : \"0\"}";
         }
         else{
             //return "$" + cur->id + "_" + Constant::CARRY_ON;
-            return "{\"id\" : \"" + cur->id + "\", \"newRoute\" : \"" + Constant::CARRY_ON + "\"}";
+            return "{\"id\" : \"" + cur->id +
+                    "\", \"station\" : \"" + cur->itinerary->station +
+                    "\", \"newRoute\" : \"" + Constant::CARRY_ON + "\"}";
         }
     }
 
@@ -518,7 +517,9 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         }
         //newRoute = newRoute.substr(newRoute.length() - 3, 3);
         //newRoute = "$" + cur->id + "_" + newRoute;
-        newRoute = "{\"id\" : \"" + cur->id + "\", \"newRoute\" : \"" + newRoute + "\"" + weights + "}";
+        newRoute = "{\"id\" : \"" + cur->id +
+                "\", \"station\" : \"" + cur->itinerary->station +
+                "\", \"newRoute\" : \"" + newRoute + "\"" + weights + "}";
         return newRoute;
     }
     return "";
