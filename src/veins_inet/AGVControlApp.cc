@@ -204,8 +204,10 @@ void AGVControlApp::exponentialSmooth(std::string key, double realTime){
     double realRatio = realTime / weight;
 
     double error = realRatio - predictRatio;
-    APE += abs(realTime - weight)/weight;
-    T++;
+    if(key.compare(this->station) == 0){
+        APE += abs(realTime - weight)/realTime;
+        T++;
+    }
     Qt = Constant::GAMMA * error - (1 - Constant::GAMMA) * Qt;
     Dt = Constant::GAMMA * abs(error)
                     - (1 - Constant::GAMMA) * Dt;
@@ -243,6 +245,7 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
             std::string newRoute = //str.substr(std::to_string(myId).length() + 2);
                     v["newRoute"].as_string();
             int size = v["weights"].size();
+            this->station = v["station"].as_string();
             for(int i = 0; i < size; i++){
                 addExpectedTime(v["weights"][i].as_string());
             }
