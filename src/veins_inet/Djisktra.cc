@@ -409,14 +409,18 @@ bool Djisktra::isValidTrace(std::string currLane, std::string trace){
 
 double Djisktra::timeForVeryNextVertex(std::string currLane, std::string veryNextVertex){
     double result = 0;
+    int count = 0;
     for(int i = 0; i < this->edges.size(); i++ ){
         std::string path = this->edges[i].first;
         if(path.find(currLane + "$") != std::string::npos
             && path.find(veryNextVertex + "$") != std::string::npos
             ){
             result += this->edges[i].second;
+            count++;
         }
     }
+    if(count > 1)
+        result /= count;
     return result;
 }
 
