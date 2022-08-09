@@ -143,7 +143,7 @@ void HospitalControlApp::finish()
     EV<<"Total travelling time: "<<Constant::TOTAL_TRAVELLING_TIME<<"(s)"<<endl;
     double percentage = Constant::TOTAL_WAITING_TIME*10/Constant::TOTAL_TRAVELLING_TIME;
     EV<<"% of waiting time: "<<percentage<<endl;
-    EV<<"Mean absolute percentage error: "<<Constant::TOTAL_APE/Constant::TOTAL_AGV<<endl;
+    EV<<"Mean absolute percentage error: "<<100*Constant::TOTAL_APE/Constant::TOTAL_AGV<<endl;
     // statistics recording goes here
 }
 
