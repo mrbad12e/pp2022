@@ -120,6 +120,8 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
                                    ;
            content = content + "\"ratio\" : \"" + std::to_string(predictRatio) + "\", ";
 
+           content = content + "\"now\" : \"" + std::to_string(simTime().dbl()) + "\", ";
+
            content = content + "\"originalRouteId\" : " + "\"" + originalRoute + "\"}";
            carBeacon->setDemoData(content.c_str());
            carBeacon->setSenderAddress(myId);
