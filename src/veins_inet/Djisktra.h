@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <assert.h>
 #include "Constant.h"
+#include "Graph.h"
 #include "Crossing.h"
 #include "veins/modules/mobility/traci/TraCICommandInterface.h"
 // Author: Aakash Prabhu
@@ -208,7 +209,7 @@ public:
     int findVertex(std::string name);
     std::string getFinalSegment(std::string trace);
     int numIVertices = 0;
-    std::string getWeights(std::string route, std::string currLane);
+    std::string getWeights(std::string route, AGV* cur);
 
 private:
     std::vector<std::vector<Quad>> adjList;
