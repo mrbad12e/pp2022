@@ -174,6 +174,10 @@ void AGVControlApp::handlePositionUpdate(cObject* obj)
 
 void AGVControlApp::addExpectedTime(std::string str){
     std::vector<std::string> list = split(str, "_");
+    std::map<std::string, double>::iterator it;
+    it = dict.find(list[0]);
+    if(it != dict.end())
+        return;
     if(list[1].compare("0") != 0 && list[0].length() > 0){
         dict[list[0]] = std::stod(list[1]);
     }
