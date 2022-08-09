@@ -412,7 +412,7 @@ double Djisktra::timeForVeryNextVertex(std::string currLane, std::string veryNex
     int count = 0;
     for(int i = 0; i < this->edges.size(); i++ ){
         std::string path = this->edges[i].first;
-        if(path.find("$" + currLane + "$") != std::string::npos
+        if(path.find("$" + currLane + "$") == 0
             && path.find(veryNextVertex + "$") != std::string::npos
             ){
             result += this->edges[i].second;
@@ -421,7 +421,7 @@ double Djisktra::timeForVeryNextVertex(std::string currLane, std::string veryNex
     }
     if(count > 1)
         result /= count;
-    result /= Constant::MAX_SPEED;
+    //result /= Constant::MAX_SPEED;
     return result;
 }
 
