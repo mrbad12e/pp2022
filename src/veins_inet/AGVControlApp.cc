@@ -190,6 +190,8 @@ void AGVControlApp::exponentialSmooth(std::string key, double realTime){
     if(weight == 0)
         return;
 
+    dict.erase(key);//no longer check the key
+
     double realRatio = realTime / weight;
 
     double error = realRatio - predictRatio;
