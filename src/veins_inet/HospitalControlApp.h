@@ -67,7 +67,8 @@ private:
     //double getAvailablePerdestrian(std::string crossId, double _time);
     //double getVeloOfPerdestrian(std::string crossId, double _time);
     void predictDispearTime();
-    Djisktra* djisktra;
+    //Djisktra* djisktra;
+    HarmfulnessDijkstra* djisktra;
     std::string reRoute(AGV *cur, std::string routeId/*, double t*/);
     void sendToAGV(std::string content);
     std::string removeAntidromic(std::string input);
