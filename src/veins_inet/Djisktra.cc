@@ -16,18 +16,6 @@
 #include "Djisktra.h"
 
 Djisktra::Djisktra() {
-    // TODO Auto-generated constructor stub
-    /*getListVertices("i-vertex.txt", "b-vertices.txt");
-    this->getSupplyAndDisposalLocation("SupplyDisposal.txt");
-    getListEdges("weightEdges.txt");
-    adjList.resize(numVertices);
-    generateAdj();
-    getListEdges("weightEdges.txt");//re-create edges
-    getItineraries("itinerary.txt");
-    ShortestPath = (double *)malloc(numVertices*sizeof(double));
-    this->expSmoothing = new ExponentialSmoothing(numVertices, numIVertices);
-    for(int i = 0; i < numVertices; i++)
-        ShortestPath[i] = 0;*/
     this->initialize();
     getItineraries("itinerary.txt");
 }
