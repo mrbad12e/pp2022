@@ -23,7 +23,7 @@ typedef std::map<std::string, Station*> AllStations;
 class HarmfulnessDijkstra: public Djisktra {
 public:
     HarmfulnessDijkstra();
-    virtual ~HarmfulnessDijkstra();
+    //virtual ~HarmfulnessDijkstra();
     void getItineraries(std::string itineraryFile) override;
 private:
     AllStations allSs;
