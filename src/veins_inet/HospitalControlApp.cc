@@ -516,11 +516,12 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         if(weights.length() > 2){
             weights = ", \"weights\" : " + weights;
         }
+
         //newRoute = newRoute.substr(newRoute.length() - 3, 3);
         //newRoute = "$" + cur->id + "_" + newRoute;
         newRoute = "{\"id\" : \"" + cur->id +
-                "\", \"station\" : \"" + cur->itinerary->station +
-                "\", \"newRoute\" : \"" + newRoute + "\"" + weights + "}";
+                "\"," + this->djisktra->getJSONStation(cur->itinerary->station) +
+                ", \"newRoute\" : \"" + newRoute + "\"" + weights + "}";
         return newRoute;
     }
     return "";
