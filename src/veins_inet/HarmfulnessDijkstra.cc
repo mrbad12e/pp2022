@@ -23,6 +23,15 @@ HarmfulnessDijkstra::HarmfulnessDijkstra() {
 
 /*HarmfulnessDijkstra::~HarmfulnessDijkstra() {
 }*/
+std::string HarmfulnessDijkstra::getJSONStation(std::string station){
+    //std::string strStation = "";
+    std::map<std::string, Station*>::iterator it;
+    it = allSs.find(station);
+    if(it == allSs.end())
+        return Djisktra::getJSONStation(station);
+    Station* s = allSs[station];
+    return s->toJSON();
+}
 
 void HarmfulnessDijkstra::getItineraries(std::string itineraryFile){
     std::ifstream file(itineraryFile);
