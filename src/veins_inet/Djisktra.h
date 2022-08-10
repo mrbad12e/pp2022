@@ -210,9 +210,15 @@ public:
     std::string getFinalSegment(std::string trace);
     int numIVertices = 0;
     std::string getWeights(std::string route, AGV* cur);
-
-private:
+    void getSupplyAndDisposalLocation(std::string fileName);
     std::vector<std::vector<Quad>> adjList;
+    int numVertices = 0; // 323 vertices (107 i-vertices and 341 b-vertices)
+    //std::string firstLanes = "$E0$E1$E226$E227$-E92$-E91$-E90$-E298$-E297$-E296$:J3$:J203$:J272$:J273$:J92$:J91$";
+
+    //std::vector <bool> visitedVertex(numVertices, false);
+    double *ShortestPath; //[numVertices]; // Have an array to store the shortest path
+private:
+
     std::vector<std::pair<std::string, std::string>> supplyDisposal;
 
     std::vector<int> nextIndexOfBVertices;
@@ -220,15 +226,11 @@ private:
     std::vector<Pair> edges;
 
     double timeForVeryNextVertex(std::string currLane, std::string veryNextVertex);
-    void getSupplyAndDisposalLocation(std::string fileName);
+
     bool isAntidromic(std::string direction, std::string otherDirection);
     bool isValidTrace(std::string currLane, std::string trace);
 
-    int numVertices = 0; // 323 vertices (107 i-vertices and 341 b-vertices)
-    //std::string firstLanes = "$E0$E1$E226$E227$-E92$-E91$-E90$-E298$-E297$-E296$:J3$:J203$:J272$:J273$:J92$:J91$";
 
-    //std::vector <bool> visitedVertex(numVertices, false);
-    double *ShortestPath; //[numVertices]; // Have an array to store the shortest path
 };
 
 #endif /* VEINS_INET_DJISKTRA_H_ */
