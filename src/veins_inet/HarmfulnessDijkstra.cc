@@ -17,19 +17,8 @@
 
 HarmfulnessDijkstra::HarmfulnessDijkstra() {
     // TODO Auto-generated constructor stub
-//    Djisktra::base();
-    /*getListVertices("i-vertex.txt", "b-vertices.txt");
-    this->getSupplyAndDisposalLocation("SupplyDisposal.txt");
-    getListEdges("weightEdges.txt");
-    adjList.resize(numVertices);
-    generateAdj();
-    getListEdges("weightEdges.txt");//re-create edges
+    this->initialize();
     getItineraries("itinerary.txt");
-    ShortestPath = (double *)malloc(numVertices*sizeof(double));
-    this->expSmoothing = new ExponentialSmoothing(numVertices, numIVertices);
-    //this->expSmoothing->waitTime = (double *)malloc(numVertices*sizeof(double));
-    for(int i = 0; i < numVertices; i++)
-        ShortestPath[i] = 0;*/
 }
 
 /*HarmfulnessDijkstra::~HarmfulnessDijkstra() {
@@ -41,7 +30,7 @@ void HarmfulnessDijkstra::getItineraries(std::string itineraryFile){
     std::string nameRoute;
     std::string nameSrc, nameStation, nameDest;
     std::string period, bestTime, amplitude;
-    int source, station, dst;
+    int source, indexOfStation, dst;
 
     while (getline(file, line)) {
         if(line[0] != '#'){
@@ -54,12 +43,12 @@ void HarmfulnessDijkstra::getItineraries(std::string itineraryFile){
             getline(ss, bestTime, ' ');
             getline(ss, amplitude, ' ');
             source = findI_Vertex(nameSrc, false);
-            station = findI_Vertex(nameStation, false);
-            //Station* station = new Station();
+            indexOfStation = findI_Vertex(nameStation, false);
+            Station* station = new Station(nameStation, bestTime, amplitude, period);
 
-            //allSs[station];
+            allSs[nameStation] = station;
             dst = findI_Vertex(nameDest, true);
-            itineraries.push_back(std::make_tuple(nameRoute, source, station, dst));
+            itineraries.push_back(std::make_tuple(nameRoute, source, indexOfStation, dst));
         }
     }
 
