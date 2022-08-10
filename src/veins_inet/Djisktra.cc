@@ -430,6 +430,10 @@ double Djisktra::timeForVeryNextVertex(std::string currLane, std::string veryNex
     return result;
 }
 
+std::string Djisktra::getJSONStation(std::string station){
+    return "\"station\" : \"" + station + "\"";
+}
+
 std::string Djisktra::getWeights(std::string route, AGV* cur
         //double ratio, double now, std::string currLane
         ){
