@@ -25,6 +25,7 @@ public:
     HarmfulnessDijkstra();
     //virtual ~HarmfulnessDijkstra();
     void getItineraries(std::string itineraryFile) override;
+    std::string getJSONStation(std::string station) override;
 private:
     AllStations allSs;
 };
