@@ -43,7 +43,8 @@ void HospitalControlApp::initialize(int stage)
     if (stage == 0) {
         sendBeacon= new cMessage("send Beacon");
         graph = new Graph();
-        djisktra = new HarmfulnessDijkstra();//new Djisktra();
+        djisktra = //new HarmfulnessDijkstra();
+                   new Djisktra();
         this->readCrossing();
     }
     else if (stage == 1) {
