@@ -190,12 +190,11 @@ class Djisktra {
 public:
     Djisktra();
     virtual ~Djisktra();
-    void getListVertices(std::string iVertices, std::string bVertices);
+    void initialize();
     void getListEdges(std::string weightEdges);
     void createAndAddEdge(//std::vector <Quad> adjList[],
             int u, double weightEdge, double weightVertex, std::string v, int indexOfV);
     //void generateAdj(std::vector<Quad> adjList[]);
-    void generateAdj();
     void DijkstrasAlgorithm(//std::vector<Quad> adjList[],
             int source, int target, std::string currLane);
     virtual void getItineraries(std::string itineraryFile);
@@ -210,15 +209,9 @@ public:
     std::string getFinalSegment(std::string trace);
     int numIVertices = 0;
     std::string getWeights(std::string route, AGV* cur);
-    void getSupplyAndDisposalLocation(std::string fileName);
-    std::vector<std::vector<Quad>> adjList;
-    int numVertices = 0; // 323 vertices (107 i-vertices and 341 b-vertices)
-    //std::string firstLanes = "$E0$E1$E226$E227$-E92$-E91$-E90$-E298$-E297$-E296$:J3$:J203$:J272$:J273$:J92$:J91$";
 
-    //std::vector <bool> visitedVertex(numVertices, false);
-    double *ShortestPath; //[numVertices]; // Have an array to store the shortest path
 private:
-
+    void getListVertices(std::string iVertices, std::string bVertices);
     std::vector<std::pair<std::string, std::string>> supplyDisposal;
 
     std::vector<int> nextIndexOfBVertices;
@@ -226,10 +219,16 @@ private:
     std::vector<Pair> edges;
 
     double timeForVeryNextVertex(std::string currLane, std::string veryNextVertex);
-
+    void generateAdj();
     bool isAntidromic(std::string direction, std::string otherDirection);
     bool isValidTrace(std::string currLane, std::string trace);
+    void getSupplyAndDisposalLocation(std::string fileName);
+    std::vector<std::vector<Quad>> adjList;
+    int numVertices = 0; // 323 vertices (107 i-vertices and 341 b-vertices)
+    //std::string firstLanes = "$E0$E1$E226$E227$-E92$-E91$-E90$-E298$-E297$-E296$:J3$:J203$:J272$:J273$:J92$:J91$";
 
+    //std::vector <bool> visitedVertex(numVertices, false);
+    double *ShortestPath; //[numVertices]; // Have an array to store the shortest path
 
 };
 
