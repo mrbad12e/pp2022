@@ -325,15 +325,17 @@ void Djisktra::getItineraries(std::string itineraryFile){
     int source, station, dst;
 
     while (getline(file, line)) {
-        std::stringstream ss(line);
-        getline(ss, nameRoute, ' ');
-        getline(ss, nameSrc, ' ');
-        getline(ss, nameStation, ' ');
-        getline(ss, nameDest, ' ');
-        source = findI_Vertex(nameSrc, false);
-        station = findI_Vertex(nameStation, false);
-        dst = findI_Vertex(nameDest, true);
-        itineraries.push_back(std::make_tuple(nameRoute, source, station, dst));
+        if(line[0] != '#'){
+            std::stringstream ss(line);
+            getline(ss, nameRoute, ' ');
+            getline(ss, nameSrc, ' ');
+            getline(ss, nameStation, ' ');
+            getline(ss, nameDest, ' ');
+            source = findI_Vertex(nameSrc, false);
+            station = findI_Vertex(nameStation, false);
+            dst = findI_Vertex(nameDest, true);
+            itineraries.push_back(std::make_tuple(nameRoute, source, station, dst));
+        }
     }
 
 }
