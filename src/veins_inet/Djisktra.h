@@ -198,7 +198,7 @@ public:
     void generateAdj();
     void DijkstrasAlgorithm(//std::vector<Quad> adjList[],
             int source, int target, std::string currLane);
-    void getItineraries(std::string itineraryFile);
+    virtual void getItineraries(std::string itineraryFile);
     std::vector<double> weightVertices;
     std::vector<std::tuple<std::string, int, int, int>> itineraries;
     std::vector<std::string> traces;
