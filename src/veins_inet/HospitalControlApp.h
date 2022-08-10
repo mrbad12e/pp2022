@@ -27,7 +27,8 @@
 #include "veins/modules/application/traci/TraCIDemo11pMessage_m.h"
 //#include "Graph.h"
 #include <vector>
-#include "Djisktra.h"
+//#include "Djisktra.h"
+#include "HarmfulnessDijkstra.h"
 using namespace omnetpp;
 
 namespace veins {
