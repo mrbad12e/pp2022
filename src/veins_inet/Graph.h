@@ -39,11 +39,7 @@ public:
         this->amplitude = std::stod(amplitude);
         this->period = std::stod(period);
     }
-    std::string name;
-    double bestTime = -1;
-    double amplitude = -1;
-    double period = -1;
-    int count = 0;
+
     double getHarmfulness(double reachedTime){
         if(bestTime + count*period - amplitude <= reachedTime &&
                 bestTime + count*period + amplitude >= reachedTime
@@ -59,6 +55,12 @@ public:
             return (delta*delta + 2*delta + 1);
         }
     }
+private:
+    std::string name;
+    double bestTime = -1;
+    double amplitude = -1;
+    double period = -1;
+    int count = 0;
 };
 
 class AGV {
