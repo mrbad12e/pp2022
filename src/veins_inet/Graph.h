@@ -33,6 +33,12 @@ public:
 
 class Station{
 public:
+    Station(std::string name, std::string bestTime, std::string amplitude, std::string period){
+        this->name = name;
+        this->bestTime = std::stod(bestTime);
+        this->amplitude = std::stod(amplitude);
+        this->period = std::stod(period);
+    }
     std::string name;
     double bestTime = -1;
     double amplitude = -1;
