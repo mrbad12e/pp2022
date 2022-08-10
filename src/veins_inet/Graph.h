@@ -40,6 +40,13 @@ public:
         this->period = std::stod(period);
     }
 
+    std::string toJSON(){
+        return "\"station\" : { \"name\" : \"" + this->name + "\", " +
+                                "\"period\": \"" + std::to_string(this->period) + "\", " +
+                                "\"bestTime\" : \"" + std::to_string(this->bestTime) + "\", " +
+                                "\"amplitude\" : \"" + std::to_string(this->amplitude) + "\"}";
+    }
+
     double getHarmfulness(double reachedTime){
         if(bestTime + count*period - amplitude <= reachedTime &&
                 bestTime + count*period + amplitude >= reachedTime
