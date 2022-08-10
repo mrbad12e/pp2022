@@ -209,6 +209,7 @@ public:
     std::string getFinalSegment(std::string trace);
     int numIVertices = 0;
     std::string getWeights(std::string route, AGV* cur);
+    virtual std::string getJSONStation(std::string station);
 
 private:
     void getListVertices(std::string iVertices, std::string bVertices);
