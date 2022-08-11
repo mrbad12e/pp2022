@@ -20,6 +20,7 @@
 #include "Graph.h"
 #include "jute.h"
 #include <boost/algorithm/string.hpp>
+#include <algorithm>
 using namespace boost::algorithm;
 
 //#include "HashAPI.cpp"
@@ -43,8 +44,8 @@ void HospitalControlApp::initialize(int stage)
     if (stage == 0) {
         sendBeacon= new cMessage("send Beacon");
         graph = new Graph();
-        djisktra = //new HarmfulnessDijkstra();
-                   new Djisktra();
+        djisktra = new HarmfulnessDijkstra();
+                   //new Djisktra();
         this->readCrossing();
     }
     else if (stage == 1) {
@@ -517,10 +518,20 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
             weights = ", \"weights\" : " + weights;
         }
 
+        std::string indexOfRoute = "";
+        if(routeDict[routeId].find("$" + cur->id + "$") == std::string::npos){
+            //std::string::difference_type n
+            std::string s = routeDict[routeId];
+            int n = std::count(s.begin(), s.end(), '$');
+            routeDict[routeId] = routeDict[routeId] + "$" + cur->id + "$";
+            indexOfRoute = ", \"indexOfRoute\" : \"" + std::to_string(n / 2) + "\"";
+        }
+
         //newRoute = newRoute.substr(newRoute.length() - 3, 3);
         //newRoute = "$" + cur->id + "_" + newRoute;
         newRoute = "{\"id\" : \"" + cur->id +
                 "\"," + this->djisktra->getJSONStation(cur->itinerary->station) +
+                ((indexOfRoute.length() == 0) ? "" : indexOfRoute) +
                 ", \"newRoute\" : \"" + newRoute + "\"" + weights + "}";
         return newRoute;
     }
