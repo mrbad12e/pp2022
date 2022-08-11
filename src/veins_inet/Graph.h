@@ -80,10 +80,12 @@ public:
         }
         if(bestTime + count*period - amplitude > reachedTime){
             double delta = bestTime + count*period - amplitude - reachedTime;
+            delta /= 60;
             return (delta*0.1 + 4);
         }
         else{
             double delta = reachedTime - (bestTime + count*period + amplitude);
+            delta /= 60;
             return (delta*delta + 2*delta + 1);
         }
     }
