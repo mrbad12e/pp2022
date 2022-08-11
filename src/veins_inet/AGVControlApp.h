@@ -26,6 +26,7 @@
 #include <float.h>
 #include <map>
 #include <string>
+#include "Graph.h"
 
 using namespace omnetpp;
 
@@ -69,7 +70,10 @@ private:
     Dictionary dict;
     double APE = 0;
     int T = 0;
-    std::string station = "";
+    double harmfulness = 0;
+    Station* station;
+    int indexInRoute = -1;
+    //std::string station = "";
 };
 }
 #endif /* VEINS_INET_AGVCONTROLAPP_H_ */
