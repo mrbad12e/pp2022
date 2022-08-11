@@ -66,6 +66,7 @@ void AGVControlApp::finish()
     Constant::TOTAL_TRAVELLING_TIME += this->travellingTime;
     Constant::TOTAL_WAITING_TIME += this->waitingIntervals;
     Constant::TOTAL_AGV++;
+    Constant::GLOBAL_HARMFULNESS += this->harmfulness;
     if(T != 0)
         Constant::TOTAL_APE += (APE/T);
     TraCIDemo11p::finish();
