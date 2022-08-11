@@ -34,10 +34,35 @@ public:
 class Station{
 public:
     Station(std::string name, std::string bestTime, std::string amplitude, std::string period){
-        this->name = name;
-        this->bestTime = std::stod(bestTime);
-        this->amplitude = std::stod(amplitude);
-        this->period = std::stod(period);
+        this->isNotChanged = false;
+        this->setAttributes(name, bestTime, amplitude, period);
+    }
+
+    Station(){
+        this->name = "";
+        this->isNotChanged = false;
+    }
+
+    std::string getName(){
+        return this->name;
+    }
+
+    void setAttributes(std::string name, std::string bestTime, std::string amplitude, std::string period){
+        //if(this->isNotChanged)
+        //    return;
+
+        if(!name.empty()){
+                this->name = name;
+        }
+        if(!bestTime.empty()){
+                this->bestTime = std::stod(bestTime);
+        }
+        if(!amplitude.empty()){
+                this->amplitude = std::stod(amplitude);
+        }
+        if(!period.empty()){
+                this->period = std::stod(period);
+        }
     }
 
     std::string toJSON(){
@@ -47,7 +72,7 @@ public:
                                 "\"amplitude\" : \"" + std::to_string(this->amplitude) + "\"}";
     }
 
-    double getHarmfulness(double reachedTime){
+    double getHarmfulness(double reachedTime, int count){
         if(bestTime + count*period - amplitude <= reachedTime &&
                 bestTime + count*period + amplitude >= reachedTime
         ){
@@ -62,12 +87,17 @@ public:
             return (delta*delta + 2*delta + 1);
         }
     }
+    void setProtected(bool isNotChanged){
+        this->isNotChanged = isNotChanged;
+    }
 private:
     std::string name;
     double bestTime = -1;
     double amplitude = -1;
     double period = -1;
-    int count = 0;
+
+    bool isNotChanged = false;
+    //std::string allRequests = "";
 };
 
 class AGV {
