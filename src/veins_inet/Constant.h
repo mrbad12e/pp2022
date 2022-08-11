@@ -44,6 +44,7 @@ public:
     static long TOTAL_WAITING_TIME;
     static double TOTAL_TRAVELLING_TIME;
     static double TOTAL_APE;
+    static double GLOBAL_HARMFULNESS;
     static int TOTAL_AGV;
     static constexpr const bool SHORTEST_PATH = false;
     static constexpr const bool STOP_AT_STATION = true;
