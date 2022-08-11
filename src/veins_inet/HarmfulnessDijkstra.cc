@@ -53,9 +53,9 @@ void HarmfulnessDijkstra::getItineraries(std::string itineraryFile){
             getline(ss, amplitude, ' ');
             source = findI_Vertex(nameSrc, false);
             indexOfStation = findI_Vertex(nameStation, false);
-            Station* station = new Station(nameStation, bestTime, amplitude, period);
+            Station* station = new Station(vertices[indexOfStation], bestTime, amplitude, period);
 
-            allSs[nameStation] = station;
+            allSs[vertices[indexOfStation]] = station;
             dst = findI_Vertex(nameDest, true);
             itineraries.push_back(std::make_tuple(nameRoute, source, indexOfStation, dst));
         }
