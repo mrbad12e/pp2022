@@ -27,6 +27,7 @@ Register_Class(AGVControlApp);
 void AGVControlApp::initialize(int stage)
 {
     TraCIDemo11p::initialize(stage);
+    this->station = new Station();
     sentFirstMessage = false;
     if (stage == 0) {
         int idDebug = getId();
@@ -204,9 +205,10 @@ void AGVControlApp::exponentialSmooth(std::string key, double realTime){
     double realRatio = realTime / weight;
 
     double error = realRatio - predictRatio;
-    if(key.compare(this->station) == 0){
+    if(key.compare(this->station->getName()) == 0){
         APE += abs(realTime - weight)/realTime;
         T++;
+        this->harmfulness = this->station->getHarmfulness(realTime, this->indexInRoute);
     }
     Qt = Constant::GAMMA * error - (1 - Constant::GAMMA) * Qt;
     Dt = Constant::GAMMA * abs(error)
@@ -245,7 +247,16 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
             std::string newRoute = //str.substr(std::to_string(myId).length() + 2);
                     v["newRoute"].as_string();
             int size = v["weights"].size();
-            this->station = v["station"].as_string();
+            this->station->setAttributes(v["station"]["name"].as_string(),
+                    v["station"]["bestTime"].as_string(),
+                    v["station"]["amplitude"].as_string(),
+                    v["station"]["period"].as_string());
+            if(this->indexInRoute == -1){
+                std::string indexOfRoute = v["indexOfRoute"].as_string();
+                if(indexOfRoute.length() > 0){
+                    this->indexInRoute = std::stoi(indexOfRoute);
+                }
+            }
             for(int i = 0; i < size; i++){
                 addExpectedTime(v["weights"][i].as_string());
             }
