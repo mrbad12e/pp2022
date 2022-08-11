@@ -385,7 +385,7 @@
     <personFlow begin="0" id="p197b" impatience="0.76941454" end="482" period="5">
         <walk from="-E197" to="E197"/>
     </personFlow>
-    <flow id="flow1" type="agv" route="route_1" begin="1" period="60" minGap="1.10" maxSpeed="4.00" number="0"/>
+    <flow id="flow1" type="agv" route="route_1" begin="1" period="60" minGap="1.10" maxSpeed="4.00" number="2"/>
  
   <personFlow begin="1" id="p98c" impatience="0.57" end="512" period="4">
     <walk from="E98" to="-E98"/>
