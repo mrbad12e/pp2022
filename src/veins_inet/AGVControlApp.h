@@ -48,6 +48,7 @@ protected:
     void handlePositionUpdate(cObject* obj) override;
     void handleLowerMsg(cMessage* msg) override;
 private:
+    std::string checkForPausing();
     void addExpectedTime(std::string str);
     void exponentialSmooth(std::string key, double realTime);
     bool sentFirstMessage = false;
@@ -73,6 +74,7 @@ private:
     double harmfulness = 0;
     Station* station;
     int indexInRoute = -1;
+    int idOfMessage = 0;
     //std::string station = "";
 };
 }
