@@ -364,6 +364,15 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     cur->ratio = ratio;
     double now = std::stod(v["now"].as_string());
     cur->now = now;
+    std::string idMess = v["idMess"].as_string();
+    if(idMess.compare("884") == 0 && cur->id.compare("22") == 0){
+        EV_TRACE<<"sdfsdfsf"<<endl;
+    }
+    std::string timeAtStation = v["atStation"].as_string();
+    if(cur->atStation == 0 && timeAtStation.length() > 0){
+        cur->atStation = std::stod(timeAtStation);
+        cur->passedStation = true;
+    }
     readLane(cur, laneId);
     if(std::stod(speed) == 0){
         cur->itinerary->localWait++;
@@ -400,6 +409,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
     if(Constant::SHORTEST_PATH)
         return "";
     if(this->djisktra->vertices[0][0] == cur->itinerary->laneId[0]){
+        EV_TRACE<<cur->itinerary->prevEdge<<endl;
         if(!cur->passedStation ||
              (cur->atStation + Constant::PAUSING_TIME > simTime().dbl())
         )
