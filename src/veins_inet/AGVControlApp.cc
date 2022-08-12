@@ -101,6 +101,7 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
     {
         TraCIDemo11pMessage* carBeacon = new TraCIDemo11pMessage("test", 0);
         {
+
            content = //std::to_string(simTime().dbl()) + " ";
            //curPosition = mobility->getPositionAt(simTime());
            //content = content +
@@ -109,6 +110,10 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
            /*content = content +*/ /*"Lid"*/ /*" " +*/
                    "{\"laneId\" : \"" +
                    traciVehicle->getLaneId() + "\", ";
+           content = content + " \"idMess\" : \"" + std::to_string(idOfMessage) + "\", ";
+           idOfMessage++;
+
+           content = content + checkForPausing();
 
            double speed = traciVehicle->getSpeed();
            if(speed == 0.0){
@@ -169,6 +174,30 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
            return;
         }
     }
+}
+
+std::string AGVControlApp::checkForPausing(){
+    std::string content = traciVehicle->getLaneId();
+    if(content.find(this->station->getName() + "_") != std::string::npos
+           && this->station->getName().length() > 0
+           && //pausingTime == DBL_MAX
+           pausingTime + Constant::PAUSING_TIME > simTime().dbl()
+    ){
+        if(myId == 22){
+            EV_TRACE<<"fffff"<<endl;
+        }
+        if(velocityBeforeHalt == -1 && pausingTime == DBL_MAX){
+            velocityBeforeHalt = traciVehicle->getSpeed();
+            if(velocityBeforeHalt == 0)
+                velocityBeforeHalt = 2;
+            pausingTime = simTime().dbl();
+            traciVehicle->setSpeed(0);
+        }
+        if(pausingTime != DBL_MAX){
+            return " \"atStation\" : \"" + std::to_string(pausingTime) + "\", ";
+        }
+    }
+    return "";
 }
 
 void AGVControlApp::handlePositionUpdate(cObject* obj)
