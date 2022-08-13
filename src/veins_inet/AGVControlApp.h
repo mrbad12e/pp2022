@@ -77,6 +77,8 @@ private:
     int idOfMessage = 0;
     int idDebug;
     void runAfterStuck();
+    void saveBeginningOfStuck(std::string junc);
+    Dictionary stuckAtJunc;
     //std::string station = "";
 };
 }
