@@ -76,6 +76,7 @@ private:
     int indexInRoute = -1;
     int idOfMessage = 0;
     int idDebug;
+    void runAfterStuck();
     //std::string station = "";
 };
 }
