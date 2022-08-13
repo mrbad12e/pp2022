@@ -463,13 +463,20 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         }
         if(stop){
             //return "$" + cur->id + "_" + "0";
+            if(cur->id.compare("154") == 0){
+                EV<<"IKIKK"<<endl;
+            }
             return "{\"id\" : \"" + cur->id +
-                        "\", \"station\" : \"" + cur->itinerary->station + "\", \"newRoute\" : \"0\"}";
+                        //"\", \"station\" : \"" + cur->itinerary->station +
+                        "\", \"newRoute\" : \"0\"}";
         }
         else{
+            if(cur->id.compare("154") == 0){
+                EV<<"IKIKK"<<endl;
+            }
             //return "$" + cur->id + "_" + Constant::CARRY_ON;
             return "{\"id\" : \"" + cur->id +
-                    "\", \"station\" : \"" + cur->itinerary->station +
+                    //"\", \"station\" : \"" + cur->itinerary->station +
                     "\", \"newRoute\" : \"" + Constant::CARRY_ON + "\"}";
         }
     }
@@ -540,10 +547,13 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
 
         //newRoute = newRoute.substr(newRoute.length() - 3, 3);
         //newRoute = "$" + cur->id + "_" + newRoute;
+        if(cur->id.compare("154") == 0){
+            EV<<"IKIKK"<<endl;
+        }
         newRoute = "{\"id\" : \"" + cur->id +
-                "\"," + this->djisktra->getJSONStation(cur->itinerary->station) +
-                ((indexOfRoute.length() == 0) ? "" : indexOfRoute) +
-                ", \"newRoute\" : \"" + newRoute + "\"" + weights + "}";
+                //"\"," + this->djisktra->getJSONStation(cur->itinerary->station) +
+                //((indexOfRoute.length() == 0) ? "" : indexOfRoute) +
+                "\", \"newRoute\" : \"" + newRoute + "\"" + weights + "}";
         return newRoute;
     }
     return "";
