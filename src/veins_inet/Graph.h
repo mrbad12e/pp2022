@@ -20,6 +20,7 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <float.h>
 
 class ItineraryRecord {// Ban ghi hanh trinh cua xe
 public:
@@ -45,6 +46,34 @@ public:
 
     std::string getName(){
         return this->name;
+    }
+
+    void getStation(std::string routeId){
+        std::ifstream file("itinerary.txt");
+        std::string line;
+        std::string nameRoute;
+        std::string nameSrc, nameStation, nameJunc, nameDest;
+        std::string period, bestTime, amplitude;
+        int source, indexOfStation, dst;
+
+        while (getline(file, line)) {
+            if(line[0] != '#'){
+                std::stringstream ss(line);
+                getline(ss, nameRoute, ' ');
+                if(nameRoute.compare(routeId) == 0){
+                    getline(ss, nameSrc, ' ');
+                    getline(ss, nameStation, ' ');
+                    getline(ss, nameJunc, ' ');
+                    getline(ss, nameDest, ' ');
+                    getline(ss, period, ' ');
+                    getline(ss, bestTime, ' ');
+                    getline(ss, amplitude, ' ');
+                    this->setAttributes(nameJunc, bestTime, amplitude, period);
+                    break;
+                }
+            }
+        }
+        file.close();
     }
 
     void setAttributes(std::string name, std::string bestTime, std::string amplitude, std::string period){
@@ -73,6 +102,8 @@ public:
     }
 
     double getHarmfulness(double reachedTime, int count){
+        if(count < 0)
+            return DBL_MAX;
         if(bestTime + count*period - amplitude <= reachedTime &&
                 bestTime + count*period + amplitude >= reachedTime
         ){
