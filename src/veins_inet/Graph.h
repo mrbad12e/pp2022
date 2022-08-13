@@ -48,6 +48,14 @@ public:
         return this->name;
     }
 
+    void setDest(std::string dest){
+        this->dest = dest;
+    }
+
+    std::string getDest(){
+        return this->dest;
+    }
+
     void getStation(std::string routeId){
         std::ifstream file("itinerary.txt");
         std::string line;
@@ -69,6 +77,7 @@ public:
                     getline(ss, bestTime, ' ');
                     getline(ss, amplitude, ' ');
                     this->setAttributes(nameJunc, bestTime, amplitude, period);
+                    this->setDest(nameDest);
                     break;
                 }
             }
@@ -128,7 +137,7 @@ private:
     double bestTime = -1;
     double amplitude = -1;
     double period = -1;
-
+    std::string dest = "";
     bool isNotChanged = false;
     //std::string allRequests = "";
 };
