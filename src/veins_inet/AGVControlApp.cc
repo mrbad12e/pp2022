@@ -36,9 +36,9 @@ void AGVControlApp::initialize(int stage)
             mobility = TraCIMobilityAccess().get(getParentModule());
             traciVehicle = mobility->getVehicleCommandInterface();
             originalRoute = traciVehicle->getRouteId();
-            if(myId == 154 || idDebug == 153){
-                EV<<"readasc"<<endl;
-            }
+            //if(myId == 154 || idDebug == 153){
+            //    EV<<"readasc"<<endl;
+            //}
         }
     }
     else if (stage == 1) {
@@ -56,9 +56,9 @@ void AGVControlApp::initialize(int stage)
         if(Constant::activation == NULL){
             Constant::activation = mobility;
         }
-        if(myId == 154 || idDebug == 153){
-            EV<<"readasc"<<endl;
-        }
+        //if(myId == 154 || idDebug == 153){
+        //    EV<<"readasc"<<endl;
+        //}
         this->station->getStation(originalRoute);
     }
 }
@@ -179,8 +179,8 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
 
                        }
                    }catch(std::exception &e){
-                       const char* x= e.what();
-                       EV<<x<<endl;
+                       //const char* x= e.what();
+                       //EV<<x<<endl;
                    }
                }
            }
@@ -191,17 +191,17 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
 
 std::string AGVControlApp::checkForPausing(){
     std::string content = traciVehicle->getLaneId();
-    if(myId == 154 && content.find(":J292_") != std::string::npos){
-        EV_TRACE<<"fffff"<<endl;
-    }
+    //if(myId == 154 && content.find(":J292_") != std::string::npos){
+    //    EV_TRACE<<"fffff"<<endl;
+    //}
     if(content.find(this->station->getName() + "_") != std::string::npos
            && this->station->getName().length() > 0
            && //pausingTime == DBL_MAX
            pausingTime + Constant::PAUSING_TIME > simTime().dbl()
     ){
-        if(myId == 154){
-            EV_TRACE<<"fffff"<<endl;
-        }
+        //if(myId == 154){
+        //    EV_TRACE<<"fffff"<<endl;
+        //}
         if(velocityBeforeHalt == -1 && pausingTime == DBL_MAX){
             velocityBeforeHalt = traciVehicle->getSpeed();
             if(velocityBeforeHalt == 0)
@@ -286,9 +286,9 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
         if(//str.find("$" + std::to_string(myId) + "_") != std::string::npos
              std::to_string(myId).compare(id) == 0
         ){
-            if(myId == 154){
-                EV<<"DFFDFD"<<endl;
-            }
+            //if(myId == 154){
+            //    EV<<"DFFDFD"<<endl;
+            //}
             std::string newRoute = //str.substr(std::to_string(myId).length() + 2);
                     v["newRoute"].as_string();
             int size = v["weights"].size();
@@ -316,10 +316,10 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                     }
                     pausingTime = simTime().dbl();
                     traciVehicle->setSpeed(0);
-                    if(myId == 154){
-                        std::string laneID = traciVehicle->getLaneId();
-                        EV<<"TTTTT"<<endl;
-                    }
+                    //if(myId == 154){
+                    //    std::string laneID = traciVehicle->getLaneId();
+                    //    EV<<"TTTTT"<<endl;
+                    //}
                 }
                 else{
 
@@ -342,16 +342,20 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                         newRoute = prevRoute;
 
                     }
-                    double t = simTime().dbl();
-                    if(t > 216.6 && myId == 154){
-                        EV<<"ERTTERTEETR"<<endl;
-                    }
+                    //double t = simTime().dbl();
+                    //if(t > 216.6 && myId == 154){
+                    //    EV<<"ERTTERTEETR"<<endl;
+                    //}
                     prevRoute = newRoute;
-                    if(prevRoute.length() == 0){
-                        double sp = traciVehicle->getSpeed();
-                        std::string laneID = traciVehicle->getLaneId();
-                        EV_TRACE<<myId<<" "<<this->waitingIntervals<<" "<<sp<<" "<<laneID<<endl;
-                    }
+                    //std::string lastStr = newRoute.substr(newRoute.length() - 5);
+                    //if(lastStr.find(" " + this->station->getDest()) == std::string::npos){
+                    //    EV<<"Not found"<<endl;
+                    //}
+                    //if(prevRoute.length() == 0){
+                    //    double sp = traciVehicle->getSpeed();
+                    //    std::string laneID = traciVehicle->getLaneId();
+                    //    EV_TRACE<<myId<<" "<<this->waitingIntervals<<" "<<sp<<" "<<laneID<<endl;
+                    //}
 
                     this->runAfterStuck();
 
@@ -375,7 +379,7 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
             else{
                 double sp = traciVehicle->getSpeed();
                 std::string laneID = traciVehicle->getLaneId();
-                EV<<sp<<" "<<laneID<<endl;
+                //EV<<sp<<" "<<laneID<<endl;
                 if(sp == 0 && laneID[0] == ':'){
                     saveBeginningOfStuck(laneID);
                     if(this->stuckAtJunc[laneID] +
