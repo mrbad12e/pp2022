@@ -40,6 +40,9 @@ void HarmfulnessDijkstra::getItineraries(std::string itineraryFile){
     std::string nameSrc, nameStation, nameDest, nameJunc;
     std::string period, bestTime, amplitude;
     int source, indexOfStation, dst;
+    if(this->itineraries.size() > 0){
+        this->itineraries.clear();
+    }
 
     while (getline(file, line)) {
         if(line[0] != '#'){
