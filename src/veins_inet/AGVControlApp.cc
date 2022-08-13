@@ -30,12 +30,15 @@ void AGVControlApp::initialize(int stage)
     this->station = new Station();
     sentFirstMessage = false;
     if (stage == 0) {
-        int idDebug = getId();
+        idDebug = getId();
         sendBeacon= new cMessage("send Beacon");
         {
             mobility = TraCIMobilityAccess().get(getParentModule());
             traciVehicle = mobility->getVehicleCommandInterface();
             originalRoute = traciVehicle->getRouteId();
+            if(myId == 154 || idDebug == 153){
+                EV<<"readasc"<<endl;
+            }
         }
     }
     else if (stage == 1) {
@@ -53,6 +56,10 @@ void AGVControlApp::initialize(int stage)
         if(Constant::activation == NULL){
             Constant::activation = mobility;
         }
+        if(myId == 154 || idDebug == 153){
+            EV<<"readasc"<<endl;
+        }
+        this->station->getStation(originalRoute);
     }
 }
 
@@ -178,12 +185,15 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
 
 std::string AGVControlApp::checkForPausing(){
     std::string content = traciVehicle->getLaneId();
+    if(myId == 154 && content.find(":J292_") != std::string::npos){
+        EV_TRACE<<"fffff"<<endl;
+    }
     if(content.find(this->station->getName() + "_") != std::string::npos
            && this->station->getName().length() > 0
            && //pausingTime == DBL_MAX
            pausingTime + Constant::PAUSING_TIME > simTime().dbl()
     ){
-        if(myId == 22){
+        if(myId == 154){
             EV_TRACE<<"fffff"<<endl;
         }
         if(velocityBeforeHalt == -1 && pausingTime == DBL_MAX){
@@ -274,9 +284,13 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
         if(//str.find("$" + std::to_string(myId) + "_") != std::string::npos
              std::to_string(myId).compare(id) == 0
         ){
+            if(myId == 154){
+                EV<<"DFFDFD"<<endl;
+            }
             std::string newRoute = //str.substr(std::to_string(myId).length() + 2);
                     v["newRoute"].as_string();
             int size = v["weights"].size();
+            /*std::string preName = this->station->getName();
             this->station->setAttributes(v["station"]["name"].as_string(),
                     v["station"]["bestTime"].as_string(),
                     v["station"]["amplitude"].as_string(),
@@ -286,7 +300,7 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                 if(indexOfRoute.length() > 0){
                     this->indexInRoute = std::stoi(indexOfRoute);
                 }
-            }
+            }*/
             for(int i = 0; i < size; i++){
                 addExpectedTime(v["weights"][i].as_string());
             }
@@ -300,19 +314,33 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                     }
                     pausingTime = simTime().dbl();
                     traciVehicle->setSpeed(0);
-
+                    if(myId == 154){
+                        std::string laneID = traciVehicle->getLaneId();
+                        EV<<"TTTTT"<<endl;
+                    }
                 }
                 else{
 
                     if(newRoute.compare(Constant::CARRY_ON) == 0){
                         if(prevRoute.length() == 0){
+                            double sp = traciVehicle->getSpeed();
+                            std::string laneID = traciVehicle->getLaneId();
+                            EV_TRACE<<myId<<" "<<this->waitingIntervals<<" "<<sp<<" "<<laneID<<endl;
                             return;
                         }
                         newRoute = prevRoute;
 
                     }
-
+                    double t = simTime().dbl();
+                    if(t > 216.6 && myId == 154){
+                        EV<<"ERTTERTEETR"<<endl;
+                    }
                     prevRoute = newRoute;
+                    if(prevRoute.length() == 0){
+                        double sp = traciVehicle->getSpeed();
+                        std::string laneID = traciVehicle->getLaneId();
+                        EV_TRACE<<myId<<" "<<this->waitingIntervals<<" "<<sp<<" "<<laneID<<endl;
+                    }
                     if(velocityBeforeHalt != -1){
                         traciVehicle->setSpeed(velocityBeforeHalt);
                         velocityBeforeHalt = -1;
