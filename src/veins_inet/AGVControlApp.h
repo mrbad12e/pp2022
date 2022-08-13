@@ -75,6 +75,7 @@ private:
     Station* station;
     int indexInRoute = -1;
     int idOfMessage = 0;
+    int idDebug;
     //std::string station = "";
 };
 }
