@@ -125,6 +125,12 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
            double speed = traciVehicle->getSpeed();
            if(speed == 0.0){
                this->waitingIntervals++;
+               std::string laneID = traciVehicle->getLaneId();
+               this->saveBeginningOfStuck(laneID);
+               if(this->stuckAtJunc[laneID] +
+                   Constant::PAUSING_TIME < simTime().dbl()){
+                   this->runAfterStuck();
+               }
            }
 
            content = content + "\"lanePos\" : " + /*"L.P"*/ "\""
@@ -220,10 +226,6 @@ void AGVControlApp::handlePositionUpdate(cObject* obj)
 
 void AGVControlApp::addExpectedTime(std::string str){
     std::vector<std::string> list = split(str, "_");
-    /*std::map<std::string, double>::iterator it;
-    it = dict.find(list[0]);
-    if(it != dict.end())
-        return;*/
     if(list[1].compare("0") != 0 && list[0].length() > 0){
         dict[list[0]] = std::stod(list[1]);
     }
@@ -374,6 +376,13 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                 double sp = traciVehicle->getSpeed();
                 std::string laneID = traciVehicle->getLaneId();
                 EV<<sp<<" "<<laneID<<endl;
+                if(sp == 0 && laneID[0] == ':'){
+                    saveBeginningOfStuck(laneID);
+                    if(this->stuckAtJunc[laneID] +
+                            Constant::PAUSING_TIME < simTime().dbl()){
+                        this->runAfterStuck();
+                    }
+                }
             }
         }
 
@@ -384,6 +393,14 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
     //}catch(std::exception& e1){
     //    EV_TRACE<<"ffffff"<<endl;
     //}
+}
+
+void AGVControlApp::saveBeginningOfStuck(std::string junc){
+    std::map<std::string, double>::iterator it;
+    it = this->stuckAtJunc.find(junc);
+    if(it == this->stuckAtJunc.end()){
+        this->stuckAtJunc[junc] = simTime().dbl();
+    }
 }
 
 void AGVControlApp::runAfterStuck(){
