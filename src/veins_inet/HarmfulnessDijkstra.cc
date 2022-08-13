@@ -37,7 +37,7 @@ void HarmfulnessDijkstra::getItineraries(std::string itineraryFile){
     std::ifstream file(itineraryFile);
     std::string line;
     std::string nameRoute;
-    std::string nameSrc, nameStation, nameDest;
+    std::string nameSrc, nameStation, nameDest, nameJunc;
     std::string period, bestTime, amplitude;
     int source, indexOfStation, dst;
 
@@ -47,6 +47,7 @@ void HarmfulnessDijkstra::getItineraries(std::string itineraryFile){
             getline(ss, nameRoute, ' ');
             getline(ss, nameSrc, ' ');
             getline(ss, nameStation, ' ');
+            getline(ss, nameJunc, ' ');
             getline(ss, nameDest, ' ');
             getline(ss, period, ' ');
             getline(ss, bestTime, ' ');
@@ -60,5 +61,6 @@ void HarmfulnessDijkstra::getItineraries(std::string itineraryFile){
             itineraries.push_back(std::make_tuple(nameRoute, source, indexOfStation, dst));
         }
     }
+    file.close();
 
 }
