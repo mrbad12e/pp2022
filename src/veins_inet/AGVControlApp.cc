@@ -166,7 +166,7 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
            populateWSM(WSM);
            send(WSM,lowerLayerOut);
 
-           if(expectedRoute.length() > 0){
+           if(expectedRoute.length() > 0 && !Constant::SHORTEST_PATH){
                double t = simTime().dbl();
 
                std::string current = traciVehicle->getLaneId();
@@ -305,17 +305,7 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
             std::string newRoute = //str.substr(std::to_string(myId).length() + 2);
                     v["newRoute"].as_string();
             int size = v["weights"].size();
-            /*std::string preName = this->station->getName();
-            this->station->setAttributes(v["station"]["name"].as_string(),
-                    v["station"]["bestTime"].as_string(),
-                    v["station"]["amplitude"].as_string(),
-                    v["station"]["period"].as_string());
-            if(this->indexInRoute == -1){
-                std::string indexOfRoute = v["indexOfRoute"].as_string();
-                if(indexOfRoute.length() > 0){
-                    this->indexInRoute = std::stoi(indexOfRoute);
-                }
-            }*/
+
             for(int i = 0; i < size; i++){
                 addExpectedTime(v["weights"][i].as_string());
             }
@@ -372,20 +362,23 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
 
                     this->runAfterStuck();
 
-                    std::vector<std::string> v = split(newRoute, " ");
-                    std::list<std::string> l(v.begin(), v.end());
-                    if(l.size() == 0){
-                        EV_TRACE<<"ERRR";
-                    }
-                    bool change = traciVehicle->changeVehicleRoute(l);
-                    if(!change){
-                        expectedRoute = newRoute;
-                    }
-                    else{
-                       expectedRoute = "";
-                       v.clear();
-                       v.shrink_to_fit();
-                       l.clear();
+
+                    if(!Constant::SHORTEST_PATH){
+                        std::vector<std::string> v = split(newRoute, " ");
+                        std::list<std::string> l(v.begin(), v.end());
+                        if(l.size() == 0){
+                            EV_TRACE<<"ERRR";
+                        }
+                        bool change = traciVehicle->changeVehicleRoute(l);
+                        if(!change){
+                            expectedRoute = newRoute;
+                        }
+                        else{
+                           expectedRoute = "";
+                           v.clear();
+                           v.shrink_to_fit();
+                           l.clear();
+                        }
                     }
                 }
             }
