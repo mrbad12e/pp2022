@@ -220,7 +220,8 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                 EV<<e.what()<<endl;
             }
         }
-        if(!Constant::SHORTEST_PATH){
+        //if(!Constant::SHORTEST_PATH)
+        {
             std::string newRoute = readMessage(bc);
             if(newRoute.length() != 0){
                 try{
@@ -403,8 +404,8 @@ bool HospitalControlApp::checkCycle(std::string route){
 
 std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double t*/){
 
-    if(Constant::SHORTEST_PATH)
-        return "";
+    //if(Constant::SHORTEST_PATH)
+    //    return "";
     if(this->djisktra->vertices[0][0] == cur->itinerary->laneId[0]){
         EV_TRACE<<cur->itinerary->prevEdge<<endl;
         if(!cur->passedStation ||
