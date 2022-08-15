@@ -44,8 +44,8 @@ void HospitalControlApp::initialize(int stage)
     if (stage == 0) {
         sendBeacon= new cMessage("send Beacon");
         graph = new Graph();
-        djisktra = new HarmfulnessDijkstra();
-                   //new Djisktra();
+        djisktra = //new HarmfulnessDijkstra();
+                   new Djisktra();
         this->readCrossing();
     }
     else if (stage == 1) {
@@ -476,7 +476,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         if(idOfI_Vertex == nextDst){
             return "";
         }
-        this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst, cur->itinerary->laneId);
+        this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst, cur->itinerary->laneId, cur);
 
         std::string newRoute = this->djisktra->getRoute(this->djisktra->traces[nextDst], cur->itinerary->laneId, idOfI_Vertex, nextDst, exit);
 
@@ -492,7 +492,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
                     break;
                 }
             }
-            this->djisktra->DijkstrasAlgorithm(nextDst, exit, futureLane);
+            this->djisktra->DijkstrasAlgorithm(nextDst, exit, futureLane, cur);
 
             std::string lastPath =
                     this->djisktra->getRoute(this->djisktra->traces[exit], futureLane, nextDst, exit, exit);
