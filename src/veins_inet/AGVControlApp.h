@@ -33,6 +33,10 @@ using namespace omnetpp;
 namespace veins {
 
 typedef std::map<std::string, double> Dictionary;
+//typedef std::map<std::string, std::string> RouteDictionary;
+
+//extern std::map<std::string, std::string> routeDict;
+
 class AGVControlApp: public veins::TraCIDemo11p {
 public:
     void initialize(int stage) override;
@@ -79,6 +83,9 @@ private:
     void runAfterStuck();
     void saveBeginningOfStuck(std::string junc);
     Dictionary stuckAtJunc;
+    //static RouteDictionary routeDict;
+    void getIndexInFlow(std::string idOfAGV, std::string routeId);
+    static std::map<std::string, std::string> routeDict;
     //std::string station = "";
 };
 }
