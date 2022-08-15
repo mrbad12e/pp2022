@@ -197,8 +197,9 @@ void Djisktra::generateAdj(){
         locations.clear();
     }
 }
+
 void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
-        int source, int target, std::string currLane){
+        int source, int target, std::string currLane, AGV* cur){
   std::priority_queue<Quad, std::vector<Quad>, std::greater<Quad> > PQ; // Set up priority queue
   Quad info;
   std::string trace;
