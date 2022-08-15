@@ -67,3 +67,99 @@ void HarmfulnessDijkstra::getItineraries(std::string itineraryFile){
     file.close();
 
 }
+
+double HarmfulnessDijkstra::firstValue(std::string currLane, std::string veryNextVertex){
+    int count = 0;
+    for(int i = 0; i < this->edges.size(); i++ ){
+        std::string path = this->edges[i].first;
+        if(path.find("$" + currLane + "$") != std::string::npos
+           && path.find(veryNextVertex + "$") != std::string::npos
+            ){
+            firstValue += this->edges[i].second;
+            count++;
+        }
+    }
+    if(count > 1)
+       result /= count;
+    return result;
+}
+
+void HarmfulnessDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
+        int source, int target, std::string currLane, AGV* cur){
+  std::priority_queue<Quad, std::vector<Quad>, std::greater<Quad> > PQ; // Set up priority queue
+  Quad info;
+  std::string trace;
+  double weight;
+  double tempW;
+  int tempIndex;
+  double now = cur->now;
+  double ratio = cur->ratio;
+  std::string tempTrace;
+  int index = findI_Vertex(cur->itinerary->laneId, false);
+  double firstCost = firstValue(currLane, vertices[index]);
+
+  ShortestPath[source] = ratio * firstCost + now;
+  std::vector <bool> visitedVertex(numVertices, false);
+
+  for (int i = 0; i < numVertices; i++)
+    if (i != source)
+      ShortestPath[i] = 100000; // Initialize everything else to +infinity
+
+  PQ.push(make_tuple(0, vertices[source], source, "")); // Source has weight 0;
+
+  while (!PQ.empty()){
+    info = PQ.top(); // Use to get minimum weight
+    PQ.pop(); // Pop before checking for cycles
+    source = std::get<2>(info); // get the vertex
+    if(source == target)
+      //continue;
+        break;
+    weight = std::get<0>(info); // current distance
+    trace = std::get<3>(info);
+
+
+    if (visitedVertex.at(source)) // Check for cycle
+      continue; // Already accounted for it, move on
+
+    visitedVertex.at(source) = true; // Else, mark the vertex so that we won't have to visit it again
+
+    for (std::vector<Quad>::iterator it = adjList[source].begin(); it != adjList[source].end(); it++){
+      tempW = std::get<0>(*it);
+      tempTrace = std::get<3>(*it);
+      tempIndex = std::get<2>(*it);
+      if(!Constant::SHORTEST_PATH){
+          weightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, weightVertices[tempIndex], vertices[tempIndex]);
+      }
+
+      double newWeight = 0; //weight + tempW + 40*weightVertices[tempIndex];
+      /*if(trace.find("$E9$") != std::string::npos
+            && tempTrace.find("$-E9$") != std::string::npos
+              ){
+          EV<<"fdfsf";
+      }*/
+      if(!isValidTrace(currLane, tempTrace)){
+          continue;
+      }
+      if(isAntidromic(trace, tempTrace)){
+          continue;
+      }
+      newWeight = weight + tempW;
+      if(!Constant::SHORTEST_PATH){
+          double weightSmoothing = weightVertices[tempIndex];
+          if(weightSmoothing < 0.1 && tempIndex < this->numIVertices){
+              newWeight += 100*(this->expSmoothing->useCycicalData(newWeight, vertices[tempIndex], weightSmoothing));
+          }
+          else{
+              newWeight += 100*weightSmoothing;
+          }
+      }
+
+      newWeight = ratio * (newWeight + firstCost) + now;
+      if (newWeight < ShortestPath[tempIndex]){ // Check if we can do better
+         ShortestPath[tempIndex] = newWeight; // Update new distance
+         traces[tempIndex] = trace; //tempTrace;
+         PQ.push(make_tuple(ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
+      } // Update distance
+    }
+  } // While Priority Queue is not empty
+} // DijkstrasAlgorithm
