@@ -22,6 +22,7 @@
 
 using namespace veins;
 
+std::map<std::string, std::string> AGVControlApp::routeDict = {{"route_0", ""}};
 Register_Class(AGVControlApp);
 
 void AGVControlApp::initialize(int stage)
@@ -59,8 +60,20 @@ void AGVControlApp::initialize(int stage)
         //if(myId == 154 || idDebug == 153){
         //    EV<<"readasc"<<endl;
         //}
+        //RouteDictionary *r = &Constant::routeDict;
+        getIndexInFlow(std::to_string(myId), originalRoute);
         this->station->getStation(originalRoute);
     }
+}
+
+void AGVControlApp::getIndexInFlow(std::string idOfAGV, std::string routeId){
+    if(AGVControlApp::routeDict[routeId].find("$" + idOfAGV + "$") == std::string::npos){
+        std::string s = AGVControlApp::routeDict[routeId];
+        int n = std::count(s.begin(), s.end(), '$');
+        AGVControlApp::routeDict[routeId] = AGVControlApp::routeDict[routeId] + "$" + idOfAGV + "$";
+        this->indexInRoute = (n/2);
+    }
+    //return -1;
 }
 
 void AGVControlApp::finish()
