@@ -167,7 +167,7 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
            send(WSM,lowerLayerOut);
 
            if(expectedRoute.length() > 0 && !Constant::SHORTEST_PATH){
-               double t = simTime().dbl();
+               //double t = simTime().dbl();
 
                std::string current = traciVehicle->getLaneId();
                int x = current.find("_");
@@ -295,7 +295,6 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
         while(getline(streamData, tmp)) str += tmp;
         jute::jValue v = jute::parser::parse(str);
         std::string id = v["id"].as_string();
-        //std::string str = std::string(bc->getDemoData(), length);
         if(//str.find("$" + std::to_string(myId) + "_") != std::string::npos
              std::to_string(myId).compare(id) == 0
         ){
@@ -319,10 +318,7 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                     }
                     pausingTime = simTime().dbl();
                     traciVehicle->setSpeed(0);
-                    //if(myId == 154){
-                    //    std::string laneID = traciVehicle->getLaneId();
-                    //    EV<<"TTTTT"<<endl;
-                    //}
+
                 }
                 else{
 
@@ -345,23 +341,10 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                         newRoute = prevRoute;
 
                     }
-                    //double t = simTime().dbl();
-                    //if(t > 216.6 && myId == 154){
-                    //    EV<<"ERTTERTEETR"<<endl;
-                    //}
+
                     prevRoute = newRoute;
-                    //std::string lastStr = newRoute.substr(newRoute.length() - 5);
-                    //if(lastStr.find(" " + this->station->getDest()) == std::string::npos){
-                    //    EV<<"Not found"<<endl;
-                    //}
-                    //if(prevRoute.length() == 0){
-                    //    double sp = traciVehicle->getSpeed();
-                    //    std::string laneID = traciVehicle->getLaneId();
-                    //    EV_TRACE<<myId<<" "<<this->waitingIntervals<<" "<<sp<<" "<<laneID<<endl;
-                    //}
 
                     this->runAfterStuck();
-
 
                     if(!Constant::SHORTEST_PATH){
                         std::vector<std::string> v = split(newRoute, " ");
