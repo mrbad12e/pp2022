@@ -335,8 +335,8 @@ void HospitalControlApp::readLane(AGV *cur, std::string str) {
 
 std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     double t = simTime().dbl();
-    if(Constant::SHORTEST_PATH)
-        return "";
+    //if(Constant::SHORTEST_PATH)
+    //    return "";
     std::stringstream streamData(bc->getDemoData());
     std::string str = "";
     AGV *cur = NULL;
