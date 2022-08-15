@@ -195,8 +195,8 @@ public:
     void createAndAddEdge(//std::vector <Quad> adjList[],
             int u, double weightEdge, double weightVertex, std::string v, int indexOfV);
     //void generateAdj(std::vector<Quad> adjList[]);
-    void DijkstrasAlgorithm(//std::vector<Quad> adjList[],
-            int source, int target, std::string currLane);
+    virtual void DijkstrasAlgorithm(//std::vector<Quad> adjList[],
+            int source, int target, std::string currLane, AGV* cur);
     virtual void getItineraries(std::string itineraryFile);
     std::vector<double> weightVertices;
     std::vector<std::tuple<std::string, int, int, int>> itineraries;
@@ -210,6 +210,12 @@ public:
     int numIVertices = 0;
     std::string getWeights(std::string route, AGV* cur);
     virtual std::string getJSONStation(std::string station);
+    double timeForVeryNextVertex(std::string currLane, std::string veryNextVertex);
+    std::vector<std::vector<Quad>> adjList;
+    int numVertices = 0; // 323 vertices (107 i-vertices and 341 b-vertices)
+    double *ShortestPath; //[numVertices]; // Have an array to store the shortest path
+    bool isAntidromic(std::string direction, std::string otherDirection);
+    bool isValidTrace(std::string currLane, std::string trace);
 
 private:
     void getListVertices(std::string iVertices, std::string bVertices);
@@ -219,17 +225,14 @@ private:
     std::vector<std::string> nextNameOfBVertices;
     std::vector<Pair> edges;
 
-    double timeForVeryNextVertex(std::string currLane, std::string veryNextVertex);
     void generateAdj();
-    bool isAntidromic(std::string direction, std::string otherDirection);
-    bool isValidTrace(std::string currLane, std::string trace);
+
     void getSupplyAndDisposalLocation(std::string fileName);
-    std::vector<std::vector<Quad>> adjList;
-    int numVertices = 0; // 323 vertices (107 i-vertices and 341 b-vertices)
+
     //std::string firstLanes = "$E0$E1$E226$E227$-E92$-E91$-E90$-E298$-E297$-E296$:J3$:J203$:J272$:J273$:J92$:J91$";
 
     //std::vector <bool> visitedVertex(numVertices, false);
-    double *ShortestPath; //[numVertices]; // Have an array to store the shortest path
+
 
 };
 
