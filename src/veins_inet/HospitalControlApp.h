@@ -33,7 +33,7 @@ using namespace omnetpp;
 
 namespace veins {
 
-typedef std::map<std::string, std::string> RouteDictionary;
+
 
 class HospitalControlApp : public TraCIDemoRSU11p {
 public:
@@ -77,7 +77,7 @@ private:
     std::vector<std::vector<int>> aroundIntersections;
     bool checkCycle(std::string route);
     double* areas;
-    RouteDictionary routeDict;
+
 };
 }
 #endif /* VEINS_INET_HOSPITALCONTROLAPP_H_ */
