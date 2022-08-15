@@ -365,9 +365,6 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     double now = std::stod(v["now"].as_string());
     cur->now = now;
     std::string idMess = v["idMess"].as_string();
-    //if(idMess.compare("884") == 0 && cur->id.compare("22") == 0){
-    //    EV_TRACE<<"sdfsdfsf"<<endl;
-    //}
     std::string timeAtStation = v["atStation"].as_string();
     if(cur->atStation == 0 && timeAtStation.length() > 0){
         cur->atStation = std::stod(timeAtStation);
@@ -462,19 +459,11 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
             }
         }
         if(stop){
-            //return "$" + cur->id + "_" + "0";
-            //if(cur->id.compare("154") == 0){
-            //    EV<<"IKIKK"<<endl;
-            //}
             return "{\"id\" : \"" + cur->id +
                         //"\", \"station\" : \"" + cur->itinerary->station +
                         "\", \"newRoute\" : \"0\"}";
         }
         else{
-            //if(cur->id.compare("154") == 0){
-            //    EV<<"IKIKK"<<endl;
-            //}
-            //return "$" + cur->id + "_" + Constant::CARRY_ON;
             return "{\"id\" : \"" + cur->id +
                     //"\", \"station\" : \"" + cur->itinerary->station +
                     "\", \"newRoute\" : \"" + Constant::CARRY_ON + "\"}";
@@ -484,22 +473,12 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
     int nextDst = (cur->passedStation) ? exit : station;
     if(nextDst > -1){
         if(idOfI_Vertex == nextDst){
-            //if(cur->passedStation){
-                return "";
-            //}else{
-            //    nextDst = exit;
-            //}
+            return "";
         }
         this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst, cur->itinerary->laneId);
 
         std::string newRoute = this->djisktra->getRoute(this->djisktra->traces[nextDst], cur->itinerary->laneId, idOfI_Vertex, nextDst, exit);
-        //std::string lastStr = newRoute.substr(newRoute.length() - 5);
-        /*if(routeId.compare("route_2") == 0 && newRoute.find("-E234 -E235") != std::string::npos){
-            EV<<"New route: "<<t<<endl;
-        }
-        if(routeId.compare("route_11") == 0 && newRoute.find("-E230 -E232") != std::string::npos){
-            EV<<"New route: "<<t<<endl;
-        }*/
+
         if(nextDst != exit){
             std::string futureLane = ""; //this->djisktra->vertices[nextDst];
             trim_right(newRoute);
@@ -531,13 +510,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         newRoute = removeAntidromic(newRoute);
         //lastStr = newRoute.substr(newRoute.length() - 5);
         newRoute = removeLoop(newRoute);
-        //lastStr = newRoute.substr(newRoute.length() - 5);
-        //if(lastStr.find("E92") == std::string::npos && lastStr.find("-E0") == std::string::npos
-        //   && lastStr.find("E298") == std::string::npos
-        //   && lastStr.find("-E226") == std::string::npos
-        //){
-        //    EV<<"Found"<<endl;
-        //}
+
         std::string weights = "";
         weights = this->djisktra->getWeights(newRoute, cur);//->ratio, cur->now, cur->itinerary->laneId);
 
@@ -547,20 +520,14 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
             weights = ", \"weights\" : " + weights;
         }
 
-        std::string indexOfRoute = "";
-        if(routeDict[routeId].find("$" + cur->id + "$") == std::string::npos){
-            //std::string::difference_type n
+        //std::string indexOfRoute = "";
+        /*if(routeDict[routeId].find("$" + cur->id + "$") == std::string::npos){
             std::string s = routeDict[routeId];
             int n = std::count(s.begin(), s.end(), '$');
             routeDict[routeId] = routeDict[routeId] + "$" + cur->id + "$";
             indexOfRoute = ", \"indexOfRoute\" : \"" + std::to_string(n / 2) + "\"";
-        }
+        }*/
 
-        //newRoute = newRoute.substr(newRoute.length() - 3, 3);
-        //newRoute = "$" + cur->id + "_" + newRoute;
-        //if(cur->id.compare("154") == 0){
-        //    EV<<"IKIKK"<<endl;
-        //}
         newRoute = "{\"id\" : \"" + cur->id +
                 //"\"," + this->djisktra->getJSONStation(cur->itinerary->station) +
                 //((indexOfRoute.length() == 0) ? "" : indexOfRoute) +
