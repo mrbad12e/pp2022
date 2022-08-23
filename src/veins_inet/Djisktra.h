@@ -200,7 +200,7 @@ public:
     virtual void getItineraries(std::string itineraryFile);
     std::vector<double> weightVertices;
     std::vector<std::tuple<std::string, int, int, int>> itineraries;
-    std::vector<std::string> traces;
+
     int findI_Vertex(std::string name, bool recursive);
     std::string getRoute(std::string trace, std::string currentLane, int currentVertex, int nextVertex, int exitVertex);
     ExponentialSmoothing* expSmoothing;
@@ -213,12 +213,13 @@ public:
     double timeForVeryNextVertex(std::string currLane, std::string veryNextVertex);
     std::vector<std::vector<Quad>> adjList;
     int numVertices = 0; // 323 vertices (107 i-vertices and 341 b-vertices)
-    double *ShortestPath; //[numVertices]; // Have an array to store the shortest path
     bool isAntidromic(std::string direction, std::string otherDirection);
     bool isValidTrace(std::string currLane, std::string trace);
     std::vector<Pair> edges;
 
 private:
+    //std::vector<std::string> traces;
+    //double *ShortestPath; //[numVertices]; // Have an array to store the shortest path
     void getListVertices(std::string iVertices, std::string bVertices);
     std::vector<std::pair<std::string, std::string>> supplyDisposal;
 
