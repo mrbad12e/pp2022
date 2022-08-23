@@ -46,6 +46,7 @@ public:
     static double TOTAL_APE;
     static double GLOBAL_HARMFULNESS;
     static int TOTAL_AGV;
+
     static constexpr const bool SHORTEST_PATH = false;
     static constexpr const bool STOP_AT_STATION = true;
     static constexpr const int PAUSING_TIME = 10;
