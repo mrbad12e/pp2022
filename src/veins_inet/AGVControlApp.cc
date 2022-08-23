@@ -158,6 +158,8 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
 
            content = content + "\"now\" : \"" + std::to_string(simTime().dbl()) + "\", ";
 
+           content = content + "\"indexInRoute\" : \"" + std::to_string(this->indexInRoute) + "\", ";
+
            content = content + "\"originalRouteId\" : " + "\"" + originalRoute + "\"}";
            carBeacon->setDemoData(content.c_str());
            carBeacon->setSenderAddress(myId);
@@ -175,7 +177,13 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
                    current = current.substr(0, x);
                if(expectedRoute.find(current) != std::string::npos){
                    try{
+                       double t = simTime().dbl();
                        std::vector<std::string> v = split(expectedRoute, " ");
+                       if(expectedRoute.find("E302 -E229") != std::string::npos
+                               && t > 26.4
+                       ){
+                           EV<<t<<myId<<this->indexInRoute<<endl;
+                       }
                        int i = 0; bool found = false;
                        for(i = 0; i < v.size(); i++){
                            if(v[i].compare(current) == 0){
@@ -347,7 +355,13 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                     this->runAfterStuck();
 
                     if(!Constant::SHORTEST_PATH){
+                        double t = simTime().dbl();
                         std::vector<std::string> v = split(newRoute, " ");
+                        if(newRoute.find("E302 -E229") != std::string::npos
+                               && t > 26.4
+                       ){
+                           EV<<t<<myId<<this->indexInRoute<<endl;
+                       }
                         std::list<std::string> l(v.begin(), v.end());
                         if(l.size() == 0){
                             EV_TRACE<<"ERRR";
