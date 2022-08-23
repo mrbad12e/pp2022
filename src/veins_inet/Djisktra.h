@@ -216,6 +216,7 @@ public:
     double *ShortestPath; //[numVertices]; // Have an array to store the shortest path
     bool isAntidromic(std::string direction, std::string otherDirection);
     bool isValidTrace(std::string currLane, std::string trace);
+    std::vector<Pair> edges;
 
 private:
     void getListVertices(std::string iVertices, std::string bVertices);
@@ -223,7 +224,6 @@ private:
 
     std::vector<int> nextIndexOfBVertices;
     std::vector<std::string> nextNameOfBVertices;
-    std::vector<Pair> edges;
 
     void generateAdj();
 
