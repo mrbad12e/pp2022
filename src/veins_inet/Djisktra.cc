@@ -277,6 +277,13 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
 } // DijkstrasAlgorithm
 
 std::string Djisktra::getRoute(std::string trace, std::string currLane, int currentVertex, int nextVertex, int exitVertex){
+  if(currLane.compare("E301") == 0
+          && currentVertex == 45
+      && nextVertex == 70
+      && exitVertex == 44
+          ){
+
+  }
   std::string route = (currLane[0] == ':') ? "" : (currLane + " ");
   std::string temp = "";
   std::string strCurrVertex = this->vertices[currentVertex];
