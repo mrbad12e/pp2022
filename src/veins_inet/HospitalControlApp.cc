@@ -416,6 +416,9 @@ bool HospitalControlApp::checkCycle(std::string route){
 
 std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double t*/){
 
+    if(cur->id.compare("40") == 0 && cur->now >= 26.3){
+        EV<<"DDDDDDUUUUGG"<<endl;
+    }
     //if(Constant::SHORTEST_PATH)
     //    return "";
     if(this->djisktra->vertices[0][0] == cur->itinerary->laneId[0]){
@@ -492,6 +495,15 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
 
         std::string newRoute = this->djisktra->getRoute(this->djisktra->traces[nextDst], cur->itinerary->laneId, idOfI_Vertex, nextDst, exit);
 
+        if(cur->id.compare("40") != std::string::npos){
+            if(newRoute.find("E302 -E229") != std::string::npos
+                   //&& t > 26.4
+            ){
+                EV<<cur->id<<" "<<cur->now<<endl;
+               //EV<<t<<myId<<this->indexInRoute<<endl;
+            }
+        }
+
         if(nextDst != exit){
             std::string futureLane = ""; //this->djisktra->vertices[nextDst];
             trim_right(newRoute);
@@ -519,10 +531,35 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
                 //lastStr = newRoute.substr(newRoute.length() - 5);
         }
 
+        if(cur->id.compare("40") != std::string::npos){
+            if(newRoute.find("E302 -E229") != std::string::npos
+                   //&& t > 26.4
+            ){
+                EV<<cur->id<<" "<<cur->now<<endl;
+               //EV<<t<<myId<<this->indexInRoute<<endl;
+            }
+        }
+
 
         newRoute = removeAntidromic(newRoute);
+        if(cur->id.compare("40") != std::string::npos){
+            if(newRoute.find("E302 -E229") != std::string::npos
+                   //&& t > 26.4
+            ){
+                EV<<cur->id<<" "<<cur->now<<endl;
+               //EV<<t<<myId<<this->indexInRoute<<endl;
+            }
+        }
         //lastStr = newRoute.substr(newRoute.length() - 5);
         newRoute = removeLoop(newRoute);
+        if(cur->id.compare("40") != std::string::npos){
+            if(newRoute.find("E302 -E229") != std::string::npos
+                   //&& t > 26.4
+            ){
+                EV<<cur->id<<" "<<cur->now<<endl;
+               //EV<<t<<myId<<this->indexInRoute<<endl;
+            }
+        }
 
         std::string weights = "";
         weights = this->djisktra->getWeights(newRoute, cur);//->ratio, cur->now, cur->itinerary->laneId);
