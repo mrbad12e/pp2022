@@ -35,12 +35,12 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 # Object files for local .cc, .msg and .sm files
 OBJS = \
     $O/veins_inet/AGVControlApp.o \
+    $O/veins_inet/ArrivalDijkstra.o \
     $O/veins_inet/Constant.o \
     $O/veins_inet/Crossing.o \
     $O/veins_inet/CustomRectangle.o \
     $O/veins_inet/Djisktra.o \
     $O/veins_inet/Graph.o \
-    $O/veins_inet/HarmfulnessDijkstra.o \
     $O/veins_inet/HospitalControlApp.o \
     $O/veins_inet/IPerson.o \
     $O/veins_inet/jute.o \
