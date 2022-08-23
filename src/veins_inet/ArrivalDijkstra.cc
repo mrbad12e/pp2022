@@ -99,12 +99,13 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   int index = findI_Vertex(cur->itinerary->laneId, false);
   double firstCost = firstValue(currLane, vertices[index]);
 
-  ShortestPath[source] = ratio * firstCost + now;
+  //ShortestPath[source] = ratio * firstCost + now;
   std::vector <bool> visitedVertex(numVertices, false);
 
-  for (int i = 0; i < numVertices; i++)
+  /*for (int i = 0; i < numVertices; i++)
     if (i != source)
       ShortestPath[i] = 100000; // Initialize everything else to +infinity
+  */
 
   PQ.push(make_tuple(0, vertices[source], source, "")); // Source has weight 0;
 
@@ -156,11 +157,11 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       }
 
       newWeight = ratio * (newWeight + firstCost) + now;
-      if (newWeight < ShortestPath[tempIndex]){ // Check if we can do better
-         ShortestPath[tempIndex] = newWeight; // Update new distance
-         traces[tempIndex] = trace; //tempTrace;
-         PQ.push(make_tuple(ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
-      } // Update distance
+      //if (newWeight < ShortestPath[tempIndex]){ // Check if we can do better
+         //ShortestPath[tempIndex] = newWeight; // Update new distance
+         //traces[tempIndex] = trace; //tempTrace;
+         //PQ.push(make_tuple(ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
+      //} // Update distance
     }
   } // While Priority Queue is not empty
 } // DijkstrasAlgorithm
