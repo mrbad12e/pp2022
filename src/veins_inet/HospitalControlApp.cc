@@ -44,8 +44,8 @@ void HospitalControlApp::initialize(int stage)
     if (stage == 0) {
         sendBeacon= new cMessage("send Beacon");
         graph = new Graph();
-        djisktra = new ArrivalDijkstra();
-                   //new Djisktra();
+        djisktra = //new ArrivalDijkstra();
+                   new Djisktra();
         this->readCrossing();
     }
     else if (stage == 1) {
@@ -493,7 +493,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         }
         this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst, cur->itinerary->laneId, cur);
 
-        std::string newRoute = this->djisktra->getRoute(this->djisktra->traces[nextDst], cur->itinerary->laneId, idOfI_Vertex, nextDst, exit);
+        std::string newRoute = this->djisktra->getRoute(/*this->djisktra*/cur->traces[nextDst], cur->itinerary->laneId, idOfI_Vertex, nextDst, exit);
 
         if(cur->id.compare("40") != std::string::npos){
             if(newRoute.find("E302 -E229") != std::string::npos
@@ -519,7 +519,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
             this->djisktra->DijkstrasAlgorithm(nextDst, exit, futureLane, cur);
 
             std::string lastPath =
-                    this->djisktra->getRoute(this->djisktra->traces[exit], futureLane, nextDst, exit, exit);
+                    this->djisktra->getRoute(/*this->djisktra*/cur->traces[exit], futureLane, nextDst, exit, exit);
             if(lastPath.find(futureLane + " ") != std::string::npos
                     && newRoute.find(" " + futureLane) != std::string::npos
             ){
