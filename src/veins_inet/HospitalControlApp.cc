@@ -44,8 +44,8 @@ void HospitalControlApp::initialize(int stage)
     if (stage == 0) {
         sendBeacon= new cMessage("send Beacon");
         graph = new Graph();
-        djisktra = //new HarmfulnessDijkstra();
-                   new Djisktra();
+        djisktra = new ArrivalDijkstra();
+                   //new Djisktra();
         this->readCrossing();
     }
     else if (stage == 1) {
@@ -225,8 +225,13 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
             std::string newRoute = readMessage(bc);
             if(newRoute.length() != 0){
                 try{
+                    double t = simTime().dbl();
                     if(checkCycle(newRoute)){
-                        double t = simTime().dbl();
+                        EV<<t<<endl;
+                    }
+                    if(newRoute.find("E302 -E229") != std::string::npos
+                            && t > 26.4
+                    ){
                         EV<<t<<endl;
                     }
                     sendToAGV(newRoute);
@@ -384,7 +389,14 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
         }
     }
     newRoute = reRoute(cur, originalRouteId);
-
+    if(cur->id.compare("40") != std::string::npos){
+        if(newRoute.find("E302 -E229") != std::string::npos
+               //&& t > 26.4
+        ){
+            EV<<cur->id<<" "<<cur->now<<endl;
+           //EV<<t<<myId<<this->indexInRoute<<endl;
+        }
+    }
     return newRoute;
 }
 
