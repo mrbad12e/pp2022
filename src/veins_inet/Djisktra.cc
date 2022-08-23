@@ -31,11 +31,10 @@ void Djisktra::initialize(){
     adjList.resize(numVertices);
     generateAdj(/*adjList*/);
     getListEdges("weightEdges.txt");//re-create edges
-    ShortestPath = (double *)malloc(numVertices*sizeof(double));
+
     this->expSmoothing = new ExponentialSmoothing(numVertices, numIVertices);
     //this->expSmoothing->waitTime = (double *)malloc(numVertices*sizeof(double));
-    for(int i = 0; i < numVertices; i++)
-        ShortestPath[i] = 0;
+
 }
 
 int Djisktra::findVertex(std::string name){
@@ -103,7 +102,7 @@ void Djisktra::getListVertices(std::string iVertices, std::string bVertices) {
     while (getline(file1, line)) {
         vertices.push_back(line);
         weightVertices.push_back(0);
-        traces.push_back("");
+        //traces.push_back("");
     }
     file1.close();
 
@@ -129,7 +128,7 @@ void Djisktra::getListVertices(std::string iVertices, std::string bVertices) {
         }
         vertices.push_back(line);
         weightVertices.push_back(0);
-        traces.push_back("");
+        //traces.push_back("");
     }
     numVertices = vertices.size();
     file2.close();
@@ -208,12 +207,12 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   int tempIndex;
   std::string tempTrace;
 
-  ShortestPath[source] = 0; // Set source distance to zero
-  std::vector <bool> visitedVertex(numVertices, false);
-
-  for (int i = 0; i < numVertices; i++)
-    if (i != source)
-      ShortestPath[i] = 100000; // Initialize everything else to +infinity
+  //ShortestPath[source] = 0; // Set source distance to zero
+  cur->init(numVertices);
+  cur->ShortestPath[source] = 0;
+  //for (int i = 0; i < numVertices; i++)
+  //  if (i != source)
+  //    ShortestPath[i] = 100000; // Initialize everything else to +infinity
 
   PQ.push(make_tuple(0, vertices[source], source, "")); // Source has weight 0;
 
@@ -228,10 +227,10 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
     trace = std::get<3>(info);
 
 
-    if (visitedVertex.at(source)) // Check for cycle
+    if (cur->visitedVertex.at(source)) // Check for cycle
       continue; // Already accounted for it, move on
 
-    visitedVertex.at(source) = true; // Else, mark the vertex so that we won't have to visit it again
+    cur->visitedVertex.at(source) = true; // Else, mark the vertex so that we won't have to visit it again
 
     for (std::vector<Quad>::iterator it = adjList[source].begin(); it != adjList[source].end(); it++){
       tempW = std::get<0>(*it);
@@ -267,22 +266,23 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
           }
       }
 
-      if (newWeight < ShortestPath[tempIndex]){ // Check if we can do better
-         ShortestPath[tempIndex] = newWeight; // Update new distance
-         traces[tempIndex] = trace; //tempTrace;
-         PQ.push(make_tuple(ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
+      if (newWeight < cur->ShortestPath[tempIndex]){ // Check if we can do better
+         cur->ShortestPath[tempIndex] = newWeight; // Update new distance
+         cur->traces[tempIndex] = trace; //tempTrace;
+         PQ.push(make_tuple(cur->ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
       } // Update distance
     }
   } // While Priority Queue is not empty
 } // DijkstrasAlgorithm
 
 std::string Djisktra::getRoute(std::string trace, std::string currLane, int currentVertex, int nextVertex, int exitVertex){
-  if(currLane.compare("E301") == 0
+
+    if(currLane.compare("E301") == 0
           && currentVertex == 45
       && nextVertex == 70
       && exitVertex == 44
           ){
-
+        EV<<"DDDDDD"<<endl;
   }
   std::string route = (currLane[0] == ':') ? "" : (currLane + " ");
   std::string temp = "";
@@ -473,7 +473,7 @@ std::string Djisktra::getWeights(std::string route, AGV* cur
         index = findI_Vertex(v[i], false);
         if(index != prevIndex && index != -1){
             cost = cost + "\"" + vertices[index] + "_" +
-                    (std::to_string(now + ratio * (ShortestPath[index] + firstCost))) + "\",";
+                    (std::to_string(now + ratio * (cur->ShortestPath[index] + firstCost))) + "\",";
             prevIndex = index;
             count++;
             if(cost.find(":J10_") != std::string::npos){
@@ -486,7 +486,7 @@ std::string Djisktra::getWeights(std::string route, AGV* cur
         if(index != prevIndex){
             //cost.push_back(std::to_string(rate * ShortestPath[index]));
             cost = cost + "\"" + vertices[index] + "_" +
-                    (std::to_string(now + ratio * (ShortestPath[index] + firstCost))) + "\",";
+                    (std::to_string(now + ratio * (cur->ShortestPath[index] + firstCost))) + "\",";
         }
     }
     if(cost.length() > 1)
