@@ -152,6 +152,32 @@ public:
     double ratio = 1.1;
     double now = 0;
     int indexOfRoute = -1;
+    double *ShortestPath;
+    std::vector<std::string> traces;
+    std::vector <bool> visitedVertex;
+    void init(int numVertices, double initSource = 10000){
+        if(!initialized){
+            ShortestPath = (double *)malloc(numVertices*sizeof(double));
+            for(int i = 0; i < numVertices; i++){
+                ShortestPath[i] = initSource;
+                traces.push_back("");
+                visitedVertex.push_back(false);
+            }
+            initialized = true;
+            return;
+        }
+
+        for(int i = 0; i < numVertices; i++){
+            ShortestPath[i] = initSource;
+            traces[i].clear();
+            visitedVertex[i] = false;
+        }
+    }
+    bool isInitialized(){
+        return initialized;
+    }
+private:
+    bool initialized = false;
 };
 
 class Edge {
