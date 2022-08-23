@@ -151,6 +151,7 @@ public:
     double atStation = 0;
     double ratio = 1.1;
     double now = 0;
+    int indexOfRoute = -1;
 };
 
 class Edge {
