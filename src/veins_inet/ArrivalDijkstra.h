@@ -13,22 +13,23 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef VEINS_INET_HARMFULNESSDIJKSTRA_H_
-#define VEINS_INET_HARMFULNESSDIJKSTRA_H_
+#ifndef VEINS_INET_ARRIVALDIJKSTRA_H_
+#define VEINS_INET_ARRIVALDIJKSTRA_H_
 
 #include "Djisktra.h"
 
 typedef std::map<std::string, Station*> AllStations;
 
-class HarmfulnessDijkstra: public Djisktra {
+class ArrivalDijkstra: public Djisktra {
 public:
-    HarmfulnessDijkstra();
+    ArrivalDijkstra();
     //virtual ~HarmfulnessDijkstra();
     void getItineraries(std::string itineraryFile) override;
     std::string getJSONStation(std::string station) override;
+    double firstValue(std::string currLane, std::string veryNextVertex);
     void DijkstrasAlgorithm(int source, int target, std::string currLane, AGV* cur) override;
 private:
     AllStations allSs;
 };
 
-#endif /* VEINS_INET_HARMFULNESSDIJKSTRA_H_ */
+#endif /* VEINS_INET_ARRIVALDIJKSTRA_H_ */
