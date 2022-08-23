@@ -13,9 +13,9 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#include "HarmfulnessDijkstra.h"
+#include "ArrivalDijkstra.h"
 
-HarmfulnessDijkstra::HarmfulnessDijkstra() {
+ArrivalDijkstra::ArrivalDijkstra() {
     // TODO Auto-generated constructor stub
     this->initialize();
     getItineraries("itinerary.txt");
@@ -23,7 +23,7 @@ HarmfulnessDijkstra::HarmfulnessDijkstra() {
 
 /*HarmfulnessDijkstra::~HarmfulnessDijkstra() {
 }*/
-std::string HarmfulnessDijkstra::getJSONStation(std::string station){
+std::string ArrivalDijkstra::getJSONStation(std::string station){
     //std::string strStation = "";
     std::map<std::string, Station*>::iterator it;
     it = allSs.find(station);
@@ -33,7 +33,7 @@ std::string HarmfulnessDijkstra::getJSONStation(std::string station){
     return s->toJSON();
 }
 
-void HarmfulnessDijkstra::getItineraries(std::string itineraryFile){
+void ArrivalDijkstra::getItineraries(std::string itineraryFile){
     std::ifstream file(itineraryFile);
     std::string line;
     std::string nameRoute;
@@ -68,14 +68,15 @@ void HarmfulnessDijkstra::getItineraries(std::string itineraryFile){
 
 }
 
-double HarmfulnessDijkstra::firstValue(std::string currLane, std::string veryNextVertex){
+double ArrivalDijkstra::firstValue(std::string currLane, std::string veryNextVertex){
     int count = 0;
+    double result = 0;
     for(int i = 0; i < this->edges.size(); i++ ){
         std::string path = this->edges[i].first;
         if(path.find("$" + currLane + "$") != std::string::npos
            && path.find(veryNextVertex + "$") != std::string::npos
             ){
-            firstValue += this->edges[i].second;
+            result += this->edges[i].second;
             count++;
         }
     }
@@ -84,7 +85,7 @@ double HarmfulnessDijkstra::firstValue(std::string currLane, std::string veryNex
     return result;
 }
 
-void HarmfulnessDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
+void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
         int source, int target, std::string currLane, AGV* cur){
   std::priority_queue<Quad, std::vector<Quad>, std::greater<Quad> > PQ; // Set up priority queue
   Quad info;
