@@ -332,7 +332,7 @@ void Djisktra::getItineraries(std::string itineraryFile){
     std::ifstream file(itineraryFile);
     std::string line;
     std::string nameRoute;
-    std::string nameSrc, nameStation, nameDest;
+    std::string nameSrc, nameStation, nameDest, rubbish;
     int source, station, dst;
 
     while (getline(file, line)) {
@@ -341,6 +341,7 @@ void Djisktra::getItineraries(std::string itineraryFile){
             getline(ss, nameRoute, ' ');
             getline(ss, nameSrc, ' ');
             getline(ss, nameStation, ' ');
+            getline(ss, rubbish, ' ');
             getline(ss, nameDest, ' ');
             source = findI_Vertex(nameSrc, false);
             station = findI_Vertex(nameStation, false);
@@ -476,9 +477,7 @@ std::string Djisktra::getWeights(std::string route, AGV* cur
                     (std::to_string(now + ratio * (cur->ShortestPath[index] + firstCost))) + "\",";
             prevIndex = index;
             count++;
-            if(cost.find(":J10_") != std::string::npos){
-                EV_TRACE<<"DEBUYG HEREE"<<endl;
-            }
+
         }
     }
     if(v.size() > 2){
