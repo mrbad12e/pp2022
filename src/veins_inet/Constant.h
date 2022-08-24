@@ -47,7 +47,7 @@ public:
     static double GLOBAL_HARMFULNESS;
     static int TOTAL_AGV;
 
-    static constexpr const bool SHORTEST_PATH = false;
+    static constexpr const bool SHORTEST_PATH = true;
     static constexpr const bool STOP_AT_STATION = true;
     static constexpr const int PAUSING_TIME = 10;
 };
@@ -140,6 +140,29 @@ static int locateLast(std::string route, std::string trace){
         int location = trace.find("$" + lastLane + "$") + lastLane.length();
         return location;
     }
+}
+
+static bool willReachExit(std::string route){
+    if(route.length() < 2)
+        return false;
+    if(route.length() < 5){
+        if(route.find("-E0") != std::string::npos
+           || route.find("E92") != std::string::npos
+           || route.find("E298") != std::string::npos
+        ){
+            return true;
+        }
+        return false;
+    }
+    std::string last = route.substr(route.length() - 5);
+    if(last.find("-E226") != std::string::npos
+       || last.find("-E0") != std::string::npos
+       || last.find("E92") != std::string::npos
+       || last.find("E298") != std::string::npos
+            ){
+        return true;
+    }
+    return false;
 }
 
 
