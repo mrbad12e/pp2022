@@ -94,9 +94,12 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   double tempW;
   int tempIndex;
   double now = cur->now;
+  if(currLane.compare(cur->itinerary->laneId) != 0){
+      now = cur->ShortestPath[source];
+  }
   double ratio = cur->ratio;
   std::string tempTrace;
-  int index = findI_Vertex(cur->itinerary->laneId, false);
+  int index = findI_Vertex(currLane, false);
   double firstCost = firstValue(currLane, vertices[index]);
 
   cur->init(numVertices);
@@ -108,7 +111,7 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       ShortestPath[i] = 100000; // Initialize everything else to +infinity
   */
 
-  PQ.push(make_tuple(0, vertices[source], source, "")); // Source has weight 0;
+  PQ.push(make_tuple(cur->ShortestPath[source], vertices[source], source, "")); // Source has weight cur->ShortestPath[source];
 
   while (!PQ.empty()){
     info = PQ.top(); // Use to get minimum weight
