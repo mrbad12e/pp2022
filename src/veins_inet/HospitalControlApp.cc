@@ -44,8 +44,8 @@ void HospitalControlApp::initialize(int stage)
     if (stage == 0) {
         sendBeacon= new cMessage("send Beacon");
         graph = new Graph();
-        djisktra = //new ArrivalDijkstra();
-                   new Djisktra();
+        djisktra = new ArrivalDijkstra();
+                   //new Djisktra();
         this->readCrossing();
     }
     else if (stage == 1) {
@@ -389,11 +389,12 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
         }
     }
     newRoute = reRoute(cur, originalRouteId);
-    if(cur->id.compare("40") != std::string::npos){
-        if(newRoute.find("E302 -E229") != std::string::npos
+    //if(cur->id.compare("142") != std::string::npos)
+    {
+        if(newRoute.find("E114 E166") != std::string::npos
                //&& t > 26.4
         ){
-            EV<<cur->id<<" "<<cur->now<<endl;
+            EV<<cur->id<<" "<<t<<" "<<cur->now<<endl;
            //EV<<t<<myId<<this->indexInRoute<<endl;
         }
     }
@@ -415,7 +416,10 @@ bool HospitalControlApp::checkCycle(std::string route){
 
 
 std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double t*/){
-
+    double t = simTime().dbl();
+    if(t > 172.2 && cur->id.compare("142") == 0 && routeId.compare("route_2") == 0){
+        EV<<"dsfsdfsfsdf"<<endl;
+    }
     if(this->djisktra->vertices[0][0] == cur->itinerary->laneId[0]){
         EV_TRACE<<cur->itinerary->prevEdge<<endl;
         if(!cur->passedStation ||
