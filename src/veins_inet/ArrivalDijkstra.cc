@@ -99,8 +99,9 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   int index = findI_Vertex(cur->itinerary->laneId, false);
   double firstCost = firstValue(currLane, vertices[index]);
 
-  //ShortestPath[source] = ratio * firstCost + now;
-  std::vector <bool> visitedVertex(numVertices, false);
+  cur->init(numVertices);
+  cur->ShortestPath[source] = ratio * firstCost + now;
+  //std::vector <bool> visitedVertex(numVertices, false);
 
   /*for (int i = 0; i < numVertices; i++)
     if (i != source)
@@ -120,10 +121,10 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
     trace = std::get<3>(info);
 
 
-    if (visitedVertex.at(source)) // Check for cycle
+    if (cur->visitedVertex.at(source)) // Check for cycle
       continue; // Already accounted for it, move on
 
-    visitedVertex.at(source) = true; // Else, mark the vertex so that we won't have to visit it again
+    cur->visitedVertex.at(source) = true; // Else, mark the vertex so that we won't have to visit it again
 
     for (std::vector<Quad>::iterator it = adjList[source].begin(); it != adjList[source].end(); it++){
       tempW = std::get<0>(*it);
@@ -157,11 +158,11 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       }
 
       newWeight = ratio * (newWeight + firstCost) + now;
-      //if (newWeight < ShortestPath[tempIndex]){ // Check if we can do better
-         //ShortestPath[tempIndex] = newWeight; // Update new distance
-         //traces[tempIndex] = trace; //tempTrace;
-         //PQ.push(make_tuple(ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
-      //} // Update distance
+      if (newWeight < cur->ShortestPath[tempIndex]){ // Check if we can do better
+         cur->ShortestPath[tempIndex] = newWeight; // Update new distance
+         cur->traces[tempIndex] = trace; //tempTrace;
+         PQ.push(make_tuple(cur->ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
+      } // Update distance
     }
   } // While Priority Queue is not empty
 } // DijkstrasAlgorithm
