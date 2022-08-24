@@ -177,13 +177,8 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
                    current = current.substr(0, x);
                if(expectedRoute.find(current) != std::string::npos){
                    try{
-                       double t = simTime().dbl();
                        std::vector<std::string> v = split(expectedRoute, " ");
-                       if(expectedRoute.find("E302 -E229") != std::string::npos
-                               && t > 26.4
-                       ){
-                           EV<<t<<myId<<this->indexInRoute<<endl;
-                       }
+
                        int i = 0; bool found = false;
                        for(i = 0; i < v.size(); i++){
                            if(v[i].compare(current) == 0){
@@ -212,17 +207,12 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
 
 std::string AGVControlApp::checkForPausing(){
     std::string content = traciVehicle->getLaneId();
-    //if(myId == 154 && content.find(":J292_") != std::string::npos){
-    //    EV_TRACE<<"fffff"<<endl;
-    //}
+
     if(content.find(this->station->getName() + "_") != std::string::npos
            && this->station->getName().length() > 0
            && //pausingTime == DBL_MAX
            pausingTime + Constant::PAUSING_TIME > simTime().dbl()
     ){
-        //if(myId == 154){
-        //    EV_TRACE<<"fffff"<<endl;
-        //}
         if(velocityBeforeHalt == -1 && pausingTime == DBL_MAX){
             velocityBeforeHalt = traciVehicle->getSpeed();
             if(velocityBeforeHalt == 0)
@@ -355,13 +345,8 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                     this->runAfterStuck();
 
                     if(!Constant::SHORTEST_PATH){
-                        double t = simTime().dbl();
                         std::vector<std::string> v = split(newRoute, " ");
-                        if(newRoute.find("E302 -E229") != std::string::npos
-                               && t > 26.4
-                       ){
-                           EV<<t<<myId<<this->indexInRoute<<endl;
-                       }
+
                         std::list<std::string> l(v.begin(), v.end());
                         if(l.size() == 0){
                             EV_TRACE<<"ERRR";
