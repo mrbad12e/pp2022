@@ -116,9 +116,12 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
     info = cur->PQ.top(); // Use to get minimum weight
     cur->PQ.pop(); // Pop before checking for cycles
     source = std::get<2>(info); // get the vertex
-    if(source == target)
+    if(source == target){
       //continue;
+        while (!cur->PQ.empty())
+            cur->PQ.pop();
         break;
+    }
     weight = std::get<0>(info); // current distance
     trace = std::get<3>(info);
 
