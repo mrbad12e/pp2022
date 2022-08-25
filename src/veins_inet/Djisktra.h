@@ -33,8 +33,6 @@
 #include <queue> // To set up priority queue
 #include <functional> // To use std::greater<T> -> This will prove to be useful in picking the minimum weight
 
-typedef std::pair<std::string, double> Pair;
-typedef std::tuple<double, std::string, int, std::string> Quad;
 
 class ExponentialSmoothing{
 public:
