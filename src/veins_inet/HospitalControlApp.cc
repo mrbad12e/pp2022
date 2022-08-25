@@ -229,8 +229,8 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                     if(checkCycle(newRoute)){
                         EV<<t<<endl;
                     }
-                    if(newRoute.find("E302 -E229") != std::string::npos
-                            && t > 26.4
+                    if(newRoute.find("E203 E230") != std::string::npos
+                            && t > 1.85
                     ){
                         EV<<t<<endl;
                     }
@@ -391,7 +391,7 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     newRoute = reRoute(cur, originalRouteId);
     //if(cur->id.compare("142") != std::string::npos)
     {
-        if(newRoute.find("E114 E166") != std::string::npos
+        if(newRoute.find("E203 E230") != std::string::npos
                //&& t > 26.4
         ){
             EV<<cur->id<<" "<<t<<" "<<cur->now<<endl;
@@ -417,7 +417,7 @@ bool HospitalControlApp::checkCycle(std::string route){
 
 std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double t*/){
     double t = simTime().dbl();
-    if(t > 172.2 && cur->id.compare("142") == 0 && routeId.compare("route_2") == 0){
+    if(t > 1.85 && cur->id.compare("22") == 0 && routeId.compare("route_1") == 0){
         EV<<"dsfsdfsfsdf"<<endl;
     }
     if(this->djisktra->vertices[0][0] == cur->itinerary->laneId[0]){
