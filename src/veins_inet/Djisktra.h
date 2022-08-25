@@ -223,6 +223,7 @@ private:
 
     std::vector<int> nextIndexOfBVertices;
     std::vector<std::string> nextNameOfBVertices;
+    bool wasGeneratedAdj = false;
 
     void generateAdj();
 
