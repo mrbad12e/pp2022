@@ -110,11 +110,15 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       ShortestPath[i] = 100000; // Initialize everything else to +infinity
   */
 
-  cur->PQ.push(make_tuple(cur->ShortestPath[source], vertices[source], source, "")); // Source has weight cur->ShortestPath[source];
+  cur->PQ.push(make_tuple(cur->ShortestPath[source], vertices[source] + "_" + cur->id, source, "")); // Source has weight cur->ShortestPath[source];
 
   while (!cur->PQ.empty()){
     info = cur->PQ.top(); // Use to get minimum weight
     cur->PQ.pop(); // Pop before checking for cycles
+    cur->count = cur->count + 1;
+    if(cur->id.compare("142") == 0 && cur->count == 20){
+        EV<<"SDfsdfsERereer"<<endl;
+    }
     source = std::get<2>(info); // get the vertex
     if(source == target){
       //continue;
@@ -166,7 +170,20 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       if (newWeight < cur->ShortestPath[tempIndex]){ // Check if we can do better
          cur->ShortestPath[tempIndex] = newWeight; // Update new distance
          cur->traces[tempIndex] = trace; //tempTrace;
-         cur->PQ.push(make_tuple(cur->ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
+         if(tempIndex == 26){
+             EV<<"DEEDDWF"<<endl;
+         }
+         if(tempTrace.length() == 0 && trace.length() == 0)
+         {
+             EV<<"ENULLLL"<<endl;
+         }
+
+         if(newWeight > 188.3 && newWeight < 188.4
+                 && cur->count < 20
+                 && cur->id.compare("142") == 0){
+             EV<<"sdfsdfsfsdfs"<<endl;
+         }
+         cur->PQ.push(make_tuple(cur->ShortestPath[tempIndex], vertices[tempIndex] + "_" + cur->id, tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
       } // Update distance
     }
   } // While Priority Queue is not empty
