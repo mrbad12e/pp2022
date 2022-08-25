@@ -186,8 +186,10 @@ public:
     bool isInitialized(){
         return initialized;
     }
+    int count = 0;
 private:
     bool initialized = false;
+
 };
 
 class Edge {
