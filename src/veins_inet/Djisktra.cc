@@ -29,7 +29,10 @@ void Djisktra::initialize(){
     this->getSupplyAndDisposalLocation("SupplyDisposal.txt");
     getListEdges("weightEdges.txt");
     adjList.resize(numVertices);
-    generateAdj(/*adjList*/);
+    if(!this->wasGeneratedAdj){
+        generateAdj(/*adjList*/);
+        this->wasGeneratedAdj = true;
+    }
     getListEdges("weightEdges.txt");//re-create edges
 
     this->expSmoothing = new ExponentialSmoothing(numVertices, numIVertices);
