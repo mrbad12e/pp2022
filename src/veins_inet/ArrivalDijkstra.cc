@@ -87,7 +87,6 @@ double ArrivalDijkstra::firstValue(std::string currLane, std::string veryNextVer
 
 void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
         int source, int target, std::string currLane, AGV* cur){
-  std::priority_queue<Quad, std::vector<Quad>, std::greater<Quad> > PQ; // Set up priority queue
   Quad info;
   std::string trace;
   double weight;
@@ -111,11 +110,11 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       ShortestPath[i] = 100000; // Initialize everything else to +infinity
   */
 
-  PQ.push(make_tuple(cur->ShortestPath[source], vertices[source], source, "")); // Source has weight cur->ShortestPath[source];
+  cur->PQ.push(make_tuple(cur->ShortestPath[source], vertices[source], source, "")); // Source has weight cur->ShortestPath[source];
 
-  while (!PQ.empty()){
-    info = PQ.top(); // Use to get minimum weight
-    PQ.pop(); // Pop before checking for cycles
+  while (!cur->PQ.empty()){
+    info = cur->PQ.top(); // Use to get minimum weight
+    cur->PQ.pop(); // Pop before checking for cycles
     source = std::get<2>(info); // get the vertex
     if(source == target)
       //continue;
@@ -164,7 +163,7 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       if (newWeight < cur->ShortestPath[tempIndex]){ // Check if we can do better
          cur->ShortestPath[tempIndex] = newWeight; // Update new distance
          cur->traces[tempIndex] = trace; //tempTrace;
-         PQ.push(make_tuple(cur->ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
+         cur->PQ.push(make_tuple(cur->ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
       } // Update distance
     }
   } // While Priority Queue is not empty
