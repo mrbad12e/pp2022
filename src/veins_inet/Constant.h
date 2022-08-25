@@ -25,6 +25,8 @@
 using veins::TraCIMobility;
 using namespace veins;
 
+typedef std::pair<std::string, double> Pair;
+
 class Constant {
 public:
     static constexpr const char* FIRST = "First vehicle";
