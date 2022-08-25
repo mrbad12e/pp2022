@@ -21,6 +21,15 @@
 #include <fstream>
 #include <sstream>
 #include <float.h>
+#include <map>
+#include <string>
+#include <string.h>
+#include <vector>
+#include <algorithm>
+#include <queue> // To set up priority queue
+#include <functional> // To use std::greater<T> -> This will prove to be useful in picking the minimum weight
+
+typedef std::tuple<double, std::string, int, std::string> Quad;
 
 class ItineraryRecord {// Ban ghi hanh trinh cua xe
 public:
@@ -155,6 +164,7 @@ public:
     double *ShortestPath;
     std::vector<std::string> traces;
     std::vector <bool> visitedVertex;
+    std::priority_queue<Quad, std::vector<Quad>, std::greater<Quad> > PQ; // Set up priority queue
     void init(int numVertices, double initSource = 10000){
         if(!initialized){
             ShortestPath = (double *)malloc(numVertices*sizeof(double));
