@@ -30,6 +30,45 @@
 #include <functional> // To use std::greater<T> -> This will prove to be useful in picking the minimum weight
 
 typedef std::tuple<double, std::string, int, std::string> Quad;
+/*class Quad{
+public:
+    double weight;
+    std::string name;
+    int source;
+    std::string trace;
+    Quad(double weight, std::string name, int source, std::string trace)
+        : weight(weight), name(name), source(source), trace(trace)
+    {
+
+    }
+};*/
+
+///usr/include/c++/9/bits/stl_function.h:376:20: error: no match for ‘operator>’ (operand types are ‘const Quad’ and ‘const Quad’)
+///usr/include/c++/9/bits/stl_function.h:376:20: error: no match for ‘operator>’ (operand types are ‘const Quad’ and ‘const Quad’)
+//usr/include/c++/9/bits/stl_function.h:386:20: error: no match for ‘operator<’ (operand types are ‘const Quad’ and ‘const Quad’)
+
+/*bool operator>(const Quad q1, const Quad q2)
+{
+
+    // this will return true when second person
+    // has greater height. Suppose we have q1.weight=5
+    // and q2.weight=5.5 then the object which
+    // have min height will be at the top(or
+    // min priority)
+    return q1.weight < q2.weight;
+}
+
+bool operator<(const Quad q1, const Quad q2)
+{
+
+    // this will return true when second person
+    // has greater height. Suppose we have q1.weight=5
+    // and q2.weight=5.5 then the object which
+    // have min height will be at the top(or
+    // min priority)
+    return q1.weight > q2.weight;
+}*/
+
 
 class ItineraryRecord {// Ban ghi hanh trinh cua xe
 public:
@@ -150,6 +189,7 @@ private:
     bool isNotChanged = false;
     //std::string allRequests = "";
 };
+///usr/include/c++/9/bits/stl_function.h:386:20: error: no match for ‘operator<’ (operand types are ‘const Quad’ and ‘const Quad’)
 
 class AGV {
 public:
@@ -165,7 +205,8 @@ public:
     std::vector<std::string> traces;
     std::vector <bool> visitedVertex;
     std::priority_queue<Quad, std::vector<Quad>, std::greater<Quad> > PQ; // Set up priority queue
-    void init(int numVertices, double initSource = 10000){
+    //std::priority_queue<Quad> PQ;
+    void init(int numVertices, double initSource = DBL_MAX){
         if(!initialized){
             ShortestPath = (double *)malloc(numVertices*sizeof(double));
             for(int i = 0; i < numVertices; i++){
