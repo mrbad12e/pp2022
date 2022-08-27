@@ -23,13 +23,12 @@ typedef std::map<std::string, Station*> AllStations;
 class ArrivalDijkstra: public Djisktra {
 public:
     ArrivalDijkstra();
-    //virtual ~HarmfulnessDijkstra();
     void getItineraries(std::string itineraryFile) override;
     std::string getJSONStation(std::string station) override;
     double firstValue(std::string currLane, std::string veryNextVertex);
     void DijkstrasAlgorithm(int source, int target, std::string currLane, AGV* cur) override;
-private:
     AllStations allSs;
+private:
 };
 
 #endif /* VEINS_INET_ARRIVALDIJKSTRA_H_ */
