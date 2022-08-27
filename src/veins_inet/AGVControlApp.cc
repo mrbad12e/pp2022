@@ -121,15 +121,25 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
     {
         TraCIDemo11pMessage* carBeacon = new TraCIDemo11pMessage("test", 0);
         {
-
-           content = //std::to_string(simTime().dbl()) + " ";
-           //curPosition = mobility->getPositionAt(simTime());
-           //content = content +
-           //             std::to_string(curPosition.x) + " "
-           //             + std::to_string(curPosition.y);
-           /*content = content +*/ /*"Lid"*/ /*" " +*/
-                   "{\"laneId\" : \"" +
+            std::string str = traciVehicle->getLaneId();
+            str.erase(str.find("_"));
+            if(str[0] != ':'){
+                bool add = true;
+                if(passedEdges.size() > 0){
+                    if(passedEdges[passedEdges.size() - 1].compare(str) == 0){
+                        add = false;
+                    }
+                }
+                if(add){
+                    passedEdges.push_back(str);
+                }
+            }
+            if(goAround(passedEdges)){
+                EV<<"Go around"<<myId<<" "<<originalRoute<<endl;
+            }
+           content = "{\"laneId\" : \"" +
                    traciVehicle->getLaneId() + "\", ";
+
            content = content + " \"idMess\" : \"" + std::to_string(idOfMessage) + "\", ";
            idOfMessage++;
 
@@ -169,7 +179,7 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
            send(WSM,lowerLayerOut);
 
            if(expectedRoute.length() > 0 && !Constant::SHORTEST_PATH){
-               //double t = simTime().dbl();
+               double t = simTime().dbl();
 
                std::string current = traciVehicle->getLaneId();
                int x = current.find("_");
@@ -180,6 +190,9 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
                        std::vector<std::string> v = split(expectedRoute, " ");
 
                        int i = 0; bool found = false;
+                       if(goAround(v)){
+                           EV<<"Go around"<<endl;
+                       }
                        for(i = 0; i < v.size(); i++){
                            if(v[i].compare(current) == 0){
                                found = true;
@@ -192,7 +205,9 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
                        if(change){
                            expectedRoute = "";
                            v.clear();
-
+                           if(myId == 190 && t > 295){
+                               EV<<"SDFSFSDFSDf"<<endl;
+                           }
                        }
                    }catch(std::exception &e){
                        //const char* x= e.what();
@@ -299,6 +314,7 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
             //if(myId == 154){
             //    EV<<"DFFDFD"<<endl;
             //}
+            double t = simTime().dbl();
             std::string newRoute = //str.substr(std::to_string(myId).length() + 2);
                     v["newRoute"].as_string();
             int size = v["weights"].size();
@@ -348,7 +364,7 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                         std::vector<std::string> v = split(newRoute, " ");
 
                         std::list<std::string> l(v.begin(), v.end());
-                        if(l.size() == 0){
+                        if(l.size() == 0 || goAround(v)){
                             EV_TRACE<<"ERRR";
                         }
                         bool change = traciVehicle->changeVehicleRoute(l);
@@ -356,6 +372,9 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                             expectedRoute = newRoute;
                         }
                         else{
+                            if(myId == 190 && t > 295){
+                                EV<<"Ddsffssf"<<endl;
+                            }
                            expectedRoute = "";
                            v.clear();
                            v.shrink_to_fit();
