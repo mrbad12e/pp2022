@@ -291,15 +291,8 @@ void AGVControlApp::exponentialSmooth(std::string key, double realTime){
 
 void AGVControlApp::handleLowerMsg(cMessage* msg)
 {
-    //if(msg == NULL){
-    //    return;
-    //}
-    //try{
     BaseFrame1609_4* WSM = check_and_cast<BaseFrame1609_4*>(msg);
     cPacket* enc = WSM->getEncapsulatedPacket();
-    //if(enc == NULL){
-    //    return;
-    //}
     if(TraCIDemo11pMessage* bc = dynamic_cast<TraCIDemo11pMessage*>(enc)){
         //int length = strlen(bc->getDemoData());
         std::stringstream streamData(bc->getDemoData());
@@ -311,9 +304,6 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
         if(//str.find("$" + std::to_string(myId) + "_") != std::string::npos
              std::to_string(myId).compare(id) == 0
         ){
-            //if(myId == 154){
-            //    EV<<"DFFDFD"<<endl;
-            //}
             double t = simTime().dbl();
             std::string newRoute = //str.substr(std::to_string(myId).length() + 2);
                     v["newRoute"].as_string();
@@ -341,8 +331,6 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                             //This case happends as: (1) AGV follows the original Dijsktra
                             //(2) messages from RSU were lost
                             double sp = traciVehicle->getSpeed();
-                            //std::string laneID = traciVehicle->getLaneId();
-                            //EV_TRACE<<myId<<" "<<this->waitingIntervals<<" "<<sp<<" "<<laneID<<endl;
                             if(sp == 0 && pausingTime + Constant::PAUSING_TIME < simTime().dbl()){
                                 //if waiting to long
                                 this->runAfterStuck();
@@ -372,13 +360,10 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                             expectedRoute = newRoute;
                         }
                         else{
-                            if(myId == 190 && t > 295){
-                                EV<<"Ddsffssf"<<endl;
-                            }
-                           expectedRoute = "";
-                           v.clear();
-                           v.shrink_to_fit();
-                           l.clear();
+                            expectedRoute = "";
+                            v.clear();
+                            v.shrink_to_fit();
+                            l.clear();
                         }
                     }
                 }
@@ -386,7 +371,6 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
             else{
                 double sp = traciVehicle->getSpeed();
                 std::string laneID = traciVehicle->getLaneId();
-                //EV<<sp<<" "<<laneID<<endl;
                 if(sp == 0 && laneID[0] == ':'){
                     saveBeginningOfStuck(laneID);
                     if(this->stuckAtJunc[laneID] +
@@ -401,9 +385,6 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
     else{
 
     }
-    //}catch(std::exception& e1){
-    //    EV_TRACE<<"ffffff"<<endl;
-    //}
 }
 
 void AGVControlApp::saveBeginningOfStuck(std::string junc){
