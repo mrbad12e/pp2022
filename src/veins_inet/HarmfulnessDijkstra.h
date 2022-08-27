@@ -22,6 +22,8 @@ public:
     HarmfulnessDijkstra();
     virtual ~HarmfulnessDijkstra();
     void DijkstrasAlgorithm(int source, int target, std::string currLane, AGV* cur) override;
+private:
+    double getHarmfulness(AGV* cur, double time);
 };
 
 #endif /* VEINS_INET_HARMFULNESSDIJKSTRA_H_ */
