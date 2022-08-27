@@ -32,46 +32,6 @@
 //typedef std::tuple<double, std::string, int, std::string> Quad;
 typedef std::tuple<double, double, int, std::string> Quad;
 
-/*class Quad{
-public:
-    double weight;
-    std::string name;
-    int source;
-    std::string trace;
-    Quad(double weight, std::string name, int source, std::string trace)
-        : weight(weight), name(name), source(source), trace(trace)
-    {
-
-    }
-};*/
-
-///usr/include/c++/9/bits/stl_function.h:376:20: error: no match for ‘operator>’ (operand types are ‘const Quad’ and ‘const Quad’)
-///usr/include/c++/9/bits/stl_function.h:376:20: error: no match for ‘operator>’ (operand types are ‘const Quad’ and ‘const Quad’)
-//usr/include/c++/9/bits/stl_function.h:386:20: error: no match for ‘operator<’ (operand types are ‘const Quad’ and ‘const Quad’)
-
-/*bool operator>(const Quad q1, const Quad q2)
-{
-
-    // this will return true when second person
-    // has greater height. Suppose we have q1.weight=5
-    // and q2.weight=5.5 then the object which
-    // have min height will be at the top(or
-    // min priority)
-    return q1.weight < q2.weight;
-}
-
-bool operator<(const Quad q1, const Quad q2)
-{
-
-    // this will return true when second person
-    // has greater height. Suppose we have q1.weight=5
-    // and q2.weight=5.5 then the object which
-    // have min height will be at the top(or
-    // min priority)
-    return q1.weight > q2.weight;
-}*/
-
-
 class ItineraryRecord {// Ban ghi hanh trinh cua xe
 public:
     std::string laneId, prevLane = "";
