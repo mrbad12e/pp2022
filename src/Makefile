@@ -41,6 +41,7 @@ OBJS = \
     $O/veins_inet/CustomRectangle.o \
     $O/veins_inet/Djisktra.o \
     $O/veins_inet/Graph.o \
+    $O/veins_inet/HarmfulnessDijkstra.o \
     $O/veins_inet/HospitalControlApp.o \
     $O/veins_inet/IPerson.o \
     $O/veins_inet/jute.o \
