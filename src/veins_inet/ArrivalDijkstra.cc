@@ -89,7 +89,7 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
         int source, int target, std::string currLane, AGV* cur){
   Quad info; //(-1, "", -1, "");
   std::string trace;
-  double weight;
+  double weight, objective;
   double tempW;
   int tempIndex;
   double now = cur->now;
@@ -111,7 +111,7 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   */
   int x = cur->PQ.size();
 
-  cur->PQ.push(make_tuple(cur->ShortestPath[source], vertices[source] + "_" + cur->id, source, "")); // Source has weight cur->ShortestPath[source];
+  cur->PQ.push(std::make_tuple(cur->ShortestPath[source], 0, source, "")); // Source has weight cur->ShortestPath[source];
   if(source == 26
           && cur->ShortestPath[source] > 188.3
           && cur->ShortestPath[source] < 188.4){
@@ -136,8 +136,9 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
             cur->PQ.pop();
         break;
     }
-    weight = //info.weight;//
+    objective = //info.weight;//
             std::get<0>(info); // current distance
+    weight = std::get<1>(info);
     trace = //info.trace;//
             std::get<3>(info);
 
@@ -149,13 +150,14 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
 
     for (std::vector<Quad>::iterator it = adjList[source].begin(); it != adjList[source].end(); it++){
       tempW = /*(*it).weight; */std::get<0>(*it);
+      //tempW = std::get<1>(*it);
       tempTrace = /*(*it).trace; */std::get<3>(*it);
       tempIndex = /*(*it).source; */ std::get<2>(*it);
       if(!Constant::SHORTEST_PATH){
           weightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, weightVertices[tempIndex], vertices[tempIndex]);
       }
 
-      double newWeight = 0; //weight + tempW + 40*weightVertices[tempIndex];
+      double newWeight = 0, newObjective = 0; //weight + tempW + 40*weightVertices[tempIndex];
       /*if(trace.find("$E9$") != std::string::npos
             && tempTrace.find("$-E9$") != std::string::npos
               ){
@@ -177,10 +179,10 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
               newWeight += 100*weightSmoothing;
           }
       }
-
-      newWeight = ratio * (newWeight /*+ firstCost*/) + /*tempW;*/now;
-      if (newWeight < cur->ShortestPath[tempIndex]){ // Check if we can do better
-         cur->ShortestPath[tempIndex] = newWeight; // Update new distance
+      newWeight += firstCost;
+      newObjective = ratio * (newWeight) + objective/*tempW;*/ /*now*/;
+      if (newObjective < cur->ShortestPath[tempIndex]){ // Check if we can do better
+         cur->ShortestPath[tempIndex] = newObjective; // Update new distance
          cur->traces[tempIndex] = trace; //tempTrace;
          if(tempIndex == 26){
              EV<<"DEEDDWF"<<endl;
@@ -190,14 +192,14 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
              EV<<"ENULLLL"<<endl;
          }
 
-         if(newWeight > 188.3 && newWeight < 188.4
+         /*if(newWeight > 188.3 && newWeight < 188.4
                  //&& cur->count < 20
                  && cur->id.compare("142") == 0){
              EV<<"sdfsdfsfsdfs"<<endl;
-         }
+         }*/
          std::string content = vertices[tempIndex] + "_" + cur->id;
          std::string newTrace = trace + tempTrace;
-         cur->PQ.push(make_tuple(newWeight, content, tempIndex, newTrace));
+         cur->PQ.push(make_tuple(newObjective, newWeight, /*content,*/ tempIndex, newTrace));
          /*cur->PQ.push(Quad(cur->ShortestPath[tempIndex],
                  vertices[tempIndex] + "_" + cur->id,
                  tempIndex, trace + tempTrace));*/
