@@ -205,9 +205,6 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
                        if(change){
                            expectedRoute = "";
                            v.clear();
-                           if(myId == 190 && t > 295){
-                               EV<<"SDFSFSDFSDf"<<endl;
-                           }
                        }
                    }catch(std::exception &e){
                        //const char* x= e.what();
