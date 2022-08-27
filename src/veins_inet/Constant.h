@@ -49,7 +49,7 @@ public:
     static double GLOBAL_HARMFULNESS;
     static int TOTAL_AGV;
 
-    static constexpr const bool SHORTEST_PATH = false;
+    static constexpr const bool SHORTEST_PATH = true;
     static constexpr const bool STOP_AT_STATION = true;
     static constexpr const int PAUSING_TIME = 10;
 };
@@ -163,6 +163,17 @@ static bool willReachExit(std::string route){
        || last.find("E298") != std::string::npos
             ){
         return true;
+    }
+    return false;
+}
+
+static bool goAround(std::vector<std::string> v){
+    for(int i = 0; i < v.size(); i++){
+        for(int j = i + 1; j < v.size(); j++){
+            if(v[i].compare(v[j]) == 0){
+                return true;
+            }
+        }
     }
     return false;
 }
