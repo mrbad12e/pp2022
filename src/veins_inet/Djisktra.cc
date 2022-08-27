@@ -156,6 +156,7 @@ void Djisktra::createAndAddEdge(//std::vector<Quad> adjList[],
             int u, double weightEdge, double weightVertex, std::string v, int indexOfV){
     weightVertices[u] = weightVertex;
     adjList[u].push_back(make_tuple(weightEdge, v, indexOfV, v));
+    //adjList[u].push_back(Quad(weightEdge, v, indexOfV, v));
 } // createAndAddEdge
 
 //void Djisktra::generateAdj(std::vector<Quad> adjList[]){
@@ -203,7 +204,7 @@ void Djisktra::generateAdj(){
 void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
         int source, int target, std::string currLane, AGV* cur){
   std::priority_queue<Quad, std::vector<Quad>, std::greater<Quad> > PQ; // Set up priority queue
-  Quad info;
+  Quad info; //(-1, "", -1, "");
   std::string trace;
   double weight;
   double tempW;
@@ -218,16 +219,17 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   //    ShortestPath[i] = 100000; // Initialize everything else to +infinity
 
   PQ.push(make_tuple(0, vertices[source], source, "")); // Source has weight 0;
+  //PQ.push(Quad(0, vertices[source], source, ""));
 
   while (!PQ.empty()){
     info = PQ.top(); // Use to get minimum weight
     PQ.pop(); // Pop before checking for cycles
-    source = std::get<2>(info); // get the vertex
+    source = /*info.source; */std::get<2>(info); // get the vertex
     if(source == target)
       //continue;
         break;
-    weight = std::get<0>(info); // current distance
-    trace = std::get<3>(info);
+    weight = /*info.weight; */std::get<0>(info); // current distance
+    trace = /*info.trace; */std::get<3>(info);
 
 
     if (cur->visitedVertex.at(source)) // Check for cycle
@@ -236,12 +238,12 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
     cur->visitedVertex.at(source) = true; // Else, mark the vertex so that we won't have to visit it again
 
     for (std::vector<Quad>::iterator it = adjList[source].begin(); it != adjList[source].end(); it++){
-      tempW = std::get<0>(*it);
-      tempTrace = std::get<3>(*it);
+      tempW = /*(*it).weight; */std::get<0>(*it);
+      tempTrace = /*(*it).trace;*/std::get<3>(*it);
       /*if(tempTrace.compare(":J8") == 0){
           EV<<"qqqqq"<<endl;
       }*/
-      tempIndex = std::get<2>(*it);
+      tempIndex = /*(*it).source; */std::get<2>(*it);
       if(!Constant::SHORTEST_PATH){
           weightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, weightVertices[tempIndex], vertices[tempIndex]);
       }
@@ -273,6 +275,7 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
          cur->ShortestPath[tempIndex] = newWeight; // Update new distance
          cur->traces[tempIndex] = trace; //tempTrace;
          PQ.push(make_tuple(cur->ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
+         //PQ.push(Quad(cur->ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
       } // Update distance
     }
   } // While Priority Queue is not empty
