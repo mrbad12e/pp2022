@@ -87,7 +87,7 @@ double ArrivalDijkstra::firstValue(std::string currLane, std::string veryNextVer
 
 void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
         int source, int target, std::string currLane, AGV* cur){
-  Quad info;
+  Quad info; //(-1, "", -1, "");
   std::string trace;
   double weight;
   double tempW;
@@ -109,25 +109,37 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
     if (i != source)
       ShortestPath[i] = 100000; // Initialize everything else to +infinity
   */
+  int x = cur->PQ.size();
 
   cur->PQ.push(make_tuple(cur->ShortestPath[source], vertices[source] + "_" + cur->id, source, "")); // Source has weight cur->ShortestPath[source];
+  if(source == 26
+          && cur->ShortestPath[source] > 188.3
+          && cur->ShortestPath[source] < 188.4){
+      EV<<"ertterert"<<cur->id<<" "<<cur->now<<endl;
+  }
+  //cur->PQ.push(Quad(cur->ShortestPath[source], vertices[source] + "_" + cur->id, source, "")); // Source has weight cur->ShortestPath[source];
 
   while (!cur->PQ.empty()){
+    x = cur->PQ.size();
     info = cur->PQ.top(); // Use to get minimum weight
     cur->PQ.pop(); // Pop before checking for cycles
+    x = cur->PQ.size();
     cur->count = cur->count + 1;
     if(cur->id.compare("142") == 0 && cur->count == 20){
         EV<<"SDfsdfsERereer"<<endl;
     }
     source = std::get<2>(info); // get the vertex
+    //source = info.source;
     if(source == target){
       //continue;
         while (!cur->PQ.empty())
             cur->PQ.pop();
         break;
     }
-    weight = std::get<0>(info); // current distance
-    trace = std::get<3>(info);
+    weight = //info.weight;//
+            std::get<0>(info); // current distance
+    trace = //info.trace;//
+            std::get<3>(info);
 
 
     if (cur->visitedVertex.at(source)) // Check for cycle
@@ -136,9 +148,9 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
     cur->visitedVertex.at(source) = true; // Else, mark the vertex so that we won't have to visit it again
 
     for (std::vector<Quad>::iterator it = adjList[source].begin(); it != adjList[source].end(); it++){
-      tempW = std::get<0>(*it);
-      tempTrace = std::get<3>(*it);
-      tempIndex = std::get<2>(*it);
+      tempW = /*(*it).weight; */std::get<0>(*it);
+      tempTrace = /*(*it).trace; */std::get<3>(*it);
+      tempIndex = /*(*it).source; */ std::get<2>(*it);
       if(!Constant::SHORTEST_PATH){
           weightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, weightVertices[tempIndex], vertices[tempIndex]);
       }
@@ -166,7 +178,7 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
           }
       }
 
-      newWeight = ratio * (newWeight + firstCost) + now;
+      newWeight = ratio * (newWeight /*+ firstCost*/) + /*tempW;*/now;
       if (newWeight < cur->ShortestPath[tempIndex]){ // Check if we can do better
          cur->ShortestPath[tempIndex] = newWeight; // Update new distance
          cur->traces[tempIndex] = trace; //tempTrace;
@@ -179,11 +191,18 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
          }
 
          if(newWeight > 188.3 && newWeight < 188.4
-                 && cur->count < 20
+                 //&& cur->count < 20
                  && cur->id.compare("142") == 0){
              EV<<"sdfsdfsfsdfs"<<endl;
          }
-         cur->PQ.push(make_tuple(cur->ShortestPath[tempIndex], vertices[tempIndex] + "_" + cur->id, tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
+         std::string content = vertices[tempIndex] + "_" + cur->id;
+         std::string newTrace = trace + tempTrace;
+         cur->PQ.push(make_tuple(newWeight, content, tempIndex, newTrace));
+         /*cur->PQ.push(Quad(cur->ShortestPath[tempIndex],
+                 vertices[tempIndex] + "_" + cur->id,
+                 tempIndex, trace + tempTrace));*/
+         // Push vertex and weight onto Priority Queue
+         x = cur->PQ.size();
       } // Update distance
     }
   } // While Priority Queue is not empty
