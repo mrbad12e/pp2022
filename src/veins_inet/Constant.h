@@ -52,6 +52,7 @@ public:
     static constexpr const bool SHORTEST_PATH = false;
     static constexpr const bool STOP_AT_STATION = true;
     static constexpr const int PAUSING_TIME = 10;
+    static std::map<std::string, std::string> routeDict;
 };
 
 static char* mergeContent(long Id){
@@ -64,6 +65,16 @@ static char* mergeContent(long Id){
     strcpy(ret, cstr);
     strcat(ret, new_str);
     return ret;
+}
+
+static int getIndexInFlow(std::string idOfAGV, std::string routeId){
+    if(Constant::routeDict[routeId].find("$" + idOfAGV + "$") == std::string::npos){
+        std::string s = Constant::routeDict[routeId];
+        int n = std::count(s.begin(), s.end(), '$');
+        Constant::routeDict[routeId] = Constant::routeDict[routeId] + "$" + idOfAGV + "$";
+        return (n/2);
+    }
+    return -1;
 }
 
 static std::vector<std::string> split(const std::string& str, const std::string& delim)
