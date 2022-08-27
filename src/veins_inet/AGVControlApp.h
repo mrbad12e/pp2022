@@ -86,6 +86,7 @@ private:
     //static RouteDictionary routeDict;
     void getIndexInFlow(std::string idOfAGV, std::string routeId);
     static std::map<std::string, std::string> routeDict;
+    std::vector<std::string> passedEdges;
     //std::string station = "";
 };
 }
