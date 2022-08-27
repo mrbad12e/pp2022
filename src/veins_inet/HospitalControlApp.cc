@@ -23,11 +23,6 @@
 #include <algorithm>
 using namespace boost::algorithm;
 
-//#include "HashAPI.cpp"
-//#include "UnitTest.cpp"
-//#include "ReadFile.cpp"
-
-
 
 using namespace veins;
 
@@ -38,8 +33,6 @@ void HospitalControlApp::initialize(int stage)
     TraCIDemoRSU11p::initialize(stage);
     if(graphGenerator == NULL){
         graphGenerator = new Parser();
-        //graph = new Graph();
-        //graphGenerator->readFile();
     }
     if (stage == 0) {
         sendBeacon= new cMessage("send Beacon");
@@ -75,8 +68,6 @@ void HospitalControlApp::readCrossing(){
 
             if (i == 0) tmp.id = token;
             if (i == 1) tmp.name = token; //std::atof(token.c_str());
-            //if (i == 2) tmp.from = token;
-            //if (i == 3) tmp.to = token;
             line.erase(0, pos + 1);
 
         }
@@ -86,7 +77,6 @@ void HospitalControlApp::readCrossing(){
     }
 
     MyReadFile.close();
-    //std::string name = "";
     areas = (double *)malloc(this->djisktra->numIVertices*sizeof(double));
     for(int i = 0; i < this->djisktra->numIVertices; i++){
         areas[i] = 0;
@@ -94,8 +84,6 @@ void HospitalControlApp::readCrossing(){
     this->aroundIntersections.resize(this->djisktra->numIVertices);
     for(int i = 0; i < crossings.size(); i++){
         for(int j = 0; j < this->djisktra->numIVertices; j++){
-            //name = this->djisktra->vertices[j];
-            //if(crossings[i].id.compare(name) == 0){
             if(crossings[i].id.compare(this->djisktra->vertices[j]) == 0){
                 this->aroundIntersections[j].push_back(i);
                 areas[j] += crossings[i].rec->getArea();
@@ -220,20 +208,15 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                 EV<<e.what()<<endl;
             }
         }
-        //if(!Constant::SHORTEST_PATH)
         {
             std::string newRoute = readMessage(bc);
             if(newRoute.length() != 0){
                 try{
                     double t = simTime().dbl();
-                    if(checkCycle(newRoute)){
+                    /*if(checkCycle(newRoute)){
                         EV<<t<<endl;
-                    }
-                    if(newRoute.find("E114 E166") != std::string::npos
-                            //&& t > 1.85
-                    ){
-                        EV<<t<<endl;
-                    }
+                    }*/
+
                     sendToAGV(newRoute);
                 }
                 catch(std::exception& e1){
@@ -341,8 +324,6 @@ void HospitalControlApp::readLane(AGV *cur, std::string str) {
 
 std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     double t = simTime().dbl();
-    //if(Constant::SHORTEST_PATH)
-    //    return "";
     std::stringstream streamData(bc->getDemoData());
     std::string str = "";
     AGV *cur = NULL;
@@ -389,15 +370,6 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
         }
     }
     newRoute = reRoute(cur, originalRouteId);
-    //if(cur->id.compare("142") != std::string::npos)
-    {
-        if(newRoute.find("E114 E166") != std::string::npos
-               //&& t > 26.4
-        ){
-            EV<<cur->id<<" "<<t<<" "<<cur->now<<endl;
-           //EV<<t<<myId<<this->indexInRoute<<endl;
-        }
-    }
     return newRoute;
 }
 
@@ -417,10 +389,6 @@ bool HospitalControlApp::checkCycle(std::string route){
 
 std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double t*/){
     double t = simTime().dbl();
-    if(cur->now > 172 && cur->id.compare("142") == 0 && routeId.compare("route_2") == 0){
-        cur->count = 0;
-        EV<<"dsfsdfsfsdf"<<endl;
-    }
     if(this->djisktra->vertices[0][0] == cur->itinerary->laneId[0]){
         EV_TRACE<<cur->itinerary->prevEdge<<endl;
         if(!cur->passedStation ||
@@ -517,13 +485,10 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
 
                 lastPath = lastPath.substr(futureLane.length() + 1);
             }
-            //else{
-                newRoute = newRoute + " " + lastPath;
-                //lastStr = newRoute.substr(newRoute.length() - 5);
+            newRoute = newRoute + " " + lastPath;
         }
 
         newRoute = removeAntidromic(newRoute);
-        //lastStr = newRoute.substr(newRoute.length() - 5);
         newRoute = removeLoop(newRoute);
 
         std::string weights = "";
