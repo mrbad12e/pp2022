@@ -155,7 +155,7 @@ void Djisktra::getListEdges(std::string weightEdges){
 void Djisktra::createAndAddEdge(//std::vector<Quad> adjList[],
             int u, double weightEdge, double weightVertex, std::string v, int indexOfV){
     weightVertices[u] = weightVertex;
-    adjList[u].push_back(make_tuple(weightEdge, v, indexOfV, v));
+    adjList[u].push_back(make_tuple(weightEdge, weightEdge /*v*/, indexOfV, v));
     //adjList[u].push_back(Quad(weightEdge, v, indexOfV, v));
 } // createAndAddEdge
 
@@ -218,7 +218,7 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   //  if (i != source)
   //    ShortestPath[i] = 100000; // Initialize everything else to +infinity
 
-  PQ.push(make_tuple(0, vertices[source], source, "")); // Source has weight 0;
+  PQ.push(std::make_tuple(0, 0, /*vertices[source],*/ source, "")); // Source has weight 0;
   //PQ.push(Quad(0, vertices[source], source, ""));
 
   while (!PQ.empty()){
@@ -274,7 +274,8 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       if (newWeight < cur->ShortestPath[tempIndex]){ // Check if we can do better
          cur->ShortestPath[tempIndex] = newWeight; // Update new distance
          cur->traces[tempIndex] = trace; //tempTrace;
-         PQ.push(make_tuple(cur->ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
+         PQ.push(make_tuple(cur->ShortestPath[tempIndex], cur->ShortestPath[tempIndex]
+                        /*vertices[tempIndex]*/, tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
          //PQ.push(Quad(cur->ShortestPath[tempIndex], vertices[tempIndex], tempIndex, trace + tempTrace)); // Push vertex and weight onto Priority Queue
       } // Update distance
     }
