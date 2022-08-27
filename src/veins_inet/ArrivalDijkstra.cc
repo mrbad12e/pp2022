@@ -21,8 +21,6 @@ ArrivalDijkstra::ArrivalDijkstra() {
     getItineraries("itinerary.txt");
 }
 
-/*HarmfulnessDijkstra::~HarmfulnessDijkstra() {
-}*/
 std::string ArrivalDijkstra::getJSONStation(std::string station){
     //std::string strStation = "";
     std::map<std::string, Station*>::iterator it;
@@ -103,21 +101,10 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
 
   cur->init(numVertices);
   cur->ShortestPath[source] = ratio * firstCost + now;
-  //std::vector <bool> visitedVertex(numVertices, false);
 
-  /*for (int i = 0; i < numVertices; i++)
-    if (i != source)
-      ShortestPath[i] = 100000; // Initialize everything else to +infinity
-  */
   int x = cur->PQ.size();
 
   cur->PQ.push(std::make_tuple(cur->ShortestPath[source], 0, source, "")); // Source has weight cur->ShortestPath[source];
-  if(source == 26
-          && cur->ShortestPath[source] > 188.3
-          && cur->ShortestPath[source] < 188.4){
-      EV<<"ertterert"<<cur->id<<" "<<cur->now<<endl;
-  }
-  //cur->PQ.push(Quad(cur->ShortestPath[source], vertices[source] + "_" + cur->id, source, "")); // Source has weight cur->ShortestPath[source];
 
   while (!cur->PQ.empty()){
     x = cur->PQ.size();
@@ -129,18 +116,14 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
         EV<<"SDfsdfsERereer"<<endl;
     }
     source = std::get<2>(info); // get the vertex
-    //source = info.source;
     if(source == target){
-      //continue;
         while (!cur->PQ.empty())
             cur->PQ.pop();
         break;
     }
-    objective = //info.weight;//
-            std::get<0>(info); // current distance
+    objective = std::get<0>(info); // current distance
     weight = std::get<1>(info);
-    trace = //info.trace;//
-            std::get<3>(info);
+    trace = std::get<3>(info);
 
 
     if (cur->visitedVertex.at(source)) // Check for cycle
@@ -158,11 +141,7 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       }
 
       double newWeight = 0, newObjective = 0; //weight + tempW + 40*weightVertices[tempIndex];
-      /*if(trace.find("$E9$") != std::string::npos
-            && tempTrace.find("$-E9$") != std::string::npos
-              ){
-          EV<<"fdfsf";
-      }*/
+
       if(!isValidTrace(currLane, tempTrace)){
           continue;
       }
@@ -192,18 +171,9 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
              EV<<"ENULLLL"<<endl;
          }
 
-         /*if(newWeight > 188.3 && newWeight < 188.4
-                 //&& cur->count < 20
-                 && cur->id.compare("142") == 0){
-             EV<<"sdfsdfsfsdfs"<<endl;
-         }*/
          std::string content = vertices[tempIndex] + "_" + cur->id;
          std::string newTrace = trace + tempTrace;
          cur->PQ.push(make_tuple(newObjective, newWeight, /*content,*/ tempIndex, newTrace));
-         /*cur->PQ.push(Quad(cur->ShortestPath[tempIndex],
-                 vertices[tempIndex] + "_" + cur->id,
-                 tempIndex, trace + tempTrace));*/
-         // Push vertex and weight onto Priority Queue
          x = cur->PQ.size();
       } // Update distance
     }
