@@ -68,10 +68,24 @@ static char* mergeContent(long Id){
 }
 
 static int getIndexInFlow(std::string idOfAGV, std::string routeId){
+    if(Constant::routeDict[routeId].length() == 0){
+        Constant::routeDict[routeId] = "$" + idOfAGV + "$";
+        return 0;
+    }
     if(Constant::routeDict[routeId].find("$" + idOfAGV + "$") == std::string::npos){
         std::string s = Constant::routeDict[routeId];
         int n = std::count(s.begin(), s.end(), '$');
         Constant::routeDict[routeId] = Constant::routeDict[routeId] + "$" + idOfAGV + "$";
+        return (n/2);
+    }
+    else{
+        int index = Constant::routeDict[routeId].find("$" + idOfAGV + "$");
+        std::string s = Constant::routeDict[routeId].substr(0, index);
+        int n = std::count(s.begin(), s.end(), '$');
+        if(n >= 2)
+        {
+            EV<<"OK"<<endl;
+        }
         return (n/2);
     }
     return -1;
