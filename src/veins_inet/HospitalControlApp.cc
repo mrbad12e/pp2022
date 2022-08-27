@@ -348,6 +348,9 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
     std::string speed = v["speed"].as_string();
     std::string laneId = v["laneId"].as_string();
     std::string originalRouteId = v["originalRouteId"].as_string();
+    if(cur->indexOfRoute == -1){
+        cur->indexOfRoute = getIndexInFlow(cur->id, originalRouteId);
+    }
     double ratio = std::stod(v["ratio"].as_string());
     cur->ratio = ratio;
     double now = std::stod(v["now"].as_string());
