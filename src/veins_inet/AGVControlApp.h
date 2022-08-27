@@ -42,7 +42,7 @@ public:
     void initialize(int stage) override;
     void finish() override;
     cMessage* sendBeacon;
-
+    //static std::map<std::string, std::string> routeDict;
 protected:
     void onBSM(DemoSafetyMessage* bsm) override;
     void onWSM(BaseFrame1609_4* wsm) override;
@@ -84,8 +84,7 @@ private:
     void saveBeginningOfStuck(std::string junc);
     Dictionary stuckAtJunc;
     //static RouteDictionary routeDict;
-    void getIndexInFlow(std::string idOfAGV, std::string routeId);
-    static std::map<std::string, std::string> routeDict;
+    //void getIndexInFlow(std::string idOfAGV, std::string routeId);
     std::vector<std::string> passedEdges;
     //std::string station = "";
 };
