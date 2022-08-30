@@ -29,6 +29,7 @@ private:
     std::vector<std::string> emergencyVertices;
     std::vector<std::vector<Quad>> emergencyAdjList;
     std::vector<double> timeW_E_Vertices;
+    void checkActiveEdges(double firstCost, int source, AGV* cur, Quad* info, std::string currLane);
 };
 
 #endif /* VEINS_INET_DECISIONDIJKSTRA_H_ */
