@@ -104,7 +104,7 @@ void Djisktra::getListVertices(std::string iVertices, std::string bVertices) {
     numIVertices = 0;
     while (getline(file1, line)) {
         vertices.push_back(line);
-        weightVertices.push_back(0);
+        timeWeightVertices.push_back(0);
         //traces.push_back("");
     }
     file1.close();
@@ -130,7 +130,7 @@ void Djisktra::getListVertices(std::string iVertices, std::string bVertices) {
             }
         }
         vertices.push_back(line);
-        weightVertices.push_back(0);
+        timeWeightVertices.push_back(0);
         //traces.push_back("");
     }
     numVertices = vertices.size();
@@ -154,7 +154,7 @@ void Djisktra::getListEdges(std::string weightEdges){
 
 void Djisktra::createAndAddEdge(//std::vector<Quad> adjList[],
             int u, double weightEdge, double weightVertex, std::string v, int indexOfV){
-    weightVertices[u] = weightVertex;
+    timeWeightVertices[u] = weightVertex;
     adjList[u].push_back(make_tuple(weightEdge, weightEdge /*v*/, indexOfV, v));
     //adjList[u].push_back(Quad(weightEdge, v, indexOfV, v));
 } // createAndAddEdge
@@ -238,7 +238,7 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       tempTrace = /*(*it).trace;*/std::get<3>(*it);
       tempIndex = /*(*it).source; */std::get<2>(*it);
       if(!Constant::SHORTEST_PATH){
-          weightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, weightVertices[tempIndex], vertices[tempIndex]);
+          timeWeightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, timeWeightVertices[tempIndex], vertices[tempIndex]);
       }
 
       double newWeight = 0; //weight + tempW + 40*weightVertices[tempIndex];
@@ -251,7 +251,7 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       }
       newWeight = weight + tempW;
       if(!Constant::SHORTEST_PATH){
-          double weightSmoothing = weightVertices[tempIndex];
+          double weightSmoothing = timeWeightVertices[tempIndex];
           if(weightSmoothing < 0.1 && tempIndex < this->numIVertices){
               newWeight += 100*(this->expSmoothing->useCycicalData(newWeight, vertices[tempIndex], weightSmoothing));
           }
