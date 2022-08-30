@@ -58,7 +58,7 @@ void DecisionDijkstra::generateEmergencyVertices(){
     }
 }
 
-void HarmfulnessDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
+void DecisionDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
         int source, int target, std::string currLane, AGV* cur){
   Quad info; //(-1, "", -1, "");
   std::string trace;
@@ -89,9 +89,9 @@ void HarmfulnessDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
             cur->PQ.pop();
         break;
     }
-    objective = std::get<0>(info); // current distance
+    /*objective = std::get<0>(info); // current distance
     weight = std::get<1>(info);
-    trace = std::get<3>(info);
+    trace = std::get<3>(info);*/
 
 
     if (cur->visitedVertex.at(source)) // Check for cycle
@@ -99,52 +99,66 @@ void HarmfulnessDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
 
     cur->visitedVertex.at(source) = true; // Else, mark the vertex so that we won't have to visit it again
 
-    for (std::vector<Quad>::iterator it = adjList[source].begin(); it != adjList[source].end(); it++){
-      tempW = /*(*it).weight; */std::get<0>(*it);
-      //tempW = std::get<1>(*it);
-      tempTrace = /*(*it).trace; */std::get<3>(*it);
-      tempIndex = /*(*it).source; */ std::get<2>(*it);
-      if(!Constant::SHORTEST_PATH){
-          timeWeightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, timeWeightVertices[tempIndex], vertices[tempIndex]);
-      }
-
-      double newWeight = 0, newObjective = 0; //weight + tempW + 40*weightVertices[tempIndex];
-
-      if(!isValidTrace(currLane, tempTrace)){
-          continue;
-      }
-      if(isAntidromic(trace, tempTrace)){
-          continue;
-      }
-      newWeight = weight + tempW;
-      if(!Constant::SHORTEST_PATH){
-          double weightSmoothing = timeWeightVertices[tempIndex];
-          if(weightSmoothing < 0.1 && tempIndex < this->numIVertices){
-              newWeight += 100*(this->expSmoothing->useCycicalData(newWeight, vertices[tempIndex], weightSmoothing));
-          }
-          else{
-              newWeight += 100*weightSmoothing;
-          }
-      }
-      newWeight += firstCost;
-      //newObjective = (ratio * (newWeight) + now);
-      newObjective = this->getHarmfulness(cur, ratio * (newWeight) + now);
-      newObjective += objective/*tempW;*/ /*now*/;
-      if (newObjective < cur->ShortestPath[tempIndex]){ // Check if we can do better
-         cur->ShortestPath[tempIndex] = newObjective; // Update new distance
-         cur->traces[tempIndex] = trace; //tempTrace;
-         if(tempIndex == 26){
-             EV<<"DEEDDWF"<<endl;
-         }
-         if(tempTrace.length() == 0 && trace.length() == 0)
-         {
-             EV<<"ENULLLL"<<endl;
-         }
-
-         std::string content = vertices[tempIndex] + "_" + cur->id;
-         std::string newTrace = trace + tempTrace;
-         cur->PQ.push(make_tuple(newObjective, newWeight, /*content,*/ tempIndex, newTrace));
-      } // Update distance
-    }//End of for
+    this->checkActiveEdges(firstCost, source, cur, &info, currLane);
   } // While Priority Queue is not empty
 } // DijkstrasAlgorithm
+
+void DecisionDijkstra::checkActiveEdges(double firstCost, int source, AGV* cur, Quad* info, std::string currLane){
+    std::string trace;
+    double weight, objective;
+    double tempW;
+    int tempIndex;
+    double now = cur->now;
+    double ratio = cur->ratio;
+    std::string tempTrace;
+    objective = std::get<0>(*info); // current distance
+    weight = std::get<1>(*info);
+    trace = std::get<3>(*info);
+    for (std::vector<Quad>::iterator it = adjList[source].begin(); it != adjList[source].end(); it++){
+        tempW = /*(*it).weight; */std::get<0>(*it);
+        //tempW = std::get<1>(*it);
+        tempTrace = /*(*it).trace; */std::get<3>(*it);
+        tempIndex = /*(*it).source; */ std::get<2>(*it);
+        if(!Constant::SHORTEST_PATH){
+            timeWeightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, timeWeightVertices[tempIndex], vertices[tempIndex]);
+        }
+
+        double newWeight = 0, newObjective = 0; //weight + tempW + 40*weightVertices[tempIndex];
+
+        if(!isValidTrace(currLane, tempTrace)){
+            continue;
+        }
+        if(isAntidromic(trace, tempTrace)){
+            continue;
+        }
+        newWeight = weight + tempW;
+        if(!Constant::SHORTEST_PATH){
+            double weightSmoothing = timeWeightVertices[tempIndex];
+            if(weightSmoothing < 0.1 && tempIndex < this->numIVertices){
+                newWeight += 100*(this->expSmoothing->useCycicalData(newWeight, vertices[tempIndex], weightSmoothing));
+            }
+            else{
+                newWeight += 100*weightSmoothing;
+            }
+        }
+        newWeight += firstCost;
+        //newObjective = (ratio * (newWeight) + now);
+        newObjective = this->getHarmfulness(cur, ratio * (newWeight) + now);
+        newObjective += objective/*tempW;*/ /*now*/;
+        if (newObjective < cur->ShortestPath[tempIndex]){ // Check if we can do better
+            cur->ShortestPath[tempIndex] = newObjective; // Update new distance
+            cur->traces[tempIndex] = trace; //tempTrace;
+            if(tempIndex == 26){
+                EV<<"DEEDDWF"<<endl;
+            }
+            if(tempTrace.length() == 0 && trace.length() == 0)
+            {
+                EV<<"ENULLLL"<<endl;
+            }
+
+            std::string content = vertices[tempIndex] + "_" + cur->id;
+            std::string newTrace = trace + tempTrace;
+            cur->PQ.push(make_tuple(newObjective, newWeight, /*content,*/ tempIndex, newTrace));
+        } // Update distance
+    }//End of for
+}
