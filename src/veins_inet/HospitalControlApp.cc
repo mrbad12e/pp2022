@@ -241,7 +241,7 @@ void HospitalControlApp::predictDispearTime(){
         double density = sum/areas[i];
         double velocity = getAverageVelocityByDensity(density);
         double predict = Constant::LENGTH_CROSSING*sum*0.5/velocity;
-        if(this->djisktra->weightVertices[i] < predict
+        if(this->djisktra->timeWeightVertices[i] < predict
                 || this->djisktra->expSmoothing->raisedTime[i] < 0
         ){
             if(predict == predict){
@@ -310,7 +310,7 @@ void HospitalControlApp::readLane(AGV *cur, std::string str) {
         if(cur->itinerary->prevVertex != idVertex){
             if(cur->itinerary->prevVertex != -1){
                 this->djisktra->expSmoothing->exponentialSmooth(cur->itinerary->prevVertex,
-                        this->djisktra->weightVertices[cur->itinerary->prevVertex]);
+                        this->djisktra->timeWeightVertices[cur->itinerary->prevVertex]);
                 this->djisktra->expSmoothing->addWait(cur->itinerary->prevVertex, -localWait);
             }
             cur->itinerary->localWait = 0;
@@ -367,10 +367,10 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
         int currentIndex = cur->itinerary->prevVertex;
         this->djisktra->expSmoothing->addWait(currentIndex, 0.1);
         if(this->djisktra->expSmoothing->getWait(currentIndex)
-              > this->djisktra->weightVertices[currentIndex]
+              > this->djisktra->timeWeightVertices[currentIndex]
         ){
             this->djisktra->expSmoothing->exponentialSmooth(currentIndex,
-                                    this->djisktra->weightVertices[currentIndex]);
+                                    this->djisktra->timeWeightVertices[currentIndex]);
         }
     }
     newRoute = reRoute(cur, originalRouteId);
