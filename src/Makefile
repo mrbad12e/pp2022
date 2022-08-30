@@ -39,6 +39,7 @@ OBJS = \
     $O/veins_inet/Constant.o \
     $O/veins_inet/Crossing.o \
     $O/veins_inet/CustomRectangle.o \
+    $O/veins_inet/DecisionDijkstra.o \
     $O/veins_inet/Djisktra.o \
     $O/veins_inet/Graph.o \
     $O/veins_inet/HarmfulnessDijkstra.o \
