@@ -105,7 +105,7 @@ void DecisionDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
 
 void DecisionDijkstra::checkActiveEdges(double firstCost, int source, AGV* cur, Quad* info, std::string currLane){
     std::string trace;
-    double weight, objective;
+    double weight = 0, objective = 0;
     double tempW;
     int tempIndex;
     double now = cur->now;
@@ -116,7 +116,6 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, int source, AGV* cur, 
     trace = std::get<3>(*info);
     for (std::vector<Quad>::iterator it = adjList[source].begin(); it != adjList[source].end(); it++){
         tempW = /*(*it).weight; */std::get<0>(*it);
-        //tempW = std::get<1>(*it);
         tempTrace = /*(*it).trace; */std::get<3>(*it);
         tempIndex = /*(*it).source; */ std::get<2>(*it);
         if(!Constant::SHORTEST_PATH){
