@@ -38,7 +38,7 @@ void HospitalControlApp::initialize(int stage)
         sendBeacon= new cMessage("send Beacon");
         graph = new Graph();
         djisktra = new DecisionDijkstra();
-                //new HarmfulnessDijkstra();
+                    //new HarmfulnessDijkstra();
                     //new ArrivalDijkstra();
                    //new Djisktra();
         this->readCrossing();
