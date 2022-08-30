@@ -152,13 +152,6 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
         if (newObjective < cur->ShortestPath[tempIndex]){ // Check if we can do better
             cur->ShortestPath[tempIndex] = newObjective; // Update new distance
             cur->traces[tempIndex] = trace; //tempTrace;
-            if(tempIndex == 26){
-                EV<<"DEEDDWF"<<endl;
-            }
-            if(tempTrace.length() == 0 && trace.length() == 0)
-            {
-                EV<<"ENULLLL"<<endl;
-            }
 
             std::string content = vertices[tempIndex] + "_" + cur->id;
             std::string newTrace = trace + tempTrace;
