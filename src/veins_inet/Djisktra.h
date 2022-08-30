@@ -195,20 +195,21 @@ public:
     virtual void DijkstrasAlgorithm(//std::vector<Quad> adjList[],
             int source, int target, std::string currLane, AGV* cur);
     virtual void getItineraries(std::string itineraryFile);
-    std::vector<double> weightVertices;
+
     std::vector<std::tuple<std::string, int, int, int>> itineraries;
 
     int findI_Vertex(std::string name, bool recursive);
     std::string getRoute(std::string trace, std::string currentLane, int currentVertex, int nextVertex, int exitVertex);
     ExponentialSmoothing* expSmoothing;
     std::vector<std::string> vertices;
+    std::vector<std::vector<Quad>> adjList;
+    std::vector<double> timeWeightVertices;
     int findVertex(std::string name);
     std::string getFinalSegment(std::string trace);
     int numIVertices = 0;
     std::string getWeights(std::string route, AGV* cur);
     virtual std::string getJSONStation(std::string station);
     double timeForVeryNextVertex(std::string currLane, std::string veryNextVertex);
-    std::vector<std::vector<Quad>> adjList;
     int numVertices = 0; // 323 vertices (107 i-vertices and 341 b-vertices)
     bool isAntidromic(std::string direction, std::string otherDirection);
     bool isValidTrace(std::string currLane, std::string trace);
