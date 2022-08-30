@@ -137,7 +137,7 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       tempTrace = /*(*it).trace; */std::get<3>(*it);
       tempIndex = /*(*it).source; */ std::get<2>(*it);
       if(!Constant::SHORTEST_PATH){
-          weightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, weightVertices[tempIndex], vertices[tempIndex]);
+          timeWeightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, timeWeightVertices[tempIndex], vertices[tempIndex]);
       }
 
       double newWeight = 0, newObjective = 0; //weight + tempW + 40*weightVertices[tempIndex];
@@ -150,7 +150,7 @@ void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       }
       newWeight = weight + tempW;
       if(!Constant::SHORTEST_PATH){
-          double weightSmoothing = weightVertices[tempIndex];
+          double weightSmoothing = timeWeightVertices[tempIndex];
           if(weightSmoothing < 0.1 && tempIndex < this->numIVertices){
               newWeight += 100*(this->expSmoothing->useCycicalData(newWeight, vertices[tempIndex], weightSmoothing));
           }
