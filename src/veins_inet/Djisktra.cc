@@ -211,12 +211,8 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   int tempIndex;
   std::string tempTrace;
 
-  //ShortestPath[source] = 0; // Set source distance to zero
   cur->init(numVertices);
   cur->ShortestPath[source] = 0;
-  //for (int i = 0; i < numVertices; i++)
-  //  if (i != source)
-  //    ShortestPath[i] = 100000; // Initialize everything else to +infinity
 
   PQ.push(std::make_tuple(0, 0, /*vertices[source],*/ source, "")); // Source has weight 0;
   //PQ.push(Quad(0, vertices[source], source, ""));
@@ -240,20 +236,13 @@ void Djisktra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
     for (std::vector<Quad>::iterator it = adjList[source].begin(); it != adjList[source].end(); it++){
       tempW = /*(*it).weight; */std::get<0>(*it);
       tempTrace = /*(*it).trace;*/std::get<3>(*it);
-      /*if(tempTrace.compare(":J8") == 0){
-          EV<<"qqqqq"<<endl;
-      }*/
       tempIndex = /*(*it).source; */std::get<2>(*it);
       if(!Constant::SHORTEST_PATH){
           weightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, weightVertices[tempIndex], vertices[tempIndex]);
       }
 
       double newWeight = 0; //weight + tempW + 40*weightVertices[tempIndex];
-      /*if(trace.find("$E9$") != std::string::npos
-            && tempTrace.find("$-E9$") != std::string::npos
-              ){
-          EV<<"fdfsf";
-      }*/
+
       if(!isValidTrace(currLane, tempTrace)){
           continue;
       }
