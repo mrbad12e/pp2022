@@ -99,6 +99,9 @@ int Djisktra::findI_Vertex(std::string name, bool recursive){
     return -1;
 }
 void Djisktra::getListVertices(std::string iVertices, std::string bVertices) {
+    if(vertices.size() > 0){
+        return;
+    }
     std::ifstream file1(iVertices);
     std::string line;
     numIVertices = 0;
