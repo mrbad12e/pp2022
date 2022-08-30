@@ -24,6 +24,11 @@ public:
     void DijkstrasAlgorithm(int source, int target, std::string currLane, AGV* cur) override;
 private:
     double getHarmfulness(AGV* cur, double time);
+    void generateEmergencyEdges();
+    void generateEmergencyVertices();
+    std::vector<std::string> emergencyVertices;
+    std::vector<std::vector<Quad>> emergencyAdjList;
+    //std::vector<double> weightVertices;
 };
 
 #endif /* VEINS_INET_HARMFULNESSDIJKSTRA_H_ */
