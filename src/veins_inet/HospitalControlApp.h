@@ -29,7 +29,8 @@
 #include <vector>
 //#include "Djisktra.h"
 //#include "ArrivalDijkstra.h"
-#include "HarmfulnessDijkstra.h"
+//#include "HarmfulnessDijkstra.h"
+#include "DecisionDijkstra.h"
 using namespace omnetpp;
 
 namespace veins {
