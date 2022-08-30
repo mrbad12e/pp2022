@@ -113,12 +113,6 @@ public:
                 fromPedestrians[index] = 0;
             }
             return fromPedestrians[index];
-            //if(simTime().dbl() - lastGettingPedestrians > Constant::EXPIRED_TIME){
-            //    lastGettingPedestrians = simTime().dbl();
-            //    double area = 0; int numCrossings = 0;
-                //int count = checkCrossing(nameVertex, &numCrossings, &area);
-                //return this->getDispearTime(count, numCrossings, area);
-            //}
         }
         return predictW;
     }
