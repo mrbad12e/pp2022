@@ -66,27 +66,29 @@ void DecisionDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   double tempW;
   int tempIndex;
   double now = cur->now;
-  if(currLane.compare(cur->itinerary->laneId) != 0){
-      now = cur->ShortestPath[source];
+  this->cur = cur;
+  this->currLane = currLane;
+  if(this->currLane.compare(this->cur->itinerary->laneId) != 0){
+      now = this->cur->ShortestPath[source];
   }
-  double ratio = cur->ratio;
+  double ratio = this->cur->ratio;
   std::string tempTrace;
-  int index = findI_Vertex(currLane, false);
-  double firstCost = firstValue(currLane, vertices[index]);
+  int index = findI_Vertex(this->currLane, false);
+  double firstCost = firstValue(this->currLane, vertices[index]);
 
-  cur->init(numVertices);
-  cur->ShortestPath[source] = this->getHarmfulness(cur, ratio * firstCost + now);
+  this->cur->init(numVertices);
+  this->cur->ShortestPath[source] = this->getHarmfulness(this->cur, ratio * firstCost + now);
 
-  cur->PQ.push(std::make_tuple(cur->ShortestPath[source], 0, source, "")); // Source has weight cur->ShortestPath[source];
+  this->cur->PQ.push(std::make_tuple(this->cur->ShortestPath[source], 0, source, "")); // Source has weight cur->ShortestPath[source];
 
-  while (!cur->PQ.empty()){
-    info = cur->PQ.top(); // Use to get minimum weight
-    cur->PQ.pop(); // Pop before checking for cycles
-    cur->count = cur->count + 1;
+  while (!this->cur->PQ.empty()){
+    info = this->cur->PQ.top(); // Use to get minimum weight
+    this->cur->PQ.pop(); // Pop before checking for cycles
+    this->cur->count = cur->count + 1;
     source = std::get<2>(info); // get the vertex
     if(source == target){
-        while (!cur->PQ.empty())
-            cur->PQ.pop();
+        while (!this->cur->PQ.empty())
+            this->cur->PQ.pop();
         break;
     }
     /*objective = std::get<0>(info); // current distance
@@ -94,27 +96,30 @@ void DecisionDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
     trace = std::get<3>(info);*/
 
 
-    if (cur->visitedVertex.at(source)) // Check for cycle
+    if (this->cur->visitedVertex.at(source)) // Check for cycle
       continue; // Already accounted for it, move on
 
-    cur->visitedVertex.at(source) = true; // Else, mark the vertex so that we won't have to visit it again
-
-    this->checkActiveEdges(firstCost, source, cur, &info, currLane);
+    this->cur->visitedVertex.at(source) = true; // Else, mark the vertex so that we won't have to visit it again
+    bool activeEdges = true;
+    this->checkActiveEdges(firstCost, &info, activeEdges);
   } // While Priority Queue is not empty
 } // DijkstrasAlgorithm
 
-void DecisionDijkstra::checkActiveEdges(double firstCost, int source, AGV* cur, Quad* info, std::string currLane){
+void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activeEdges = false){
     std::string trace;
     double weight = 0, objective = 0;
     double tempW;
     int tempIndex;
+
     double now = cur->now;
     double ratio = cur->ratio;
     std::string tempTrace;
     objective = std::get<0>(*info); // current distance
     weight = std::get<1>(*info);
+    int source = std::get<2>(*info);
     trace = std::get<3>(*info);
-    for (std::vector<Quad>::iterator it = adjList[source].begin(); it != adjList[source].end(); it++){
+    std::vector<std::vector<Quad>> *list = activeEdge ? &adjList : &emergencyAdjList;
+    for (std::vector<Quad>::iterator it = (*list)[source].begin(); it != (*list)[source].end(); it++){
         tempW = /*(*it).weight; */std::get<0>(*it);
         tempTrace = /*(*it).trace; */std::get<3>(*it);
         tempIndex = /*(*it).source; */ std::get<2>(*it);
