@@ -182,7 +182,8 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
                            }
                        }
                        if(!found) i = 0;
-                       std::list<std::string> l(v.begin() + i, v.end());
+                       //std::list<std::string> l(v.begin() + i, v.end());
+                       parseLanes(i, v);
                        bool change = traciVehicle->changeVehicleRoute(l);
                        if(change){
                            expectedRoute = "";
@@ -326,7 +327,8 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                     if(!Constant::SHORTEST_PATH){
                         std::vector<std::string> v = split(newRoute, " ");
 
-                        std::list<std::string> l(v.begin(), v.end());
+                        //std::list<std::string> l(v.begin(), v.end());
+                        parseLanes(0, v);
                         if(l.size() == 0 || goAround(v)){
                             EV_TRACE<<"ERRR";
                         }
@@ -339,6 +341,7 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                             v.clear();
                             v.shrink_to_fit();
                             l.clear();
+                            emergencyLanes.clear();
                         }
                     }
                 }
@@ -359,6 +362,20 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
     }
     else{
 
+    }
+}
+
+void AGVControlApp::parseLanes(int start, std::vector<std::string> v){
+    l.clear();
+    emergencyLanes.clear();
+    for(int i = start; i < v.size(); i++){
+        if(v[i][0] == '^'){
+            l.push_back(v[i].substr(1));
+            emergencyLanes.push_back(v[i].substr(1));
+        }
+        else{
+            l.push_back(v[i]);
+        }
     }
 }
 
