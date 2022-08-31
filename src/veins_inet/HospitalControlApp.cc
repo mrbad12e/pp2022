@@ -504,7 +504,9 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         if(weights.length() > 2){
             weights = ", \"weights\" : " + weights;
         }
-
+        if(newRoute.find("E169") != std::string::npos){
+            EV<<"DADadasda"<<endl;
+        }
 
         newRoute = "{\"id\" : \"" + cur->id +
                 "\", \"newRoute\" : \"" + newRoute + "\"" + weights + "}";
