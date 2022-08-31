@@ -171,12 +171,15 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
                 newWeight += 100*weightSmoothing;
             }
         }
-        newWeight += firstCost;
-        //newObjective = (ratio * (newWeight) + now);
-        newObjective = this->getHarmfulnessArrival(cur, ratio * (newWeight) + now);
+
         if(!activeEdges){
-            //newObjective += this->getHarmfulnessEmergency(ratio * newWeight);
+            newObjective += this->getHarmfulnessEmergency(ratio * tempW);//tempW la trong so cua canh khan cap
         }
+
+        newWeight += firstCost;
+
+        newObjective = this->getHarmfulnessArrival(cur, ratio * (newWeight) + now);
+
         newObjective += objective/*tempW;*/ /*now*/;
         if (newObjective < cur->ShortestPath[tempIndex]){ // Check if we can do better
             cur->ShortestPath[tempIndex] = newObjective; // Update new distance
@@ -191,5 +194,5 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
     }//End of for
 }
 double DecisionDijkstra::getHarmfulnessEmergency(double time){
-    return 0.15*time;
+    return 0.01*time;
 }
