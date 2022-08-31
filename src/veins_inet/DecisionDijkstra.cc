@@ -222,5 +222,5 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
     }//End of for
 }
 double DecisionDijkstra::getHarmfulnessEmergency(double time){
-    return 0.1*time;
+    return 0.05*time;
 }
