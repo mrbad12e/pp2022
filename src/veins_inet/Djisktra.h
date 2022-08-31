@@ -117,6 +117,30 @@ public:
         return predictW;
     }
 
+    /*double getDampingAsEmergence(int index, double predictW, std::string nameVertex){
+        double timeOflastSmoothing = raisedTime[index];
+        bool checkPedestrians = timeOflastSmoothing < 0 && index < numIVertices;
+        if(!checkPedestrians){
+            if(simTime().dbl() - timeOflastSmoothing > Constant::EXPIRED_TIME){
+                if(waitTime[index] > 0){
+                    return exponentialSmooth(index, predictW);
+                }
+                else{
+                    waitTime[index] = 0;
+                    checkPedestrians = index < numIVertices;
+                }
+            }
+        }
+        if(checkPedestrians){
+            double x = fromPedestrians[index];
+            if(x != x){
+                fromPedestrians[index] = 0;
+            }
+            return fromPedestrians[index];
+        }
+        return predictW;
+    }*/
+
     void readCycicalData(){
         std::string line;
         std::ifstream MyReadFile("cyclicalData.txt");
