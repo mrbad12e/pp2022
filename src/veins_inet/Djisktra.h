@@ -230,7 +230,7 @@ public:
     double timeForVeryNextVertex(std::string currLane, std::string veryNextVertex);
     int numVertices = 0; // 323 vertices (107 i-vertices and 341 b-vertices)
     bool isAntidromic(std::string direction, std::string otherDirection);
-    bool isValidTrace(std::string currLane, std::string trace);
+    virtual bool isValidTrace(std::string currLane, std::string trace);
     std::vector<Pair> edges;
 
 
