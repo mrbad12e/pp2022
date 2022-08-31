@@ -86,6 +86,9 @@ private:
     //static RouteDictionary routeDict;
     //void getIndexInFlow(std::string idOfAGV, std::string routeId);
     std::vector<std::string> passedEdges;
+    std::vector<std::string> emergencyLanes;
+    void parseLanes(int start, std::vector<std::string> v);
+    std::list<std::string> l;
     //std::string station = "";
 };
 }
