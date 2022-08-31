@@ -137,6 +137,8 @@ static std::string getLane(std::vector<std::string> list, bool wantLast){
             if(list[i][0] != ':' &&
                     list[i].find("_") == std::string::npos
             ){
+                if(list[i][0] == '^')
+                    return list[i].substr(1);
                 return list[i];
             }
         }
@@ -146,6 +148,8 @@ static std::string getLane(std::vector<std::string> list, bool wantLast){
             if(list[i][0] != ':' &&
                     list[i].find("_") == std::string::npos
             ){
+                if(list[i][0] == '^')
+                    return list[i].substr(1);
                 return list[i];
             }
         }
