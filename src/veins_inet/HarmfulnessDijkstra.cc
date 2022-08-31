@@ -119,7 +119,7 @@ void HarmfulnessDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
              EV<<"ENULLLL"<<endl;
          }
 
-         std::string content = vertices[tempIndex] + "_" + cur->id;
+         //std::string content = vertices[tempIndex] + "_" + cur->id;
          std::string newTrace = trace + tempTrace;
          cur->PQ.push(make_tuple(newObjective, newWeight, /*content,*/ tempIndex, newTrace));
          x = cur->PQ.size();
