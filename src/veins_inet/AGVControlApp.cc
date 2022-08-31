@@ -188,6 +188,7 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
                        if(change){
                            expectedRoute = "";
                            v.clear();
+                           emergencyLanes.clear();
                        }
                    }catch(std::exception &e){
                        //const char* x= e.what();
@@ -335,13 +336,13 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                         bool change = traciVehicle->changeVehicleRoute(l);
                         if(!change){
                             expectedRoute = newRoute;
+                            emergencyLanes.clear();
                         }
                         else{
                             expectedRoute = "";
                             v.clear();
                             v.shrink_to_fit();
                             l.clear();
-                            emergencyLanes.clear();
                         }
                     }
                 }
