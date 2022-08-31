@@ -29,7 +29,7 @@ private:
     std::vector<std::string> emergencyVertices;
     std::vector<std::vector<Quad>> emergencyAdjList;
     std::vector<double> timeW_E_Vertices;
-    void checkActiveEdges(double firstCost, Quad* info, bool activeEdges = false);
+    void checkActiveEdges(double firstCost, Quad* info, bool activeEdges);
     std::string currLane;
     AGV* cur;
 };
