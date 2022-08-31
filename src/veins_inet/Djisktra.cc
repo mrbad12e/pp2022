@@ -69,6 +69,9 @@ int Djisktra::findVertex(std::string name){
 }
 
 int Djisktra::findI_Vertex(std::string name, bool recursive){
+    if(name[0] == '^'){
+        name = name.substr(1);
+    }
     std::string nameOfI_Vertex = "";
     for(int i = 0; i < edges.size(); i++){
         if(edges[i].first.find("$" + name + "$") != std::string::npos){
@@ -421,6 +424,9 @@ bool Djisktra::isValidTrace(std::string currLane, std::string trace){
 }
 
 double Djisktra::timeForVeryNextVertex(std::string currLane, std::string veryNextVertex){
+    if(currLane[0] == '^'){
+        currLane = currLane.substr(1);
+    }
     double result = 0;
     int count = 0;
     for(int i = 0; i < this->edges.size(); i++ ){
