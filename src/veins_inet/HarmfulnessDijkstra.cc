@@ -24,7 +24,7 @@ HarmfulnessDijkstra::~HarmfulnessDijkstra() {
     // TODO Auto-generated destructor stub
 }
 
-double HarmfulnessDijkstra::getHarmfulness(AGV* cur, double time){
+double HarmfulnessDijkstra::getHarmfulnessArrival(AGV* cur, double time){
     double result = allSs[cur->itinerary->station]->getHarmfulness(time, cur->indexOfRoute);
     return result;
 }
@@ -46,7 +46,7 @@ void HarmfulnessDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   double firstCost = firstValue(currLane, vertices[index]);
 
   cur->init(numVertices);
-  cur->ShortestPath[source] = this->getHarmfulness(cur, ratio * firstCost + now);
+  cur->ShortestPath[source] = this->getHarmfulnessArrival(cur, ratio * firstCost + now);
 
   int x = cur->PQ.size();
 
@@ -106,7 +106,7 @@ void HarmfulnessDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
       }
       newWeight += firstCost;
       //newObjective = (ratio * (newWeight) + now);
-      newObjective = this->getHarmfulness(cur, ratio * (newWeight) + now);
+      newObjective = this->getHarmfulnessArrival(cur, ratio * (newWeight) + now);
       newObjective += objective/*tempW;*/ /*now*/;
       if (newObjective < cur->ShortestPath[tempIndex]){ // Check if we can do better
          cur->ShortestPath[tempIndex] = newObjective; // Update new distance
