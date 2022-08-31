@@ -23,6 +23,7 @@ public:
     DecisionDijkstra();
     virtual ~DecisionDijkstra();
     void DijkstrasAlgorithm(int source, int target, std::string currLane, AGV* cur) override;
+    //void generateAdj() override;
 private:
     void generateEmergencyEdges();
     void generateEmergencyVertices();
