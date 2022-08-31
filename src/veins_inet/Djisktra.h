@@ -232,7 +232,7 @@ public:
     bool isAntidromic(std::string direction, std::string otherDirection);
     bool isValidTrace(std::string currLane, std::string trace);
     std::vector<Pair> edges;
-    virtual void generateAdj();
+
 
 private:
     //std::vector<std::string> traces;
@@ -240,11 +240,13 @@ private:
     void getListVertices(std::string iVertices, std::string bVertices);
     std::vector<std::pair<std::string, std::string>> supplyDisposal;
 
-    std::vector<int> nextIndexOfBVertices;
-    std::vector<std::string> nextNameOfBVertices;
+
     bool wasGeneratedAdj = false;
 
     void getSupplyAndDisposalLocation(std::string fileName);
+    virtual void generateAdj();
+    std::vector<int> nextIndexOfBVertices;
+    std::vector<std::string> nextNameOfBVertices;
 
     //std::string firstLanes = "$E0$E1$E226$E227$-E92$-E91$-E90$-E298$-E297$-E296$:J3$:J203$:J272$:J273$:J92$:J91$";
 
