@@ -166,6 +166,7 @@ public:
     double *ShortestPath;
     std::vector<std::string> traces;
     std::vector <bool> visitedVertex;
+    std::vector <bool> visitedEmergencyVertex;
     std::priority_queue<Quad, std::vector<Quad>, std::greater<Quad> > PQ; // Set up priority queue
     //std::priority_queue<Quad> PQ;
     void init(int numVertices, double initSource = DBL_MAX){
@@ -175,6 +176,7 @@ public:
                 ShortestPath[i] = initSource;
                 traces.push_back("");
                 visitedVertex.push_back(false);
+                visitedEmergencyVertex.push_back(false);
             }
             initialized = true;
             return;
@@ -184,6 +186,7 @@ public:
             ShortestPath[i] = initSource;
             traces[i].clear();
             visitedVertex[i] = false;
+            visitedEmergencyVertex[i] = false;
         }
     }
     bool isInitialized(){
