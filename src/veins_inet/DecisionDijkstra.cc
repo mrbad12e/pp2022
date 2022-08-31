@@ -30,30 +30,32 @@ void DecisionDijkstra::generateEmergencyEdges(){
     double tempW;
     int tempIndex;
     std::string tempTrace;
-    std::string newTempTrace = "";
 
-    this->emergencyAdjList.resize(this->adjList.size());
-    for(int i = 0; i < this->adjList.size(); i++){
+
+    this->emergencyAdjList.resize(this->numIVertices);
+    for(int i = 0; i < this->numIVertices; i++){
         for (std::vector<Quad>::iterator it = this->adjList[i].begin(); it != this->adjList[i].end(); it++){
-              tempW = std::get<0>(*it);
-              tempTrace = std::get<3>(*it);
-              std::vector<std::string> list = split(tempTrace, "$");
-              for(int i = 0; i < list.size() - 1; i++){
-                  if(list[i][0] != ':'){
-                      newTempTrace += "$_" + list[i];
-                  }
-                  else{
-                      newTempTrace += "$" + list[i];
-                  }
-              }
-              newTempTrace += "$";
-              tempIndex = std::get<2>(*it);
-              if(tempIndex >= this->numIVertices){
-                  //tempIndex -= numIVertices;
-                  //tempIndex /= 3;
-                  EV<<"Exceed!"<<endl;
-              }
-              this->emergencyAdjList[i].push_back(std::make_tuple(tempW, tempW, tempIndex, newTempTrace));
+            std::string newTempTrace = "";
+            tempW = std::get<0>(*it);
+            tempTrace = std::get<3>(*it);
+            std::vector<std::string> list = split(tempTrace, "$");
+            for(int i = 0; i < list.size() - 1; i++){
+                if(list[i][0] != ':'){
+                    newTempTrace += "$_" + list[i];
+                }
+                else{
+                    newTempTrace += "$" + list[i];
+                }
+            }
+            newTempTrace += "$";
+            tempIndex = std::get<2>(*it);
+            if(tempIndex >= this->numIVertices){
+                //tempIndex -= numIVertices;
+                tempIndex = std::get<2>(this->adjList[tempIndex][0]);
+                //tempIndex /= 3;
+                //EV<<"Exceed!"<<endl;
+            }
+            this->emergencyAdjList[i].push_back(std::make_tuple(tempW, tempW, tempIndex, newTempTrace));
         }
     }
 }
@@ -63,8 +65,8 @@ void DecisionDijkstra::generateEmergencyVertices(){
         this->emergencyVertices.push_back("_" + vertices[i]);
     }
 
-    this->timeW_E_Vertices.resize(numVertices);
-    for(int i = 0; i < this->numVertices; i++){
+    this->timeW_E_Vertices.resize(numIVertices);
+    for(int i = 0; i < this->numIVertices; i++){
         this->timeW_E_Vertices[i] = 0;
     }
 }
@@ -122,6 +124,10 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
     objective = std::get<0>(*info); // current distance
     weight = std::get<1>(*info);
     int source = std::get<2>(*info);
+    if(!activeEdges){
+        if(source > this->numIVertices)
+            source = std::get<2>(this->adjList[source][0]);
+    }
     if(activeEdges){
         if (this->cur->visitedVertex.at(source)) // Check for cycle
             return; // Already accounted for it, move on
