@@ -30,19 +30,30 @@ void DecisionDijkstra::generateEmergencyEdges(){
     double tempW;
     int tempIndex;
     std::string tempTrace;
+    std::string newTempTrace = "";
 
     this->emergencyAdjList.resize(this->adjList.size());
     for(int i = 0; i < this->adjList.size(); i++){
         for (std::vector<Quad>::iterator it = this->adjList[i].begin(); it != this->adjList[i].end(); it++){
               tempW = std::get<0>(*it);
               tempTrace = std::get<3>(*it);
+              std::vector<std::string> list = split(tempTrace, "$");
+              for(int i = 0; i < list.size() - 1; i++){
+                  if(list[i][0] != ':'){
+                      newTempTrace += "$_" + list[i];
+                  }
+                  else{
+                      newTempTrace += "$" + list[i];
+                  }
+              }
+              newTempTrace += "$";
               tempIndex = std::get<2>(*it);
               if(tempIndex >= this->numIVertices){
                   //tempIndex -= numIVertices;
                   //tempIndex /= 3;
                   EV<<"Exceed!"<<endl;
               }
-              this->emergencyAdjList[i].push_back(std::make_tuple(tempW, tempW, tempIndex, tempTrace));
+              this->emergencyAdjList[i].push_back(std::make_tuple(tempW, tempW, tempIndex, newTempTrace));
         }
     }
 }
@@ -95,6 +106,7 @@ void DecisionDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
 
     bool activeEdges = true;
     this->checkActiveEdges(firstCost, &info, activeEdges);
+    this->checkActiveEdges(firstCost, &info, false);
   } // While Priority Queue is not empty
 } // DijkstrasAlgorithm
 
@@ -163,13 +175,15 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
         //newObjective = (ratio * (newWeight) + now);
         newObjective = this->getHarmfulnessArrival(cur, ratio * (newWeight) + now);
         if(!activeEdges){
-            newObjective += this->getHarmfulnessEmergency(ratio * newWeight);
+            //newObjective += this->getHarmfulnessEmergency(ratio * newWeight);
         }
         newObjective += objective/*tempW;*/ /*now*/;
         if (newObjective < cur->ShortestPath[tempIndex]){ // Check if we can do better
             cur->ShortestPath[tempIndex] = newObjective; // Update new distance
             cur->traces[tempIndex] = trace; //tempTrace;
-
+            if(!activeEdges){
+                EV<<"OIIIPIPI"<<endl;
+            }
             //std::string content = vertices[tempIndex] + "_" + cur->id;
             std::string newTrace = trace + tempTrace;
             cur->PQ.push(make_tuple(newObjective, newWeight, /*content,*/ tempIndex, newTrace));
@@ -177,5 +191,5 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
     }//End of for
 }
 double DecisionDijkstra::getHarmfulnessEmergency(double time){
-    return 0.5*time;
+    return 0.15*time;
 }
