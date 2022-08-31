@@ -39,19 +39,25 @@ void DecisionDijkstra::generateEmergencyEdges(){
             tempW = std::get<0>(*it);
             tempTrace = std::get<3>(*it);
             std::vector<std::string> list = split(tempTrace, "$");
-            for(int i = 0; i < list.size() - 1; i++){
+            for(int i = 0; i < list.size(); i++){
                 if(list[i][0] != ':'){
-                    newTempTrace += "$_" + list[i];
+                    if(list[i].find("_:J") == std::string::npos){
+                        newTempTrace += "$^" + list[i];
+                    }
                 }
                 else{
                     newTempTrace += "$" + list[i];
                 }
             }
             newTempTrace += "$";
+            if(newTempTrace.find("$:J4$_E2$:J5$_E3$:J6$_E4$:J7$_E5$") != std::string::npos){
+                EV<<"SD&&&****"<<endl;
+            }
             tempIndex = std::get<2>(*it);
             if(tempIndex >= this->numIVertices){
                 //tempIndex -= numIVertices;
                 tempIndex = std::get<2>(this->adjList[tempIndex][0]);
+                newTempTrace += vertices[tempIndex] + "$";
                 //tempIndex /= 3;
                 //EV<<"Exceed!"<<endl;
             }
@@ -62,7 +68,7 @@ void DecisionDijkstra::generateEmergencyEdges(){
 
 void DecisionDijkstra::generateEmergencyVertices(){
     for(int i = 0; i < this->numIVertices; i++){
-        this->emergencyVertices.push_back("_" + vertices[i]);
+        this->emergencyVertices.push_back("^" + vertices[i]);
     }
 
     this->timeW_E_Vertices.resize(numIVertices);
@@ -112,6 +118,22 @@ void DecisionDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   } // While Priority Queue is not empty
 } // DijkstrasAlgorithm
 
+bool DecisionDijkstra::isValidTrace(std::string currLane, std::string trace){
+    std::string otherLane = "";
+    if(currLane[0] == '-'){
+        otherLane = currLane.substr(1);
+    }
+    else{
+        otherLane = "-" + currLane;
+    }
+    if(otherLane.length() > 0){
+        return ((trace.find("$" + otherLane + "$") == std::string::npos)
+                && (trace.find("$^" + otherLane + "$") == std::string::npos)
+                );
+    }
+    return true;
+}
+
 void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activeEdges){
     std::string trace;
     double weight = 0, objective = 0;
@@ -125,7 +147,7 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
     weight = std::get<1>(*info);
     int source = std::get<2>(*info);
     if(!activeEdges){
-        if(source > this->numIVertices)
+        if(source >= this->numIVertices)
             source = std::get<2>(this->adjList[source][0]);
     }
     if(activeEdges){
@@ -184,7 +206,7 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
 
         newWeight += firstCost;
 
-        newObjective = this->getHarmfulnessArrival(cur, ratio * (newWeight) + now);
+        newObjective += this->getHarmfulnessArrival(cur, ratio * (newWeight) + now);
 
         newObjective += objective/*tempW;*/ /*now*/;
         if (newObjective < cur->ShortestPath[tempIndex]){ // Check if we can do better
@@ -200,5 +222,5 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
     }//End of for
 }
 double DecisionDijkstra::getHarmfulnessEmergency(double time){
-    return 0.01*time;
+    return 0.1*time;
 }
