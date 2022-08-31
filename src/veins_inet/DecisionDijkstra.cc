@@ -77,7 +77,7 @@ void DecisionDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   double firstCost = firstValue(this->currLane, vertices[index]);
 
   this->cur->init(numVertices);
-  this->cur->ShortestPath[source] = this->getHarmfulness(this->cur, ratio * firstCost + now);
+  this->cur->ShortestPath[source] = this->getHarmfulnessArrival(this->cur, ratio * firstCost + now);
 
   this->cur->PQ.push(std::make_tuple(this->cur->ShortestPath[source], 0, source, "")); // Source has weight cur->ShortestPath[source];
 
@@ -105,7 +105,7 @@ void DecisionDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   } // While Priority Queue is not empty
 } // DijkstrasAlgorithm
 
-void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activeEdges = false){
+void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activeEdges){
     std::string trace;
     double weight = 0, objective = 0;
     double tempW;
@@ -118,13 +118,13 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
     weight = std::get<1>(*info);
     int source = std::get<2>(*info);
     trace = std::get<3>(*info);
-    std::vector<std::vector<Quad>> *list = activeEdge ? &adjList : &emergencyAdjList;
+    std::vector<std::vector<Quad>> *list = activeEdges ? &adjList : &emergencyAdjList;
     for (std::vector<Quad>::iterator it = (*list)[source].begin(); it != (*list)[source].end(); it++){
         tempW = /*(*it).weight; */std::get<0>(*it);
         tempTrace = /*(*it).trace; */std::get<3>(*it);
         tempIndex = /*(*it).source; */ std::get<2>(*it);
         if(!Constant::SHORTEST_PATH){
-            if(activeEdge){
+            if(activeEdges){
                 timeWeightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, timeWeightVertices[tempIndex], vertices[tempIndex]);
             }
             else{
@@ -142,8 +142,8 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
         }
         newWeight = weight + tempW;
         if(!Constant::SHORTEST_PATH){
-            double weightSmoothing = activeEdge ? timeWeightVertices[tempIndex] : timeW_E_Vertices[tempIndex];
-            if(weightSmoothing < 0.1 && tempIndex < this->numIVertices && activeEdge){
+            double weightSmoothing = activeEdges ? timeWeightVertices[tempIndex] : timeW_E_Vertices[tempIndex];
+            if(weightSmoothing < 0.1 && tempIndex < this->numIVertices && activeEdges){
                 newWeight += 100*(this->expSmoothing->useCycicalData(newWeight, vertices[tempIndex], weightSmoothing));
             }
             else{
@@ -152,7 +152,7 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
         }
         newWeight += firstCost;
         //newObjective = (ratio * (newWeight) + now);
-        newObjective = this->getHarmfulness(cur, ratio * (newWeight) + now);
+        newObjective = this->getHarmfulnessArrival(cur, ratio * (newWeight) + now);
         newObjective += objective/*tempW;*/ /*now*/;
         if (newObjective < cur->ShortestPath[tempIndex]){ // Check if we can do better
             cur->ShortestPath[tempIndex] = newObjective; // Update new distance
