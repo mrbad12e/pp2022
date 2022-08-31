@@ -124,7 +124,12 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
         tempTrace = /*(*it).trace; */std::get<3>(*it);
         tempIndex = /*(*it).source; */ std::get<2>(*it);
         if(!Constant::SHORTEST_PATH){
-            timeWeightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, timeWeightVertices[tempIndex], vertices[tempIndex]);
+            if(activeEdge){
+                timeWeightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, timeWeightVertices[tempIndex], vertices[tempIndex]);
+            }
+            else{
+                timeW_E_Vertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, timeW_E_Vertices[tempIndex], vertices[tempIndex]);
+            }
         }
 
         double newWeight = 0, newObjective = 0; //weight + tempW + 40*weightVertices[tempIndex];
@@ -137,8 +142,8 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
         }
         newWeight = weight + tempW;
         if(!Constant::SHORTEST_PATH){
-            double weightSmoothing = timeWeightVertices[tempIndex];
-            if(weightSmoothing < 0.1 && tempIndex < this->numIVertices){
+            double weightSmoothing = activeEdge ? timeWeightVertices[tempIndex] : timeW_E_Vertices[tempIndex];
+            if(weightSmoothing < 0.1 && tempIndex < this->numIVertices && activeEdge){
                 newWeight += 100*(this->expSmoothing->useCycicalData(newWeight, vertices[tempIndex], weightSmoothing));
             }
             else{
