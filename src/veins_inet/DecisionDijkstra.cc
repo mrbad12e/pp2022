@@ -91,15 +91,8 @@ void DecisionDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
             this->cur->PQ.pop();
         break;
     }
-    /*objective = std::get<0>(info); // current distance
-    weight = std::get<1>(info);
-    trace = std::get<3>(info);*/
 
 
-    if (this->cur->visitedVertex.at(source)) // Check for cycle
-      continue; // Already accounted for it, move on
-
-    this->cur->visitedVertex.at(source) = true; // Else, mark the vertex so that we won't have to visit it again
     bool activeEdges = true;
     this->checkActiveEdges(firstCost, &info, activeEdges);
   } // While Priority Queue is not empty
@@ -117,6 +110,22 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
     objective = std::get<0>(*info); // current distance
     weight = std::get<1>(*info);
     int source = std::get<2>(*info);
+    if(activeEdges){
+        if (this->cur->visitedVertex.at(source)) // Check for cycle
+            return; // Already accounted for it, move on
+    }
+    else{
+        if (this->cur->visitedEmergencyVertex.at(source)) // Check for cycle
+             return; // Already accounted for it, move on
+    }
+
+    if(activeEdges){
+        this->cur->visitedVertex.at(source) = true; // Else, mark the vertex so that we won't have to visit it again
+    }
+    else{
+        this->cur->visitedEmergencyVertex.at(source) = true;
+    }
+
     trace = std::get<3>(*info);
     std::vector<std::vector<Quad>> *list = activeEdges ? &adjList : &emergencyAdjList;
     for (std::vector<Quad>::iterator it = (*list)[source].begin(); it != (*list)[source].end(); it++){
@@ -153,14 +162,20 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
         newWeight += firstCost;
         //newObjective = (ratio * (newWeight) + now);
         newObjective = this->getHarmfulnessArrival(cur, ratio * (newWeight) + now);
+        if(!activeEdges){
+            newObjective += this->getHarmfulnessEmergency(ratio * newWeight);
+        }
         newObjective += objective/*tempW;*/ /*now*/;
         if (newObjective < cur->ShortestPath[tempIndex]){ // Check if we can do better
             cur->ShortestPath[tempIndex] = newObjective; // Update new distance
             cur->traces[tempIndex] = trace; //tempTrace;
 
-            std::string content = vertices[tempIndex] + "_" + cur->id;
+            //std::string content = vertices[tempIndex] + "_" + cur->id;
             std::string newTrace = trace + tempTrace;
             cur->PQ.push(make_tuple(newObjective, newWeight, /*content,*/ tempIndex, newTrace));
         } // Update distance
     }//End of for
+}
+double DecisionDijkstra::getHarmfulnessEmergency(double time){
+    return 0.5*time;
 }
