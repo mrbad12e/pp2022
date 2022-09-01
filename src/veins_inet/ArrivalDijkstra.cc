@@ -83,6 +83,10 @@ double ArrivalDijkstra::firstValue(std::string currLane, std::string veryNextVer
     return result;
 }
 
+std::string ArrivalDijkstra::getName(){
+    return "Objective: Arrival time";
+}
+
 void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
         int source, int target, std::string currLane, AGV* cur){
   Quad info; //(-1, "", -1, "");
