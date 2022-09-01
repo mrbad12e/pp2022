@@ -106,6 +106,10 @@ void DecisionDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
     this->cur->count = cur->count + 1;
     source = std::get<2>(info); // get the vertex
     if(source == target){
+        std::string last = std::get<3>(info);
+        if(cur->traces[target].compare(last) != 0){
+            cur->traces[target] = last;
+        }
         while (!this->cur->PQ.empty())
             this->cur->PQ.pop();
         break;
@@ -217,6 +221,9 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
             }
             //std::string content = vertices[tempIndex] + "_" + cur->id;
             std::string newTrace = trace + tempTrace;
+            if(tempIndex == 103){
+                EV<<"TRTRTRWR"<<endl;
+            }
             cur->PQ.push(make_tuple(newObjective, newWeight, /*content,*/ tempIndex, newTrace));
         } // Update distance
     }//End of for
