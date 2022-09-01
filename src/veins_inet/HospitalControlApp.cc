@@ -136,7 +136,14 @@ void HospitalControlApp::finish()
     double percentage = Constant::TOTAL_WAITING_TIME*10/Constant::TOTAL_TRAVELLING_TIME;
     EV<<"% of waiting time: "<<percentage<<endl;
     EV<<"Average Mean Absolute Percentage Error: "<<100*Constant::TOTAL_APE/Constant::TOTAL_AGV<<endl;
-    EV<<"Global harmfulness: "<<Constant::GLOBAL_HARMFULNESS<<endl;
+    if(Constant::SHORTEST_PATH){
+        EV<<"Shortest Path: "<<endl;
+    }
+    else{
+        EV<<"Our proposal - "<<this->djisktra->getName()<<":"<<endl;
+    }
+    EV<<"\t Global harmfulness: "<<Constant::GLOBAL_HARMFULNESS<<". ";
+    EV<<"Sooner: "<<Constant::GLOBAL_SONNER<<". Later "<<Constant::GLOBAL_LATER<<endl;
     // statistics recording goes here
 }
 
