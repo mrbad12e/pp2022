@@ -33,6 +33,10 @@ private:
     std::vector<double> timeW_E_Vertices;
     void checkActiveEdges(double firstCost, Quad* info, bool activeEdges);
     double getHarmfulnessEmergency(double time);
+    double getHarmfulnessAvailable(double time, std::string tempTrace);
+    void getBeneficialAndNeutral();
+    std::string beneficialLanes;
+    std::string neutralLanes;
     std::string currLane;
     AGV* cur;
 };
