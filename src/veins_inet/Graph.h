@@ -120,7 +120,9 @@ public:
                                 "\"amplitude\" : \"" + std::to_string(this->amplitude) + "\"}";
     }
 
-    double getHarmfulness(double reachedTime, int count){
+    double getHarmfulness(double reachedTime, int count, double *sooner, double *later){
+        *sooner = 0;
+        *later = 0;
         if(count < 0)
             return DBL_MAX;
         if(bestTime + count*period - amplitude <= reachedTime &&
@@ -129,13 +131,14 @@ public:
             return 0;
         }
         if(bestTime + count*period - amplitude > reachedTime){
-            double delta = bestTime + count*period - amplitude - reachedTime;
-            delta /= 60;
-            return (delta*0.1 + 4);
+            *sooner = bestTime + count*period - amplitude - reachedTime;
+            *sooner /= 60;
+            return ((*sooner)*0.1 + 4);
         }
         else{
-            double delta = reachedTime - (bestTime + count*period + amplitude);
-            delta /= 60;
+            *later = reachedTime - (bestTime + count*period + amplitude);
+            *later /= 60;
+            double delta = *later;
             return (delta*delta + 2*delta + 1);
         }
     }
