@@ -26,6 +26,10 @@ DecisionDijkstra::~DecisionDijkstra() {
     // TODO Auto-generated destructor stub
 }
 
+std::string DecisionDijkstra::getName(){
+    return "Objective: Decision Graph";
+}
+
 void DecisionDijkstra::getBeneficialAndNeutral(){
     std::ifstream file("beneficial.txt");
     std::string line;
