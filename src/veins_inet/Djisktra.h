@@ -213,6 +213,7 @@ public:
     virtual void DijkstrasAlgorithm(//std::vector<Quad> adjList[],
             int source, int target, std::string currLane, AGV* cur);
     virtual void getItineraries(std::string itineraryFile);
+    virtual std::string getName();
 
     std::vector<std::tuple<std::string, int, int, int>> itineraries;
 
