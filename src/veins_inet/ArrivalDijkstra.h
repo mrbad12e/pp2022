@@ -27,6 +27,7 @@ public:
     std::string getJSONStation(std::string station) override;
     double firstValue(std::string currLane, std::string veryNextVertex);
     void DijkstrasAlgorithm(int source, int target, std::string currLane, AGV* cur) override;
+    std::string getName() override;
     AllStations allSs;
 private:
 };
