@@ -17,7 +17,13 @@
 
 HarmfulnessDijkstra::HarmfulnessDijkstra() {
     // TODO Auto-generated constructor stub
+    double x = 3, y = 3;
+    this->s = &x;
+    this->l = &y;
+}
 
+std::string HarmfulnessDijkstra::getName(){
+    return "Objective: Harmfulness No Emergence";
 }
 
 HarmfulnessDijkstra::~HarmfulnessDijkstra() {
@@ -25,7 +31,7 @@ HarmfulnessDijkstra::~HarmfulnessDijkstra() {
 }
 
 double HarmfulnessDijkstra::getHarmfulnessArrival(AGV* cur, double time){
-    double result = allSs[cur->itinerary->station]->getHarmfulness(time, cur->indexOfRoute);
+    double result = allSs[cur->itinerary->station]->getHarmfulness(time, cur->indexOfRoute, this->s, this->l);
     return result;
 }
 
