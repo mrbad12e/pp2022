@@ -279,13 +279,15 @@ double DecisionDijkstra::getHarmfulnessAvailable(double time, std::string tempTr
                 ){
                     if(beneficialLanes.find("$" + temp + "$") == std::string::npos)
                         harmfulLanes++;
-                    else
+                    else{
                         beneficialOnes++;
+                    }
                 }
             }
         }
     }
     harmfulLanes -= beneficialOnes;
     if(totalLanes == 0) return 0;
-    return (harmfulLanes*time/totalLanes);
+    double ratio = harmfulLanes < 0 ? 0 : 1;
+    return (ratio*harmfulLanes*time/totalLanes);
 }
