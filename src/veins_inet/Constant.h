@@ -113,7 +113,10 @@ static std::string removeLoop(const std::string& str)
     int i = 0, j = 0; int found = 0;
     for(i = 0; i < tokens.size(); i++){
         for(j = i+1; j < tokens.size(); j++){
-            if(tokens[i].compare(tokens[j])== 0){
+            if(tokens[i].compare(tokens[j])== 0
+            || ("^" + tokens[i]).compare(tokens[j])== 0
+            || tokens[i].compare("^" + tokens[j])== 0
+            ){
                 found = 1;
                 break;
             }
@@ -197,9 +200,14 @@ static bool willReachExit(std::string route){
 }
 
 static bool goAround(std::vector<std::string> v){
+    std::string temp1, temp2;
     for(int i = 0; i < v.size(); i++){
+        temp1 = v[i];
+        if(temp1[0] == '^') temp1 = temp1.substr(1);
         for(int j = i + 1; j < v.size(); j++){
-            if(v[i].compare(v[j]) == 0){
+            temp2 = v[j];
+            if(temp2[0] == '^') temp2 = temp2.substr(1);
+            if(temp1.compare(temp2) == 0){
                 return true;
             }
         }
