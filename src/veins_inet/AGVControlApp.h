@@ -90,6 +90,8 @@ private:
     void parseLanes(int start, std::vector<std::string> v);
     std::list<std::string> l;
     bool checkEmergencySituation();
+    double sooner;
+    double later;
     //std::string station = "";
 };
 }
