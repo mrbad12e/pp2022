@@ -24,6 +24,7 @@ public:
     virtual ~DecisionDijkstra();
     void DijkstrasAlgorithm(int source, int target, std::string currLane, AGV* cur) override;
     bool isValidTrace(std::string currLane, std::string trace) override;
+    std::string getName() override;
     //void generateAdj() override;
 private:
     void generateEmergencyEdges();
