@@ -47,9 +47,11 @@ public:
     static double TOTAL_TRAVELLING_TIME;
     static double TOTAL_APE;
     static double GLOBAL_HARMFULNESS;
+    static double GLOBAL_SONNER;
+    static double GLOBAL_LATER;
     static int TOTAL_AGV;
 
-    static constexpr const bool SHORTEST_PATH = false;
+    static constexpr const bool SHORTEST_PATH = true;
     static constexpr const bool STOP_AT_STATION = true;
     static constexpr const int PAUSING_TIME = 10;
     static std::map<std::string, std::string> routeDict;
