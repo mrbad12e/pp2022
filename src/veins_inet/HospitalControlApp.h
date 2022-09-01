@@ -79,6 +79,7 @@ private:
     std::vector<std::vector<int>> aroundIntersections;
     bool checkCycle(std::string route);
     double* areas;
+    std::string excludeDuplication(std::string futureLane, std::string lastRoute);
 
 };
 }
