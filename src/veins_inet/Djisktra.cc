@@ -286,6 +286,12 @@ std::string Djisktra::getRoute(std::string trace, std::string currLane, int curr
           ){
         EV<<"DDDDDD"<<endl;
   }
+  if(currLane.length() > 0){
+      if(currLane[0] == '^'){
+          currLane = currLane.substr(1);
+      }
+  }
+
   std::string route = (currLane[0] == ':') ? "" : (currLane + " ");
   std::string temp = "";
   std::string strCurrVertex = this->vertices[currentVertex];
@@ -503,8 +509,16 @@ std::string Djisktra::getWeights(std::string route, AGV* cur
 std::string Djisktra::getFinalSegment(std::string trace){
     int index = trace.length() > 10 ? (trace.length() - 10) : 0;
     std::string lastTrace = trace.substr(index);
+    bool foundEmergence = false;
+    if(lastTrace.find("^") != std::string::npos){
+        EV<<"YYGVSV"<<endl;
+        //foundEmergence = true;
+    }
     for(int i = 0; i < this->supplyDisposal.size(); i++){
         if(lastTrace.find("_" + this->supplyDisposal[i].first + "$") != std::string::npos){
+            return (" " + this->supplyDisposal[i].second);
+        }
+        if(lastTrace.find("$" + this->supplyDisposal[i].first + "$") != std::string::npos){
             return (" " + this->supplyDisposal[i].second);
         }
     }
