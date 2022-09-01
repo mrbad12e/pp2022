@@ -54,6 +54,7 @@ void AGVControlApp::initialize(int stage)
         }
         this->indexInRoute = getIndexInFlow(std::to_string(myId), originalRoute);
         this->station->getStation(originalRoute);
+        traciVehicle->setSpeedMode(0x1f);
     }
 }
 
@@ -135,6 +136,15 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
                if(this->stuckAtJunc[laneID] +
                    Constant::PAUSING_TIME < simTime().dbl()){
                    this->runAfterStuck();
+               }
+               else{
+                   if(this->checkEmergencySituation()){
+                       traciVehicle->setSpeedMode(0);
+                       traciVehicle->setSpeed(Constant::MAX_SPEED + 2);
+                   }
+                   else{
+                       traciVehicle->setSpeedMode(0x1f);
+                   }
                }
            }
 
@@ -397,7 +407,24 @@ void AGVControlApp::runAfterStuck(){
             return;
         }
         if(traciVehicle->getSpeed() == 0){
-            traciVehicle->setSpeed(2);
+            if(this->checkEmergencySituation()){
+                traciVehicle->setSpeedMode(0);
+                traciVehicle->setSpeed(Constant::MAX_SPEED + 2);
+            }
+            else{
+                traciVehicle->setSpeedMode(0x1f);
+                traciVehicle->setSpeed(Constant::MAX_SPEED - 0.1);
+            }
         }
     }
+}
+
+bool AGVControlApp::checkEmergencySituation(){
+    std::string laneID = traciVehicle->getLaneId();
+    for(int i = 0; i < emergencyLanes.size(); i++){
+        if(laneID.find(emergencyLanes[i] + "_") != std::string::npos){
+            return true;
+        }
+    }
+    return false;
 }
