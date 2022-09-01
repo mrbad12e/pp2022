@@ -210,23 +210,24 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
                 EV<<e.what()<<endl;
             }
         }
-        {
-            std::string newRoute = readMessage(bc);
-            if(newRoute.length() != 0){
-                try{
-                    double t = simTime().dbl();
-                    /*if(checkCycle(newRoute)){
-                        EV<<t<<endl;
-                    }*/
 
-                    sendToAGV(newRoute);
-                }
-                catch(std::exception& e1){
-                    EV<<e1.what()<<endl;
+        double t = simTime().dbl();
+        std::string newRoute = readMessage(bc);
+        if(newRoute.length() != 0){
+            try{
+
+                if(checkCycle(newRoute)){
+                    EV<<t<<endl;
                 }
 
+                sendToAGV(newRoute);
             }
+            catch(std::exception& e1){
+                EV<<e1.what()<<endl;
+            }
+
         }
+
     }
 
 }
@@ -374,27 +375,21 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
                                     this->djisktra->timeWeightVertices[currentIndex]);
         }
     }
-    if(t > 225.5){
-        EV<<"RRERERR"<<endl;
-    }
     newRoute = reRoute(cur, originalRouteId);
-    if(newRoute.find("-E295") != std::string::npos){
-        EV<<"Wasting the lanes"<<endl;
-    }
-    if(newRoute.find("E203 ^-E202") != std::string::npos ||
-            newRoute.find("E203 -E202") != std::string::npos
-    ){
-        EV<<"KJHFDVBB"<<endl;
-    }
     return newRoute;
 }
 
 bool HospitalControlApp::checkCycle(std::string route){
     std::vector<std::string> v = split(route, " ");
     for(int i = 0; i < v.size(); i++){
-        for(int j = i + 1; j < v.size(); j++){
-            if(v[j].compare(v[i]) == 0){
-                return true;
+        if(v[i].length() > 2){
+            for(int j = i + 1; j < v.size(); j++){
+                if(v[j].compare(v[i]) == 0
+                || ("^" + v[j]).compare(v[i]) == 0
+                || (v[j]).compare("^" + v[i]) == 0
+                ){
+                    return true;
+                }
             }
         }
     }
@@ -478,7 +473,6 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst, cur->itinerary->laneId, cur);
 
         std::string newRoute = this->djisktra->getRoute(/*this->djisktra*/cur->traces[nextDst], cur->itinerary->laneId, idOfI_Vertex, nextDst, exit);
-
         if(nextDst != exit){
             std::string futureLane = ""; //this->djisktra->vertices[nextDst];
             trim_right(newRoute);
@@ -510,9 +504,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         if(weights.length() > 2){
             weights = ", \"weights\" : " + weights;
         }
-        if(newRoute.find("E169") != std::string::npos){
-            EV<<"DADadasda"<<endl;
-        }
+
 
         newRoute = "{\"id\" : \"" + cur->id +
                 "\", \"newRoute\" : \"" + newRoute + "\"" + weights + "}";
