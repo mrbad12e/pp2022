@@ -23,8 +23,10 @@ public:
     virtual ~HarmfulnessDijkstra();
     void DijkstrasAlgorithm(int source, int target, std::string currLane, AGV* cur) override;
     double getHarmfulnessArrival(AGV* cur, double time);
+    std::string getName() override;
 private:
-
+    double *s;
+    double *l;
     /*void generateEmergencyEdges();
     void generateEmergencyVertices();
     std::vector<std::string> emergencyVertices;
