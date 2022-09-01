@@ -56,6 +56,8 @@ void AGVControlApp::initialize(int stage)
         this->station->getStation(originalRoute);
         traciVehicle->setSpeedMode(0x1f);
     }
+    this->sooner = 0;
+    this->later = 0;
 }
 
 
@@ -69,6 +71,8 @@ void AGVControlApp::finish()
     Constant::TOTAL_TRAVELLING_TIME += this->travellingTime;
     Constant::TOTAL_WAITING_TIME += this->waitingIntervals;
     Constant::TOTAL_AGV++;
+    Constant::GLOBAL_SONNER += this->sooner;
+    Constant::GLOBAL_LATER += this->later;
     Constant::GLOBAL_HARMFULNESS += this->harmfulness;
     if(T != 0)
         Constant::TOTAL_APE += (APE/T);
@@ -276,7 +280,7 @@ void AGVControlApp::exponentialSmooth(std::string key, double realTime){
     if(key.compare(this->station->getName()) == 0){
         APE += abs(realTime - weight)/realTime;
         T++;
-        this->harmfulness = this->station->getHarmfulness(realTime, this->indexInRoute);
+        this->harmfulness = this->station->getHarmfulness(realTime, this->indexInRoute, &(this->sooner), &(this->later));
     }
     Qt = Constant::GAMMA * error - (1 - Constant::GAMMA) * Qt;
     Dt = Constant::GAMMA * abs(error)
