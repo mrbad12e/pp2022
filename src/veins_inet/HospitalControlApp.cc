@@ -374,7 +374,18 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
                                     this->djisktra->timeWeightVertices[currentIndex]);
         }
     }
+    if(t > 225.5){
+        EV<<"RRERERR"<<endl;
+    }
     newRoute = reRoute(cur, originalRouteId);
+    if(newRoute.find("-E295") != std::string::npos){
+        EV<<"Wasting the lanes"<<endl;
+    }
+    if(newRoute.find("E203 ^-E202") != std::string::npos ||
+            newRoute.find("E203 -E202") != std::string::npos
+    ){
+        EV<<"KJHFDVBB"<<endl;
+    }
     return newRoute;
 }
 
@@ -484,12 +495,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
 
             std::string lastPath =
                     this->djisktra->getRoute(/*this->djisktra*/cur->traces[exit], futureLane, nextDst, exit, exit);
-            if(lastPath.find(futureLane + " ") != std::string::npos
-                    && newRoute.find(" " + futureLane) != std::string::npos
-            ){
-
-                lastPath = lastPath.substr(futureLane.length() + 1);
-            }
+            lastPath = this->excludeDuplication(futureLane, lastPath);
             newRoute = newRoute + " " + lastPath;
         }
 
@@ -513,6 +519,31 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         return newRoute;
     }
     return "";
+}
+
+std::string HospitalControlApp::excludeDuplication(std::string futureLane, std::string lastRoute){
+    std::string lastPath = lastRoute;
+    //bool emergencyFutureLane = false;
+    bool emergencyLastPath = false;
+    if(futureLane[0] == '^'){
+        futureLane = futureLane.substr(1);
+        //emergencyFutureLane = true;
+    }
+    if(lastPath[0] == '^'){
+        lastPath = lastPath.substr(1);
+        emergencyLastPath = true;
+    }
+    if(lastPath.find(futureLane + " ") != std::string::npos
+            //&& newRoute.find(" " + futureLane) != std::string::npos
+    ){
+        if(!emergencyLastPath){
+            lastPath = lastPath.substr(futureLane.length() + 1);
+        }
+        else{
+            lastPath = lastPath.substr(futureLane.length() + 2);
+        }
+    }
+    return lastPath;
 }
 
 std::string HospitalControlApp::removeAntidromic(std::string input){
