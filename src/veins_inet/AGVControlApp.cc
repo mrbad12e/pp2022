@@ -187,8 +187,17 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
                        }
                        for(i = 0; i < v.size(); i++){
                            if(v[i].compare(current) == 0){
-                               found = true;
-                               break;
+                              found = true;
+                              break;
+                           }
+                           /*if(v[i][0] != '^'){
+
+                           }*/
+                           else{
+                               if(v[i].compare("^" + current) == 0){
+                                  found = true;
+                                  break;
+                               }
                            }
                        }
                        if(!found) i = 0;
@@ -198,7 +207,7 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
                        if(change){
                            expectedRoute = "";
                            v.clear();
-                           emergencyLanes.clear();
+                           //emergencyLanes.clear();
                        }
                    }catch(std::exception &e){
                        //const char* x= e.what();
