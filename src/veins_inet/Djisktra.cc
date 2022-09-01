@@ -360,6 +360,10 @@ void Djisktra::getItineraries(std::string itineraryFile){
 
 }
 
+std::string Djisktra::getName(){
+    return "Objective: Soonest time";
+}
+
 void Djisktra::getSupplyAndDisposalLocation(std::string fileName){
     std::ifstream file(fileName);
     std::string line;
