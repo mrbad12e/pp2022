@@ -19,12 +19,37 @@ DecisionDijkstra::DecisionDijkstra() {
     // TODO Auto-generated constructor stub
     this->generateEmergencyEdges();
     this->generateEmergencyVertices();
+    this->getBeneficialAndNeutral();
 }
 
 DecisionDijkstra::~DecisionDijkstra() {
     // TODO Auto-generated destructor stub
 }
 
+void DecisionDijkstra::getBeneficialAndNeutral(){
+    std::ifstream file("beneficial.txt");
+    std::string line;
+    std::string name, path;
+    beneficialLanes = "";
+    neutralLanes = "";
+
+    while (getline(file, line)) {
+        std::stringstream ss(line);
+        getline(ss, name);
+        beneficialLanes += "$" + name;
+    }
+    file.close();
+
+    std::ifstream file2("neutral.txt");
+    std::string line2;
+
+    while (getline(file2, line2)) {
+        std::stringstream ss(line2);
+        getline(ss, path);
+        neutralLanes += "$" + path;
+    }
+    file2.close();
+}
 
 void DecisionDijkstra::generateEmergencyEdges(){
     double tempW;
@@ -50,16 +75,11 @@ void DecisionDijkstra::generateEmergencyEdges(){
                 }
             }
             newTempTrace += "$";
-            if(newTempTrace.find("$:J4$_E2$:J5$_E3$:J6$_E4$:J7$_E5$") != std::string::npos){
-                EV<<"SD&&&****"<<endl;
-            }
+
             tempIndex = std::get<2>(*it);
             if(tempIndex >= this->numIVertices){
-                //tempIndex -= numIVertices;
                 tempIndex = std::get<2>(this->adjList[tempIndex][0]);
                 newTempTrace += vertices[tempIndex] + "$";
-                //tempIndex /= 3;
-                //EV<<"Exceed!"<<endl;
             }
             this->emergencyAdjList[i].push_back(std::make_tuple(tempW, tempW, tempIndex, newTempTrace));
         }
@@ -123,6 +143,9 @@ void DecisionDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
 } // DijkstrasAlgorithm
 
 bool DecisionDijkstra::isValidTrace(std::string currLane, std::string trace){
+    if(currLane[0] == '^'){
+        currLane = currLane.substr(1);
+    }
     std::string otherLane = "";
     if(currLane[0] == '-'){
         otherLane = currLane.substr(1);
@@ -208,6 +231,8 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
             newObjective += this->getHarmfulnessEmergency(ratio * tempW);//tempW la trong so cua canh khan cap
         }
 
+        newObjective += this->getHarmfulnessAvailable(ratio * tempW, tempTrace);
+
         newWeight += firstCost;
 
         newObjective += this->getHarmfulnessArrival(cur, ratio * (newWeight) + now);
@@ -230,4 +255,37 @@ void DecisionDijkstra::checkActiveEdges(double firstCost, Quad* info, bool activ
 }
 double DecisionDijkstra::getHarmfulnessEmergency(double time){
     return 0.05*time;
+}
+
+double DecisionDijkstra::getHarmfulnessAvailable(double time, std::string tempTrace){
+    std::vector<std::string> v = split(tempTrace, "$");
+    //std::vector<std::string> list;
+    int totalLanes = 0;
+    int harmfulLanes = 0, beneficialOnes = 0;
+    for(int i = 0; i < v.size(); i++){
+
+        if(v[i].find(":") == std::string::npos){
+            std::string temp = "";
+            for(int j = 0; j < v[i].length(); j++){
+                if(v[i][j] != '^' && v[i][j] != '-'){
+                    temp += v[i][j];
+                }
+            }
+            if(temp.length() > 0){
+                //list.push_back(temp);
+                totalLanes++;
+                if(neutralLanes.find("$" + temp + "$") == std::string::npos
+
+                ){
+                    if(beneficialLanes.find("$" + temp + "$") == std::string::npos)
+                        harmfulLanes++;
+                    else
+                        beneficialOnes++;
+                }
+            }
+        }
+    }
+    harmfulLanes -= beneficialOnes;
+    if(totalLanes == 0) return 0;
+    return (harmfulLanes*time/totalLanes);
 }
