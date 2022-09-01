@@ -328,7 +328,6 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
                     if(!Constant::SHORTEST_PATH){
                         std::vector<std::string> v = split(newRoute, " ");
 
-                        //std::list<std::string> l(v.begin(), v.end());
                         parseLanes(0, v);
                         if(l.size() == 0 || goAround(v)){
                             EV_TRACE<<"ERRR";
