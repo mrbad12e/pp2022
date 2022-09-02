@@ -31,6 +31,8 @@ HarmfulnessDijkstra::~HarmfulnessDijkstra() {
 }
 
 double HarmfulnessDijkstra::getHarmfulnessArrival(AGV* cur, double time){
+    if(cur->passedStation)
+        return 0;
     double result = allSs[cur->itinerary->station]->getHarmfulness(time, cur->indexOfRoute, this->s, this->l);
     return result;
 }
