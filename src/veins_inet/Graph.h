@@ -220,6 +220,8 @@ public:
     double now = 0;
     int indexOfRoute = -1;
     double *ShortestPath;
+    double MIN_LATENCY = DBL_MAX;
+    double MIN_EMERGENCY = DBL_MAX;
     std::vector<std::string> traces;
     std::vector <bool> visitedVertex;
     std::vector <bool> visitedEmergencyVertex;
@@ -238,6 +240,9 @@ public:
             initialized = true;
             return;
         }
+
+        MIN_LATENCY = DBL_MAX;
+        MIN_EMERGENCY = DBL_MAX;
 
         for(int i = 0; i < numVertices; i++){
             ShortestPath[i] = initSource;
