@@ -22,7 +22,7 @@ public:
     HarmfulnessDijkstra();
     virtual ~HarmfulnessDijkstra();
     void DijkstrasAlgorithm(int source, int target, std::string currLane, AGV* cur) override;
-    double getHarmfulnessArrival(AGV* cur, double time);
+    virtual double getHarmfulnessArrival(AGV* cur, double time);
     std::string getName() override;
 private:
     double *s;
