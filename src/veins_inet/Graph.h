@@ -32,6 +32,55 @@
 //typedef std::tuple<double, std::string, int, std::string> Quad;
 typedef std::tuple<double, double, int, std::string> Quad;
 
+static void extractTraceAndTime(std::string* trace, double* time){
+    int i = 0;
+    std::string tempTime = "";
+    bool foundSpace = false;
+    for(i = (*trace).length() - 1; i > 0; i--){
+        if(((*trace).at(i) >= '0' && (*trace).at(i) <= '9') || (*trace).at(i) == '.'){
+            tempTime = (*trace).at(i) + tempTime;
+        }
+        else{
+            foundSpace = (*trace).at(i) == ' ';
+            if(foundSpace){
+                break;
+            }
+        }
+    }
+    if(tempTime.length() > 0 && foundSpace){
+        (*trace) = (i > 0) ? (*trace).substr(i - 1) : "";
+        if(time != NULL){
+            (*time) = std::stod(tempTime);
+        }
+    }
+    else{
+        if(time != NULL)
+            *time = 0;
+    }
+}
+
+class Comparison{
+public:
+    bool operator()(Quad q1, Quad q2){
+        double x1 = std::get<0>(q1);
+        double x2 = std::get<0>(q2);
+        if(x1 < x2){
+            return true;
+        }
+        else if(x1 > x2){
+            return false;
+        }
+        else{
+            std::string trace1 = std::get<3>(q1);
+            std::string trace2 = std::get<3>(q2);
+            double t1 = 0, t2 = 0;
+            extractTraceAndTime(&trace1, &t1);
+            extractTraceAndTime(&trace2, &t2);
+            return t1 <= t2;
+        }
+    }
+};
+
 class ItineraryRecord {// Ban ghi hanh trinh cua xe
 public:
     std::string laneId, prevLane = "";
@@ -145,11 +194,12 @@ public:
     void setProtected(bool isNotChanged){
         this->isNotChanged = isNotChanged;
     }
-private:
-    std::string name;
     double bestTime = -1;
     double amplitude = -1;
     double period = -1;
+private:
+    std::string name;
+
     std::string dest = "";
     bool isNotChanged = false;
     //std::string allRequests = "";
@@ -171,6 +221,7 @@ public:
     std::vector <bool> visitedVertex;
     std::vector <bool> visitedEmergencyVertex;
     std::priority_queue<Quad, std::vector<Quad>, std::greater<Quad> > PQ; // Set up priority queue
+    std::priority_queue<Quad, std::vector<Quad>, Comparison > PQ1; // Set up priority queue
     //std::priority_queue<Quad> PQ;
     void init(int numVertices, double initSource = DBL_MAX){
         if(!initialized){
