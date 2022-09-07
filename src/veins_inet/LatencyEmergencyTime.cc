@@ -63,6 +63,8 @@ void LatencyEmergencyTime::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   }
   double ratio = this->cur->ratio;
   std::string tempTrace;
+  double totalEmergency = 0;
+  double totalCost = 0;
   int index = findI_Vertex(this->currLane, false);
   double firstCost = firstValue(this->currLane, vertices[index]);
 
@@ -78,13 +80,24 @@ void LatencyEmergencyTime::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
     source = std::get<2>(info); // get the vertex
     if(source == target){
         std::string last = std::get<3>(info);
-        extractTraceAndTime(&last, NULL);
-        if(cur->traces[target].compare(last) != 0){
+        extractTraceAndTime(&last, &totalEmergency);
+        totalCost = std::get<0>(info);
+        bool accept = false;
+        if(cur->MIN_LATENCY > 100000){
+            cur->MIN_LATENCY = Constant::THRESHOLD;
+            accept = true;
+            cur->MIN_EMERGENCY = totalEmergency;
+        }
+        else if(cur->MIN_EMERGENCY > totalEmergency && totalCost < Constant::THRESHOLD){
+            accept = true;
+            cur->MIN_EMERGENCY = totalEmergency;
+        }
+        if(accept && cur->traces[target].compare(last) != 0){
             cur->traces[target] = last;
         }
-        while (!this->cur->PQ.empty())
+        /*while (!this->cur->PQ.empty())
             this->cur->PQ.pop();
-        break;
+        break;*/
     }
     else{
         bool activeEdges = true;
@@ -181,7 +194,7 @@ void LatencyEmergencyTime::checkActiveEdges(double firstCost, Quad* info, bool a
         }
         else{
             tempW = ratio*tempW + timeForEmergencyMode;
-            newObjective += tempW*0.25;
+            //newObjective += tempW*0.25;
         }
 
 
