@@ -181,7 +181,7 @@ void LatencyEmergencyTime::checkActiveEdges(double firstCost, Quad* info, bool a
         }
         else{
             tempW = ratio*tempW + timeForEmergencyMode;
-            //newObjective += tempW*0.25;
+            newObjective += tempW*0.25;
         }
 
 
