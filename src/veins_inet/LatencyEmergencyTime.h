@@ -15,12 +15,16 @@
 
 #ifndef VEINS_INET_LATENCYEMERGENCYTIME_H_
 #define VEINS_INET_LATENCYEMERGENCYTIME_H_
-#include "HarmfulnessDijkstra.h"
+#include "DecisionDijkstra.h"
 
-class LatencyEmergencyTime : HarmfulnessDijkstra{
+class LatencyEmergencyTime : public DecisionDijkstra{
 public:
     LatencyEmergencyTime();
     virtual ~LatencyEmergencyTime();
+    double getHarmfulnessArrival(AGV* cur, double time) override;
+    std::string getName() override;
+    void DijkstrasAlgorithm(int source, int target, std::string currLane, AGV* cur) override;
+    void checkActiveEdges(double firstCost, Quad* info, bool activeEdges) override;
 };
 
 #endif /* VEINS_INET_LATENCYEMERGENCYTIME_H_ */
