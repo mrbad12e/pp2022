@@ -69,6 +69,7 @@ static char* mergeContent(long Id){
     return ret;
 }
 
+
 static int getIndexInFlow(std::string idOfAGV, std::string routeId){
     if(Constant::routeDict[routeId].length() == 0){
         Constant::routeDict[routeId] = "$" + idOfAGV + "$";
