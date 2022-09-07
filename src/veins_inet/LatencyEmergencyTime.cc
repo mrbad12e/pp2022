@@ -69,11 +69,11 @@ void LatencyEmergencyTime::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   this->cur->init(numVertices);
   this->cur->ShortestPath[source] = this->getHarmfulnessArrival(this->cur, ratio * firstCost + now);
 
-  this->cur->PQ1.push(std::make_tuple(this->cur->ShortestPath[source], 0, source, " 0")); // Source has weight cur->ShortestPath[source];
+  this->cur->PQ.push(std::make_tuple(this->cur->ShortestPath[source], 0, source, " 0")); // Source has weight cur->ShortestPath[source];
 
-  while (!this->cur->PQ1.empty()){
-    info = this->cur->PQ1.top(); // Use to get minimum weight
-    this->cur->PQ1.pop(); // Pop before checking for cycles
+  while (!this->cur->PQ.empty()){
+    info = this->cur->PQ.top(); // Use to get minimum weight
+    this->cur->PQ.pop(); // Pop before checking for cycles
     this->cur->count = cur->count + 1;
     source = std::get<2>(info); // get the vertex
     if(source == target){
@@ -82,15 +82,15 @@ void LatencyEmergencyTime::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
         if(cur->traces[target].compare(last) != 0){
             cur->traces[target] = last;
         }
-        while (!this->cur->PQ1.empty())
-            this->cur->PQ1.pop();
+        while (!this->cur->PQ.empty())
+            this->cur->PQ.pop();
         break;
     }
-
-
-    bool activeEdges = true;
-    this->checkActiveEdges(firstCost, &info, activeEdges);
-    this->checkActiveEdges(firstCost, &info, false);
+    else{
+        bool activeEdges = true;
+        this->checkActiveEdges(firstCost, &info, activeEdges);
+        this->checkActiveEdges(firstCost, &info, false);
+    }
   } // While Priority Queue is not empty
 } // DijkstrasAlgorithm
 
@@ -134,7 +134,6 @@ void LatencyEmergencyTime::checkActiveEdges(double firstCost, Quad* info, bool a
         tempW = /*(*it).weight; */std::get<0>(*it);
         tempTrace = /*(*it).trace; */std::get<3>(*it);
         double tempEmergencyTime = 0;
-        extractTraceAndTime(&tempTrace, &tempEmergencyTime);
         tempIndex = /*(*it).source; */ std::get<2>(*it);
         if(!Constant::SHORTEST_PATH){
             if(activeEdges){
@@ -175,18 +174,23 @@ void LatencyEmergencyTime::checkActiveEdges(double firstCost, Quad* info, bool a
         newObjective += this->getHarmfulnessArrival(cur, ratio * (newWeight) + now);
 
         newObjective += objective/*tempW;*/ /*now*/;
+
+
+        if(activeEdges){
+            tempW = timeForEmergencyMode;
+        }
+        else{
+            tempW = ratio*tempW + timeForEmergencyMode;
+            //newObjective += tempW*0.25;
+        }
+
+
         if (newObjective < cur->ShortestPath[tempIndex]){ // Check if we can do better
             cur->ShortestPath[tempIndex] = newObjective; // Update new distance
             cur->traces[tempIndex] = trace; //tempTrace;
-            if(activeEdges){
-                tempW = timeForEmergencyMode;
-            }
-            else{
-                tempW = ratio*tempW + timeForEmergencyMode;
-            }
             //std::string content = vertices[tempIndex] + "_" + cur->id;
             std::string newTrace = trace + tempTrace + " " + std::to_string(tempW);
-            cur->PQ1.push(make_tuple(newObjective, newWeight, /*content,*/ tempIndex, newTrace));
+            cur->PQ.push(make_tuple(newObjective, newWeight, /*content,*/ tempIndex, newTrace));
         } // Update distance
     }//End of for
 }
