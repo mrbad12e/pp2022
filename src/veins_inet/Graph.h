@@ -48,7 +48,7 @@ static void extractTraceAndTime(std::string* trace, double* time){
         }
     }
     if(tempTime.length() > 0 && foundSpace){
-        (*trace) = (i > 0) ? (*trace).substr(i - 1) : "";
+        (*trace) = (i > 0) ? (*trace).substr(0, i - 1) : "";
         if(time != NULL){
             (*time) = std::stod(tempTime);
         }
