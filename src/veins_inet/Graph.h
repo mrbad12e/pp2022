@@ -47,6 +47,9 @@ static void extractTraceAndTime(std::string* trace, double* time){
             }
         }
     }
+    if(i == 0 && !foundSpace){
+        foundSpace = (*trace).at(0) == ' ';
+    }
     if(tempTime.length() > 0 && foundSpace){
         (*trace) = (i > 0) ? (*trace).substr(0, i - 1) : "";
         if(time != NULL){
