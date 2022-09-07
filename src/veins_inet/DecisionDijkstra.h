@@ -25,21 +25,23 @@ public:
     void DijkstrasAlgorithm(int source, int target, std::string currLane, AGV* cur) override;
     bool isValidTrace(std::string currLane, std::string trace) override;
     std::string getName() override;
+    virtual void checkActiveEdges(double firstCost, Quad* info, bool activeEdges);
     //void generateAdj() override;
+    AGV* cur;
+    std::string currLane;
+    std::vector<std::vector<Quad>> emergencyAdjList;
+    std::vector<double> timeW_E_Vertices;
 private:
     void generateEmergencyEdges();
     void generateEmergencyVertices();
     std::vector<std::string> emergencyVertices;
-    std::vector<std::vector<Quad>> emergencyAdjList;
-    std::vector<double> timeW_E_Vertices;
-    void checkActiveEdges(double firstCost, Quad* info, bool activeEdges);
     double getHarmfulnessEmergency(double time);
     double getHarmfulnessAvailable(double time, std::string tempTrace);
     void getBeneficialAndNeutral();
     std::string beneficialLanes;
     std::string neutralLanes;
-    std::string currLane;
-    AGV* cur;
+
+
 };
 
 #endif /* VEINS_INET_DECISIONDIJKSTRA_H_ */
