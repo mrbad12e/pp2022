@@ -37,7 +37,8 @@ void HospitalControlApp::initialize(int stage)
     if (stage == 0) {
         sendBeacon= new cMessage("send Beacon");
         graph = new Graph();
-        djisktra = new DecisionDijkstra();
+        djisktra = new LatencyEmergencyTime();
+                //new DecisionDijkstra();
                     //new HarmfulnessDijkstra();
                     //new ArrivalDijkstra();
                    //new Djisktra();
