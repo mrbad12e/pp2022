@@ -61,7 +61,7 @@ void LatencyEmergencyTime::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   this->cur = cur;
   this->currLane = currLane;
   if(this->currLane.compare(this->cur->itinerary->laneId) != 0){
-      now = this->cur->ShortestPath[source];
+      now = this->cur->expectedTimeAtStation; //this->cur->ShortestPath[source];
   }
   double ratio = this->cur->ratio;
   std::string tempTrace;
@@ -92,7 +92,8 @@ void LatencyEmergencyTime::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
             cur->MIN_EMERGENCY = totalEmergency;
         }
         else*/
-        if(target != this->cur->itinerary->exit){
+        if(target != this->cur->itinerary->exit || this->cur->itinerary->exit == this->cur->itinerary->indexStation){
+            cur->expectedTimeAtStation = ratio * std::get<1>(info) + now;
             if(cur->MIN_EMERGENCY > totalEmergency && totalCost < Constant::THRESHOLD){
                 accept = true;
                 cur->MIN_EMERGENCY = totalEmergency;
@@ -103,6 +104,9 @@ void LatencyEmergencyTime::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
             }
         }
         else{
+            if(cur->traces[target].compare(last) != 0){
+                cur->traces[target] = last;
+            }
             while (!this->cur->PQ.empty())
                 this->cur->PQ.pop();
             break;
