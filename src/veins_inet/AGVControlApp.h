@@ -27,6 +27,7 @@
 #include <map>
 #include <string>
 #include "Graph.h"
+#include "StateOfAGV.h"
 
 using namespace omnetpp;
 
@@ -92,7 +93,7 @@ private:
     bool checkEmergencySituation();
     double sooner;
     double later;
-    //std::string station = "";
+    StateOfAGV* state;
 };
 }
 #endif /* VEINS_INET_AGVCONTROLAPP_H_ */
