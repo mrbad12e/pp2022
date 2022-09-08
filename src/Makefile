@@ -49,6 +49,7 @@ OBJS = \
     $O/veins_inet/LatencyEmergencyTime.o \
     $O/veins_inet/RouteDirection.o \
     $O/veins_inet/RSUControlApp.o \
+    $O/veins_inet/StateOfAGV.o \
     $O/veins_inet/TraCITestApp.o \
     $O/veins_inet/TraCITrafficLightApp.o \
     $O/veins_inet/TraCITrafficLightTestLogic.o \
