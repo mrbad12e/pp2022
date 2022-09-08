@@ -55,6 +55,7 @@ void AGVControlApp::initialize(int stage)
         this->indexInRoute = getIndexInFlow(std::to_string(myId), originalRoute);
         this->station->getStation(originalRoute);
         traciVehicle->setSpeedMode(0x1f);
+        this->state = new StateOfAGV();
     }
     this->sooner = 0;
     this->later = 0;
@@ -74,6 +75,7 @@ void AGVControlApp::finish()
     Constant::GLOBAL_SONNER += this->sooner;
     Constant::GLOBAL_LATER += this->later;
     Constant::GLOBAL_HARMFULNESS += this->harmfulness;
+    Constant::EMERGENCY_TIME += this->state->totalEmergencyTime();
     if(T != 0)
         Constant::TOTAL_APE += (APE/T);
     TraCIDemo11p::finish();
@@ -143,10 +145,13 @@ void AGVControlApp::handleSelfMsg(cMessage* msg)
                }
                else{
                    if(this->checkEmergencySituation()){
+                       this->state->startEmergencyMode();
                        traciVehicle->setSpeedMode(0);
                        traciVehicle->setSpeed(Constant::MAX_SPEED + 2);
+
                    }
                    else{
+                       this->state->stopEmergencyMode();
                        traciVehicle->setSpeedMode(0x1f);
                    }
                }
@@ -421,10 +426,12 @@ void AGVControlApp::runAfterStuck(){
         }
         if(traciVehicle->getSpeed() == 0){
             if(this->checkEmergencySituation()){
+                this->state->startEmergencyMode();
                 traciVehicle->setSpeedMode(0);
                 traciVehicle->setSpeed(Constant::MAX_SPEED + 2);
             }
             else{
+                this->state->stopEmergencyMode();
                 traciVehicle->setSpeedMode(0x1f);
                 traciVehicle->setSpeed(Constant::MAX_SPEED - 0.1);
             }
