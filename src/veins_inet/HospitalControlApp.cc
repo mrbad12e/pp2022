@@ -438,6 +438,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
                     cur->itinerary->station = this->djisktra->vertices[station];
                 }
                 exit = std::get<3>(this->djisktra->itineraries[i]);
+                cur->itinerary->exit = exit;
                 break;
             }
         }
@@ -509,6 +510,10 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
 
         if(newRoute.length() == 0)
             return "";
+        std::vector<std::string> list = split(newRoute, " ");
+        if(list.size() <= 2){
+            //return "";
+        }
         if(weights.length() > 2){
             weights = ", \"weights\" : " + weights;
         }
