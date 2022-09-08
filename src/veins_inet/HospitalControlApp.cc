@@ -220,13 +220,19 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
         }
 
         double t = simTime().dbl();
+        if(t > 4.2){
+            EV<<"TRRTRE"<<endl;
+        }
         std::string newRoute = readMessage(bc);
         if(newRoute.length() != 0){
             try{
 
-                if(checkCycle(newRoute)){
+                if(checkCycle(newRoute)
+                || newRoute.find("-E401 -E409") != std::string::npos
+                ){
                     EV<<t<<endl;
                 }
+
 
                 sendToAGV(newRoute);
             }
@@ -434,8 +440,10 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
             if(routeId.compare(std::get<0>(this->djisktra->itineraries[i])) == 0){
                 src = std::get<1>(this->djisktra->itineraries[i]);
                 station = std::get<2>(this->djisktra->itineraries[i]);
+
                 if(cur->itinerary->station.length() == 0){
                     cur->itinerary->station = this->djisktra->vertices[station];
+                    cur->itinerary->indexStation = station;
                 }
                 exit = std::get<3>(this->djisktra->itineraries[i]);
                 cur->itinerary->exit = exit;
