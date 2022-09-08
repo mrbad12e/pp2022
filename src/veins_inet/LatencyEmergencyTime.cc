@@ -83,6 +83,7 @@ void LatencyEmergencyTime::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
     source = std::get<2>(info); // get the vertex
     if(source == target){
         std::string last = std::get<3>(info);
+        std::string lastOfLast = last.substr(last.length() - 27);
         extractTraceAndTime(&last, &totalEmergency);
         totalCost = std::get<0>(info);
         bool accept = false;
@@ -93,13 +94,14 @@ void LatencyEmergencyTime::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
         }
         else*/
         if(target != this->cur->itinerary->exit || this->cur->itinerary->exit == this->cur->itinerary->indexStation){
-            cur->expectedTimeAtStation = ratio * std::get<1>(info) + now;
             if(cur->MIN_EMERGENCY > totalEmergency && totalCost < Constant::THRESHOLD){
                 accept = true;
                 cur->MIN_EMERGENCY = totalEmergency;
                 found = true;
             }
             if(accept && cur->traces[target].compare(last) != 0){
+                cur->expectedTimeAtStation = ratio * std::get<1>(info) + cur->now;
+                lastOfLast = last.substr(last.length() - 17);
                 cur->traces[target] = last;
             }
         }
@@ -113,7 +115,7 @@ void LatencyEmergencyTime::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
         }
 
     }
-    else{
+    else if(!found){
         bool activeEdges = true;
         this->checkActiveEdges(firstCost, &info, activeEdges);
         this->checkActiveEdges(firstCost, &info, false);
@@ -221,6 +223,9 @@ void LatencyEmergencyTime::checkActiveEdges(double firstCost, Quad* info, bool a
             cur->traces[tempIndex] = trace; //tempTrace;
             //std::string content = vertices[tempIndex] + "_" + cur->id;
             std::string newTrace = trace + tempTrace + " " + std::to_string(tempW);
+            if(tempIndex == 72){
+                EV<<"Target here"<<endl;
+            }
             cur->PQ.push(make_tuple(newObjective, newWeight, /*content,*/ tempIndex, newTrace));
         } // Update distance
     }//End of for
