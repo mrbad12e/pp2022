@@ -50,6 +50,7 @@ public:
     static double GLOBAL_SONNER;
     static double GLOBAL_LATER;
     static int TOTAL_AGV;
+    static double EMERGENCY_TIME;
 
     static constexpr const bool SHORTEST_PATH = false;
     static constexpr const bool STOP_AT_STATION = true;
