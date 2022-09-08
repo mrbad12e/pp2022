@@ -90,6 +90,7 @@ public:
     std::string prevEdge = "";
     int prevVertex = -1;
     std::string station = "";
+    int exit = -1;
     //int stopTime;
     int localWait;
 };
