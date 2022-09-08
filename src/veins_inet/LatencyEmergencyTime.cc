@@ -43,10 +43,12 @@ double LatencyEmergencyTime::getHarmfulnessArrival(AGV* cur, double time){
     }
     if(bestTime + count*period - amplitude > time){
         result = bestTime + count*period - amplitude - time;
+        result /= 60;
         result /= 2;
     }
     else{
         result = time - (bestTime + count*period + amplitude);
+        result /= 60;
     }
     return result;
 }
@@ -72,6 +74,7 @@ void LatencyEmergencyTime::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
   this->cur->ShortestPath[source] = this->getHarmfulnessArrival(this->cur, ratio * firstCost + now);
 
   this->cur->PQ.push(std::make_tuple(this->cur->ShortestPath[source], 0, source, " 0")); // Source has weight cur->ShortestPath[source];
+  bool found = false;
 
   while (!this->cur->PQ.empty()){
     info = this->cur->PQ.top(); // Use to get minimum weight
@@ -83,21 +86,28 @@ void LatencyEmergencyTime::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
         extractTraceAndTime(&last, &totalEmergency);
         totalCost = std::get<0>(info);
         bool accept = false;
-        if(cur->MIN_LATENCY > 100000){
+        /*if(cur->MIN_LATENCY > 100000){
             cur->MIN_LATENCY = Constant::THRESHOLD;
             accept = true;
             cur->MIN_EMERGENCY = totalEmergency;
         }
-        else if(cur->MIN_EMERGENCY > totalEmergency && totalCost < Constant::THRESHOLD){
-            accept = true;
-            cur->MIN_EMERGENCY = totalEmergency;
+        else*/
+        if(target != this->cur->itinerary->exit){
+            if(cur->MIN_EMERGENCY > totalEmergency && totalCost < Constant::THRESHOLD){
+                accept = true;
+                cur->MIN_EMERGENCY = totalEmergency;
+                found = true;
+            }
+            if(accept && cur->traces[target].compare(last) != 0){
+                cur->traces[target] = last;
+            }
         }
-        if(accept && cur->traces[target].compare(last) != 0){
-            cur->traces[target] = last;
+        else{
+            while (!this->cur->PQ.empty())
+                this->cur->PQ.pop();
+            break;
         }
-        /*while (!this->cur->PQ.empty())
-            this->cur->PQ.pop();
-        break;*/
+
     }
     else{
         bool activeEdges = true;
@@ -105,6 +115,10 @@ void LatencyEmergencyTime::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
         this->checkActiveEdges(firstCost, &info, false);
     }
   } // While Priority Queue is not empty
+
+  if(!found){
+      //cur->traces[target] = "";
+  }
 } // DijkstrasAlgorithm
 
 void LatencyEmergencyTime::checkActiveEdges(double firstCost, Quad* info, bool activeEdges){
@@ -184,9 +198,9 @@ void LatencyEmergencyTime::checkActiveEdges(double firstCost, Quad* info, bool a
 
         newWeight += firstCost;
 
-        newObjective += this->getHarmfulnessArrival(cur, ratio * (newWeight) + now);
+        newObjective = this->getHarmfulnessArrival(cur, ratio * (newWeight) + now);
 
-        newObjective += objective/*tempW;*/ /*now*/;
+        //newObjective += objective/*tempW;*/ /*now*/;
 
 
         if(activeEdges){
