@@ -91,6 +91,7 @@ public:
     int prevVertex = -1;
     std::string station = "";
     int exit = -1;
+    int indexStation = -1;
     //int stopTime;
     int localWait;
 };
@@ -221,6 +222,7 @@ public:
     double now = 0;
     int indexOfRoute = -1;
     double *ShortestPath;
+    double expectedTimeAtStation = -1;
     double MIN_LATENCY = DBL_MAX;
     double MIN_EMERGENCY = DBL_MAX;
     std::vector<std::string> traces;
