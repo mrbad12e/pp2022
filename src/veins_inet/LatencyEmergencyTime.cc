@@ -94,10 +94,13 @@ void LatencyEmergencyTime::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
         }
         else*/
         if(target != this->cur->itinerary->exit || this->cur->itinerary->exit == this->cur->itinerary->indexStation){
-            if(cur->MIN_EMERGENCY > totalEmergency && totalCost < Constant::THRESHOLD){
-                accept = true;
-                cur->MIN_EMERGENCY = totalEmergency;
-                found = true;
+            if(cur->MIN_EMERGENCY > totalEmergency ){
+                if(totalCost < Constant::THRESHOLD || cur->MIN_EMERGENCY == DBL_MAX){
+                    //the cur->MIN_EMERGENCY == DBL_MAX to ensure that at least one path will be added
+                    accept = true;
+                    cur->MIN_EMERGENCY = totalEmergency;
+                    found = true;
+                }
             }
             if(accept && cur->traces[target].compare(last) != 0){
                 cur->expectedTimeAtStation = ratio * std::get<1>(info) + cur->now;
@@ -223,7 +226,7 @@ void LatencyEmergencyTime::checkActiveEdges(double firstCost, Quad* info, bool a
             cur->traces[tempIndex] = trace; //tempTrace;
             //std::string content = vertices[tempIndex] + "_" + cur->id;
             std::string newTrace = trace + tempTrace + " " + std::to_string(tempW);
-            if(tempIndex == 72){
+            if(tempIndex == 70){
                 EV<<"Target here"<<endl;
             }
             cur->PQ.push(make_tuple(newObjective, newWeight, /*content,*/ tempIndex, newTrace));
