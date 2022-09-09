@@ -220,7 +220,7 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
         }
 
         double t = simTime().dbl();
-        if(t > 4.2){
+        if(t > 25.5){
             EV<<"TRRTRE"<<endl;
         }
         std::string newRoute = readMessage(bc);
@@ -228,7 +228,7 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
             try{
 
                 if(checkCycle(newRoute)
-                || newRoute.find("-E401 -E409") != std::string::npos
+                || checkInvalidRoute(newRoute)
                 ){
                     EV<<t<<endl;
                 }
@@ -490,6 +490,9 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst, cur->itinerary->laneId, cur);
 
         std::string newRoute = this->djisktra->getRoute(/*this->djisktra*/cur->traces[nextDst], cur->itinerary->laneId, idOfI_Vertex, nextDst, exit);
+        if(checkInvalidRoute(newRoute)){
+            EV<<"TRACE"<<endl;
+        }
         if(nextDst != exit){
             std::string futureLane = ""; //this->djisktra->vertices[nextDst];
             trim_right(newRoute);
@@ -508,10 +511,19 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
                     this->djisktra->getRoute(/*this->djisktra*/cur->traces[exit], futureLane, nextDst, exit, exit);
             lastPath = this->excludeDuplication(futureLane, lastPath);
             newRoute = newRoute + " " + lastPath;
+            if(checkInvalidRoute(newRoute)){
+                EV<<"TRACE"<<endl;
+            }
         }
 
         newRoute = removeAntidromic(newRoute);
+        if(checkInvalidRoute(newRoute)){
+            EV<<"TRACE"<<endl;
+        }
         newRoute = removeLoop(newRoute);
+        if(checkInvalidRoute(newRoute)){
+            EV<<"TRACE"<<endl;
+        }
 
         std::string weights = "";
         weights = this->djisktra->getWeights(newRoute, cur);//->ratio, cur->now, cur->itinerary->laneId);
