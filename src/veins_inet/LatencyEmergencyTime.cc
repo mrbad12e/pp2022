@@ -45,7 +45,7 @@ double LatencyEmergencyTime::getHarmfulnessArrival(AGV* cur, double time){
     if(bestTime + count*period - amplitude > time){
         result = bestTime + count*period - amplitude - time;
         result /= 60;
-        result /= 2;
+        //result /= 2;
     }
     else{
         result = time - (bestTime + count*period + amplitude);
