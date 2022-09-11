@@ -229,7 +229,9 @@ public:
     std::vector <bool> visitedVertex;
     std::vector <bool> visitedEmergencyVertex;
     std::priority_queue<Quad, std::vector<Quad>, std::greater<Quad> > PQ; // Set up priority queue
-    std::priority_queue<Quad, std::vector<Quad>, Comparison > PQ1; // Set up priority queue
+    //std::priority_queue<Quad, std::vector<Quad>, Comparison > PQ1; // Set up priority queue
+    //std::priority_queue<Quad, std::vector<Quad>, std::greater<Quad> > PQ_MIN; // Set up priority queue for min cost
+    std::vector<Quad> allMinOptions;//Set up paths within min cost
     //std::priority_queue<Quad> PQ;
     void init(int numVertices, double initSource = DBL_MAX){
         if(!initialized){
