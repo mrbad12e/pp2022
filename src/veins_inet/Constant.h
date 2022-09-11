@@ -58,8 +58,9 @@ public:
     static constexpr const bool STOP_AT_STATION = true;
     static constexpr const int PAUSING_TIME = 10;
     static std::map<std::string, std::string> routeDict;
-    static constexpr const double THRESHOLD = 2;
-    static constexpr const ModeOfLatencyEmergenyTime STRATEGY = ModeOfLatencyEmergenyTime::MAX;
+    static constexpr const double THRESHOLD = -2;
+    static constexpr const ModeOfLatencyEmergenyTime STRATEGY
+                    = ModeOfLatencyEmergenyTime::MIN;
 };
 
 
