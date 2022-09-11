@@ -248,7 +248,6 @@ void LatencyEmergencyTime::checkActiveEdges(double firstCost, Quad* info, bool a
 
         //newObjective += objective/*tempW;*/ /*now*/;
 
-
         if(activeEdges){
             tempW = timeForEmergencyMode;
         }
@@ -258,12 +257,14 @@ void LatencyEmergencyTime::checkActiveEdges(double firstCost, Quad* info, bool a
         }
 
 
-        if (newObjective < cur->ShortestPath[tempIndex]){ // Check if we can do better
+        if (newObjective < cur->ShortestPath[tempIndex]
+             || newObjective < Constant::THRESHOLD
+        ){ // Check if we can do better
             cur->ShortestPath[tempIndex] = newObjective; // Update new distance
             cur->traces[tempIndex] = trace; //tempTrace;
             //std::string content = vertices[tempIndex] + "_" + cur->id;
             std::string newTrace = trace + tempTrace + " " + std::to_string(tempW);
-            if(tempIndex == 70){
+            if(tempIndex == 106){
                 EV<<"Target here"<<endl;
             }
             cur->PQ.push(make_tuple(newObjective, newWeight, /*content,*/ tempIndex, newTrace));
