@@ -26,7 +26,7 @@ LatencyEmergencyTime::~LatencyEmergencyTime() {
 
 std::string LatencyEmergencyTime::getName(){
     return "Objective: Threshold - " + std::to_string(Constant::THRESHOLD)
-            + "Trade-off Latency & EmergencyTime  =>" + std::to_string(Constant::EMERGENCY_TIME);
+            + "Trade-off Latency & EmergencyTime  =>" + std::to_string(Constant::EMERGENCY_TIME/60);
 }
 
 
