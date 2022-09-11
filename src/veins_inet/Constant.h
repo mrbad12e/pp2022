@@ -26,6 +26,8 @@ using veins::TraCIMobility;
 using namespace veins;
 
 typedef std::pair<std::string, double> Pair;
+enum ModeOfLatencyEmergenyTime{ MIN, MAX, AVERAGE, RAN};
+
 
 class Constant {
 public:
@@ -56,10 +58,10 @@ public:
     static constexpr const bool STOP_AT_STATION = true;
     static constexpr const int PAUSING_TIME = 10;
     static std::map<std::string, std::string> routeDict;
-    static constexpr const double THRESHOLD = 2000000;
+    static constexpr const double THRESHOLD = 2;
+    static constexpr const ModeOfLatencyEmergenyTime STRATEGY = ModeOfLatencyEmergenyTime::MAX;
 };
 
-enum ModeOfLatencyEmergenyTime{ MIN, MAX, AVERAGE, RAN};
 
 static char* mergeContent(long Id){
     char *cstr = new char[strlen(Constant::RSU_IDENTIFY) + 1];
