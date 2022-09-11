@@ -95,16 +95,22 @@ void LatencyEmergencyTime::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
         }
         else*/
         if(target != this->cur->itinerary->exit || this->cur->itinerary->exit == this->cur->itinerary->indexStation){
-            if(cur->MIN_EMERGENCY > totalEmergency ){
+            /*if(cur->MIN_EMERGENCY > totalEmergency ){
                 if(totalCost < Constant::THRESHOLD || cur->MIN_EMERGENCY == DBL_MAX){
                     //the cur->MIN_EMERGENCY == DBL_MAX to ensure that at least one path will be added
                     accept = true;
                     cur->MIN_EMERGENCY = totalEmergency;
                     found = true;
                 }
+            }*/
+            if(totalCost < Constant::THRESHOLD || cur->MIN_EMERGENCY == DBL_MAX){
+                //the cur->MIN_EMERGENCY == DBL_MAX to ensure that at least one path will be added
+                accept = true;
+                found = true;
             }
             if(accept && cur->traces[target].compare(last) != 0){
-                cur->expectedTimeAtStation = ratio * std::get<1>(info) + cur->now;
+                //cur->expectedTimeAtStation = ratio * std::get<1>(info) + cur->now;
+                this->cur->allMinOptions.push_back(std::make_tuple(totalEmergency, std::get<1>(info), target, last)); // Source has weight cur->ShortestPath[source];
                 lastOfLast = last.substr(last.length() - 17);
                 cur->traces[target] = last;
             }
@@ -119,17 +125,47 @@ void LatencyEmergencyTime::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
         }
 
     }
-    else if(!found){
+    else //if(!found)
+    {
         bool activeEdges = true;
         this->checkActiveEdges(firstCost, &info, activeEdges);
         this->checkActiveEdges(firstCost, &info, false);
     }
   } // While Priority Queue is not empty
 
-  if(!found){
+  if(found){
+      while (!this->cur->PQ.empty())
+          this->cur->PQ.pop();
+      int index = this->getBestChoise();
+      cur->traces[target] = std::get<3>(this->cur->allMinOptions[index]);
+      cur->expectedTimeAtStation = ratio * std::get<1>(this->cur->allMinOptions[index]) + cur->now;
+      this->cur->allMinOptions.clear();
       //cur->traces[target] = "";
   }
 } // DijkstrasAlgorithm
+
+int LatencyEmergencyTime::getBestChoise(){
+    double t = 0;
+    int index = 0;
+    double expectedValue = std::get<0>(this->cur->allMinOptions[0]);
+    int size = this->cur->allMinOptions.size();
+    for(int i = 1; i < size; i++){
+        t = std::get<0>(this->cur->allMinOptions[i]);
+        if(Constant::STRATEGY == ModeOfLatencyEmergenyTime::MIN){
+            if(expectedValue > t){
+                expectedValue = t;
+                index = i;
+            }
+        }
+        else if(Constant::STRATEGY == ModeOfLatencyEmergenyTime::MAX){
+            if(expectedValue < t){
+                expectedValue = t;
+                index = i;
+            }
+        }
+    }
+    return index;
+}
 
 void LatencyEmergencyTime::checkActiveEdges(double firstCost, Quad* info, bool activeEdges){
     std::string trace;
