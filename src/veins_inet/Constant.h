@@ -56,8 +56,10 @@ public:
     static constexpr const bool STOP_AT_STATION = true;
     static constexpr const int PAUSING_TIME = 10;
     static std::map<std::string, std::string> routeDict;
-    static constexpr const double THRESHOLD = 5;
+    static constexpr const double THRESHOLD = 2000000;
 };
+
+enum ModeOfLatencyEmergenyTime{ MIN, MAX, AVERAGE, RAN};
 
 static char* mergeContent(long Id){
     char *cstr = new char[strlen(Constant::RSU_IDENTIFY) + 1];
