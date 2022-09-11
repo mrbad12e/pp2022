@@ -25,6 +25,8 @@ public:
     std::string getName() override;
     void DijkstrasAlgorithm(int source, int target, std::string currLane, AGV* cur) override;
     void checkActiveEdges(double firstCost, Quad* info, bool activeEdges) override;
+private:
+    int getBestChoise();
 };
 
 #endif /* VEINS_INET_LATENCYEMERGENCYTIME_H_ */
