@@ -158,7 +158,7 @@ int LatencyEmergencyTime::getBestChoise(){
             }
         }
         else if(Constant::STRATEGY == ModeOfLatencyEmergenyTime::MAX){
-            if(expectedValue < t){
+            if(expectedValue <= t){
                 expectedValue = t;
                 index = i;
             }
