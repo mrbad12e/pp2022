@@ -21,6 +21,7 @@
 #include "jute.h"
 #include <boost/algorithm/string.hpp>
 #include <algorithm>
+#include <omp.h>
 using namespace boost::algorithm;
 
 
@@ -220,7 +221,7 @@ void HospitalControlApp::onWSM(BaseFrame1609_4 *wsm){
         }
 
         double t = simTime().dbl();
-        if(t > 25.5){
+        if(t > 224.5){
             EV<<"TRRTRE"<<endl;
         }
         std::string newRoute = readMessage(bc);
