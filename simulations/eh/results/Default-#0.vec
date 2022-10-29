@@ -1,0 +1,161 @@
+version 3
+run Default-0-20220813-14:20:10-25165
+attr configname Default
+attr datetime 20220813-14:20:10
+attr datetimef 20220813-142010
+attr experiment Default
+attr inifile omnetpp.ini
+attr iterationvars ""
+attr iterationvarsd ""
+attr iterationvarsf ""
+attr measurement ""
+attr network myHospitalNetwork
+attr processid 25165
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+config debug-on-errors true
+config image-path ../../../../veins_framework/src/omnetpp-6.0/samples/inet4.4/images:../../../../veins_framework/src/veins-5.2/veins-veins-5.2/images
+config cmdenv-express-mode true
+config cmdenv-autoflush true
+config cmdenv-status-frequency 0.1s
+config **.cmdenv-log-level info
+config ned-path .
+config image-path ../../images
+config network myHospitalNetwork
+config debug-on-errors true
+config print-undisposed false
+config sim-time-limit 3600s
+config **.scalar-recording true
+config **.vector-recording true
+config *.playgroundSizeX 2500m
+config *.playgroundSizeY 2500m
+config *.playgroundSizeZ 50m
+config *.annotations.draw true
+config *.manager.updateInterval 0.1s
+config *.manager.host "\"localhost\""
+config *.manager.port 9999
+config *.manager.autoShutdown true
+config *.manager.launchConfig "xmldoc(\"vd013.launchd.xml\")"
+config *.manager.moduleType "\"agv=org.car2x.veins.nodes.Car pedestrian=lab001.veins_inet.IPerson\""
+config *.manager.moduleName "\"agv=node pedestrian=personNode\""
+config *.manager.moduleDisplayString "\"agv='i=veins/node/car;is=vs' pedestrian='i=veins/node/pedestrian;is=vs'\""
+config *.rsu[0].mobility.x 300
+config *.rsu[0].mobility.y 300
+config *.rsu[0].mobility.z 3
+config *.rsu[*].applType "\"HospitalControlApp\""
+config *.rsu[*].appl.headerLength "80 bit"
+config *.rsu[*].appl.sendBeacons false
+config *.rsu[*].appl.dataOnSch false
+config *.rsu[*].nic.phy80211p.antennaOffsetZ "0 m"
+config *.connectionManager.sendDirect true
+config *.connectionManager.maxInterfDist 2600m
+config *.connectionManager.drawMaxIntfDist false
+config *.**.nic.mac1609_4.useServiceChannel true
+config *.**.nic.mac1609_4.txPower 20mW
+config *.**.nic.mac1609_4.bitrate 6Mbps
+config *.**.nic.phy80211p.minPowerLevel -110dBm
+config *.**.nic.phy80211p.useNoiseFloor true
+config *.**.nic.phy80211p.noiseFloor -98dBm
+config *.**.nic.phy80211p.decider "xmldoc(\"config.xml\")"
+config *.**.nic.phy80211p.analogueModels "xmldoc(\"config.xml\")"
+config *.**.nic.phy80211p.usePropagationDelay true
+config *.**.nic.phy80211p.antenna "xmldoc(\"antenna.xml\", \"/root/Antenna[@id='monopole']\")"
+config *.node[*].nic.phy80211p.antennaOffsetY "0 m"
+config *.node[*].nic.phy80211p.antennaOffsetZ "1.895 m"
+config *.node[*].applType "\"AGVControlApp\""
+config *.node[*].appl.headerLength "80 bit"
+config *.node[*].appl.sendBeacons false
+config *.node[*].appl.dataOnSch true
+config *.node[*].appl.beaconInterval 0.1s
+config *.node[*].veinsmobility.x 0
+config *.node[*].veinsmobility.y 0
+config *.node[*].veinsmobility.z 0
+config *.node[*].veinsmobility.setHostSpeed false
+config *.node[*0].veinsmobility.accidentCount 0
+
+vector 0 myHospitalNetwork.node[0].veinsmobility posx ETV
+vector 1 myHospitalNetwork.node[0].veinsmobility posy ETV
+vector 2 myHospitalNetwork.node[0].veinsmobility speed ETV
+vector 3 myHospitalNetwork.node[0].veinsmobility acceleration ETV
+vector 4 myHospitalNetwork.node[0].veinsmobility co2emission ETV
+vector 5 myHospitalNetwork.node[1].veinsmobility posx ETV
+vector 6 myHospitalNetwork.node[1].veinsmobility posy ETV
+vector 7 myHospitalNetwork.node[1].veinsmobility speed ETV
+vector 8 myHospitalNetwork.node[1].veinsmobility acceleration ETV
+vector 9 myHospitalNetwork.node[1].veinsmobility co2emission ETV
+vector 10 myHospitalNetwork.node[2].veinsmobility posx ETV
+vector 11 myHospitalNetwork.node[2].veinsmobility posy ETV
+vector 12 myHospitalNetwork.node[3].veinsmobility posx ETV
+vector 13 myHospitalNetwork.node[3].veinsmobility posy ETV
+vector 14 myHospitalNetwork.node[2].veinsmobility speed ETV
+vector 15 myHospitalNetwork.node[3].veinsmobility speed ETV
+vector 16 myHospitalNetwork.node[2].veinsmobility acceleration ETV
+vector 17 myHospitalNetwork.node[2].veinsmobility co2emission ETV
+vector 18 myHospitalNetwork.node[3].veinsmobility acceleration ETV
+vector 19 myHospitalNetwork.node[3].veinsmobility co2emission ETV
+vector 20 myHospitalNetwork.node[4].veinsmobility posx ETV
+vector 21 myHospitalNetwork.node[4].veinsmobility posy ETV
+vector 22 myHospitalNetwork.node[4].veinsmobility speed ETV
+vector 23 myHospitalNetwork.node[4].veinsmobility acceleration ETV
+vector 24 myHospitalNetwork.node[4].veinsmobility co2emission ETV
+vector 25 myHospitalNetwork.node[5].veinsmobility posx ETV
+vector 26 myHospitalNetwork.node[5].veinsmobility posy ETV
+vector 27 myHospitalNetwork.node[5].veinsmobility speed ETV
+vector 28 myHospitalNetwork.node[5].veinsmobility acceleration ETV
+vector 29 myHospitalNetwork.node[5].veinsmobility co2emission ETV
+vector 30 myHospitalNetwork.node[6].veinsmobility posx ETV
+vector 31 myHospitalNetwork.node[6].veinsmobility posy ETV
+vector 32 myHospitalNetwork.node[6].veinsmobility speed ETV
+vector 33 myHospitalNetwork.node[6].veinsmobility acceleration ETV
+vector 34 myHospitalNetwork.node[6].veinsmobility co2emission ETV
+vector 35 myHospitalNetwork.node[7].veinsmobility posx ETV
+vector 36 myHospitalNetwork.node[7].veinsmobility posy ETV
+vector 37 myHospitalNetwork.node[7].veinsmobility speed ETV
+vector 38 myHospitalNetwork.node[7].veinsmobility acceleration ETV
+vector 39 myHospitalNetwork.node[7].veinsmobility co2emission ETV
+vector 40 myHospitalNetwork.node[8].veinsmobility posx ETV
+vector 41 myHospitalNetwork.node[8].veinsmobility posy ETV
+vector 42 myHospitalNetwork.node[8].veinsmobility speed ETV
+vector 43 myHospitalNetwork.node[8].veinsmobility acceleration ETV
+vector 44 myHospitalNetwork.node[8].veinsmobility co2emission ETV
+vector 45 myHospitalNetwork.node[9].veinsmobility posx ETV
+vector 46 myHospitalNetwork.node[9].veinsmobility posy ETV
+vector 47 myHospitalNetwork.node[9].veinsmobility speed ETV
+vector 48 myHospitalNetwork.node[9].veinsmobility acceleration ETV
+vector 49 myHospitalNetwork.node[9].veinsmobility co2emission ETV
+vector 50 myHospitalNetwork.node[10].veinsmobility posx ETV
+vector 51 myHospitalNetwork.node[10].veinsmobility posy ETV
+vector 52 myHospitalNetwork.node[10].veinsmobility speed ETV
+vector 53 myHospitalNetwork.node[11].veinsmobility posx ETV
+vector 54 myHospitalNetwork.node[11].veinsmobility posy ETV
+vector 55 myHospitalNetwork.node[10].veinsmobility acceleration ETV
+vector 56 myHospitalNetwork.node[10].veinsmobility co2emission ETV
+vector 57 myHospitalNetwork.node[11].veinsmobility speed ETV
+vector 58 myHospitalNetwork.node[11].veinsmobility acceleration ETV
+vector 59 myHospitalNetwork.node[11].veinsmobility co2emission ETV
+vector 60 myHospitalNetwork.node[12].veinsmobility posx ETV
+vector 61 myHospitalNetwork.node[12].veinsmobility posy ETV
+vector 62 myHospitalNetwork.node[12].veinsmobility speed ETV
+vector 63 myHospitalNetwork.node[12].veinsmobility acceleration ETV
+vector 64 myHospitalNetwork.node[12].veinsmobility co2emission ETV
+vector 65 myHospitalNetwork.node[13].veinsmobility posx ETV
+vector 66 myHospitalNetwork.node[13].veinsmobility posy ETV
+vector 67 myHospitalNetwork.node[13].veinsmobility speed ETV
+vector 68 myHospitalNetwork.node[13].veinsmobility acceleration ETV
+vector 69 myHospitalNetwork.node[13].veinsmobility co2emission ETV
+vector 70 myHospitalNetwork.node[14].veinsmobility posx ETV
+vector 71 myHospitalNetwork.node[14].veinsmobility posy ETV
+vector 72 myHospitalNetwork.node[14].veinsmobility speed ETV
+vector 73 myHospitalNetwork.node[14].veinsmobility acceleration ETV
+vector 74 myHospitalNetwork.node[14].veinsmobility co2emission ETV
+vector 75 myHospitalNetwork.node[15].veinsmobility posx ETV
+vector 76 myHospitalNetwork.node[15].veinsmobility posy ETV
+vector 77 myHospitalNetwork.node[15].veinsmobility speed ETV
+vector 78 myHospitalNetwork.node[15].veinsmobility acceleration ETV
+vector 79 myHospitalNetwork.node[15].veinsmobility co2emission ETV
+vector 80 myHospitalNetwork.node[16].veinsmobility posx ETV
+vector 81 myHospitalNetwork.node[16].veinsmobility posy ETV
+vector 82 m

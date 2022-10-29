@@ -801,7 +801,7 @@
     <walk from="-E221" to="E221"/>
   </personFlow>
 
-  <flow id="flow4" type="agv" route="route_4" begin="4" period="60" minGap="1.10" maxSpeed="4.00" number="1"/>    
+  <flow id="flow4" type="agv" route="route_4" begin="4" period="60" minGap="1.10" maxSpeed="4.00" number="0"/>    
   <personFlow begin="5" id="p305a" impatience="0.57" end="512" period="4">
     <walk from="E305" to="-E305"/>
   </personFlow>
@@ -1211,7 +1211,7 @@
   <personFlow begin="9" id="p459b" impatience="0.14" end="512" period="4">
     <walk from="-E459" to="E459"/>
   </personFlow>
-  <flow id="flow12" type="agv" route="route_12" begin="9" period="13" minGap="1.10" maxSpeed="4.00" number="0"/>
+  <flow id="flow12" type="agv" route="route_12" begin="9" period="13" minGap="1.10" maxSpeed="4.00" number="1"/>
   <personFlow begin="10" id="p46a" impatience="0.17" end="1501" period="10">
     <walk from="E46" to="-E46"/>
   </personFlow> 
