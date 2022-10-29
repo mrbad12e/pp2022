@@ -84,7 +84,7 @@ void AGVControlApp::finish()
             EV<<"Constant is helpless eventually"<<endl;
     }
     //An example of executing other C program from Omnet++ source code
-    std::system("./a.o > outCar.txt");
+    //std::system("./a.o > outCar.txt");
     // statistics recording goes here
 }
 
