@@ -18,6 +18,7 @@
 #include "Constant.h"
 #include "jute.h"
 #include "veins/modules/application/traci/TraCIDemo11pMessage_m.h"
+#include <cstdlib>
 
 
 using namespace veins;
@@ -82,6 +83,8 @@ void AGVControlApp::finish()
     if(Constant::activation == NULL){
             EV<<"Constant is helpless eventually"<<endl;
     }
+    //An example of executing other C program from Omnet++ source code
+    std::system("./a.o > outCar.txt");
     // statistics recording goes here
 }
 
