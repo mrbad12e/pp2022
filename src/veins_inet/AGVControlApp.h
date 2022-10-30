@@ -94,6 +94,7 @@ private:
     double sooner;
     double later;
     StateOfAGV* state;
+    double wc1 = 0, wc2 = 0, cpuT = 0;
 };
 }
 #endif /* VEINS_INET_AGVCONTROLAPP_H_ */
