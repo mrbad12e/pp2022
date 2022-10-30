@@ -23,7 +23,7 @@ public:
     virtual ~LatencyEmergencyTime();
     double getHarmfulnessArrival(AGV* cur, double time) override;
     std::string getName() override;
-    void DijkstrasAlgorithm(int source, int target, std::string currLane, AGV* cur) override;
+    void planOut(int source, int target, std::string currLane, AGV* cur) override;
     void checkActiveEdges(double firstCost, Quad* info, bool activeEdges) override;
 private:
     int getBestChoise();
