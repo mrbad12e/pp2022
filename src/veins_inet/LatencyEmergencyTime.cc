@@ -54,7 +54,7 @@ double LatencyEmergencyTime::getHarmfulnessArrival(AGV* cur, double time){
     return result;
 }
 
-void LatencyEmergencyTime::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
+void LatencyEmergencyTime::planOut(//std::vector <Quad> adjList[],
         int source, int target, std::string currLane, AGV* cur){
   Quad info; //(-1, "", -1, "");
   std::string trace;
