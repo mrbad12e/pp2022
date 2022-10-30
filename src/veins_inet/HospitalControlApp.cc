@@ -488,7 +488,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
         if(idOfI_Vertex == nextDst){
             return "";
         }
-        this->djisktra->DijkstrasAlgorithm(idOfI_Vertex, nextDst, cur->itinerary->laneId, cur);
+        this->djisktra->planOut(idOfI_Vertex, nextDst, cur->itinerary->laneId, cur);
 
         std::string newRoute = this->djisktra->getRoute(/*this->djisktra*/cur->traces[nextDst], cur->itinerary->laneId, idOfI_Vertex, nextDst, exit);
         if(checkInvalidRoute(newRoute)){
@@ -506,7 +506,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
                     break;
                 }
             }
-            this->djisktra->DijkstrasAlgorithm(nextDst, exit, futureLane, cur);
+            this->djisktra->planOut(nextDst, exit, futureLane, cur);
 
             std::string lastPath =
                     this->djisktra->getRoute(/*this->djisktra*/cur->traces[exit], futureLane, nextDst, exit, exit);
