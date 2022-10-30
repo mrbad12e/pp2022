@@ -87,7 +87,7 @@ std::string ArrivalDijkstra::getName(){
     return "Objective: Arrival time";
 }
 
-void ArrivalDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
+void ArrivalDijkstra::planOut(//std::vector <Quad> adjList[],
         int source, int target, std::string currLane, AGV* cur){
   Quad info; //(-1, "", -1, "");
   std::string trace;
