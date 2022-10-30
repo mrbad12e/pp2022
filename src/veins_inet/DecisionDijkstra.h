@@ -22,7 +22,7 @@ class DecisionDijkstra: public HarmfulnessDijkstra {
 public:
     DecisionDijkstra();
     virtual ~DecisionDijkstra();
-    void DijkstrasAlgorithm(int source, int target, std::string currLane, AGV* cur) override;
+    void planOut(int source, int target, std::string currLane, AGV* cur) override;
     bool isValidTrace(std::string currLane, std::string trace) override;
     std::string getName() override;
     virtual void checkActiveEdges(double firstCost, Quad* info, bool activeEdges);
