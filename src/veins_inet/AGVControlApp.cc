@@ -57,6 +57,9 @@ void AGVControlApp::initialize(int stage)
         this->station->getStation(originalRoute);
         traciVehicle->setSpeedMode(0x1f);
         this->state = new StateOfAGV();
+
+        timing(&wc1, &cpuT);
+
     }
     this->sooner = 0;
     this->later = 0;
@@ -83,6 +86,9 @@ void AGVControlApp::finish()
     if(Constant::activation == NULL){
             EV<<"Constant is helpless eventually"<<endl;
     }
+    timing(&wc2, &cpuT);
+    wc2 -= wc1;
+    EV<<"\n Time: "<<wc2/60<<"(ms)\n";
     //An example of executing other C program from Omnet++ source code
     //std::system("./a.o > outCar.txt");
     // statistics recording goes here
