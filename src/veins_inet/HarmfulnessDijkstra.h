@@ -21,7 +21,7 @@ class HarmfulnessDijkstra: public ArrivalDijkstra {
 public:
     HarmfulnessDijkstra();
     virtual ~HarmfulnessDijkstra();
-    void DijkstrasAlgorithm(int source, int target, std::string currLane, AGV* cur) override;
+    void planOut(int source, int target, std::string currLane, AGV* cur) override;
     virtual double getHarmfulnessArrival(AGV* cur, double time);
     std::string getName() override;
 private:
