@@ -101,7 +101,7 @@ void DecisionDijkstra::generateEmergencyVertices(){
     }
 }
 
-void DecisionDijkstra::DijkstrasAlgorithm(//std::vector <Quad> adjList[],
+void DecisionDijkstra::planOut(//std::vector <Quad> adjList[],
         int source, int target, std::string currLane, AGV* cur){
   Quad info; //(-1, "", -1, "");
   std::string trace;
