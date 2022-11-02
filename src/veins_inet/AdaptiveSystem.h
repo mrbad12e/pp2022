@@ -72,7 +72,7 @@ public:
 
 protected:
     virtual void initTopo(const std::string&);
-    std::vector<Edge> edges;
+    std::vector<Edge> adaptiveEdges;
 
 private:
     static int edgeIdCnt;
