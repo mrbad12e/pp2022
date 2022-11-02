@@ -116,9 +116,7 @@ void ArrivalDijkstra::planOut(//std::vector <Quad> adjList[],
     cur->PQ.pop(); // Pop before checking for cycles
     x = cur->PQ.size();
     cur->count = cur->count + 1;
-    if(cur->id.compare("142") == 0 && cur->count == 20){
-        EV<<"SDfsdfsERereer"<<endl;
-    }
+
     source = std::get<2>(info); // get the vertex
     if(source == target){
         while (!cur->PQ.empty())
