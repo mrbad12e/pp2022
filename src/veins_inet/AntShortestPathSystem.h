@@ -47,7 +47,7 @@ struct edgeHash
     }
 };
 
-class AntSystem : public AdaptiveSystem, Djisktra
+class AntShortestPathSystem : public AdaptiveSystem, Djisktra
 {
 public:
     static const int ANTS = 250;
@@ -56,9 +56,9 @@ public:
     static constexpr double A_PAR = 1;
     static constexpr double B_PAR = 5;
     static constexpr double EVAPO_RATE = 0.5;
-    AntSystem(const std::string&, int = 0, int = 0);
-    AntSystem(int = 0, int = 0);
-    virtual ~AntSystem();
+    AntShortestPathSystem(const std::string&, int = 0, int = 0);
+    AntShortestPathSystem(int = 0, int = 0);
+    virtual ~AntShortestPathSystem();
     virtual std::vector<int> path(int, int);
     virtual void clear();
     virtual void insertEdge(int, int, double) noexcept(false);
