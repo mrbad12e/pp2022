@@ -58,6 +58,7 @@ public:
     static constexpr double EVAPO_RATE = 0.5;
     AntShortestPathSystem(const std::string&, int = 0, int = 0);
     AntShortestPathSystem(int ants, int iterations);
+    AntShortestPathSystem();
     virtual ~AntShortestPathSystem();
     virtual std::vector<int> path(int, int);
     virtual void clear();
@@ -65,7 +66,7 @@ public:
 
 private:
     void init(int, int);
-    double prob(int, int);
+    double prob(int, int, std::vector<int>&);
     double heuInfo(int, int);
     double pheromone(int, int);
     virtual double diffPheromone(double);
