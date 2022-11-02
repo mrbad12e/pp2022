@@ -57,7 +57,7 @@ public:
     static constexpr double B_PAR = 5;
     static constexpr double EVAPO_RATE = 0.5;
     AntShortestPathSystem(const std::string&, int = 0, int = 0);
-    AntShortestPathSystem(int = 0, int = 0);
+    AntShortestPathSystem(int ants, int iterations);
     virtual ~AntShortestPathSystem();
     virtual std::vector<int> path(int, int);
     virtual void clear();
