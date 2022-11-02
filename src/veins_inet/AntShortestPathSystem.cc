@@ -21,7 +21,7 @@
  *
  */
 
-#include "AntSystem.h"
+#include "AntShortestPathSystem.h"
 
 /**
  * Constructor initialising the topology from external file.
@@ -30,7 +30,7 @@
  * @param ants Number of ants to unlease in each iteration
  * @param iterations Number of iterations
  */
-AntSystem::AntSystem(const std::string& filename, int ants, int iterations)
+AntShortestPathSystem::AntShortestPathSystem(const std::string& filename, int ants, int iterations)
 {
     try
     {
@@ -52,7 +52,7 @@ AntSystem::AntSystem(const std::string& filename, int ants, int iterations)
  * @param ants Number of ants to unlease in each iteration
  * @param iterations Number of iterations
  */
-AntSystem::AntSystem(int ants, int iterations)
+AntShortestPathSystem::AntShortestPathSystem(int ants, int iterations)
 {
     init(ants, iterations);
 }
@@ -60,7 +60,7 @@ AntSystem::AntSystem(int ants, int iterations)
 /**
  * Empty destructor.
  */
-AntSystem::~AntSystem() { }
+AntShortestPathSystem::~AntShortestPathSystem() { }
 
 /**
  * Initialiser for ants, iterations and random numner generator.
@@ -68,7 +68,7 @@ AntSystem::~AntSystem() { }
  * @param ants Number of ants to unlease in each iteration
  * @param iterations Number of iterations
  */
-void AntSystem::init(int ants, int iterations)
+void AntShortestPathSystem::init(int ants, int iterations)
 {
     if(ants > 0 && iterations > 0)
     {
@@ -92,7 +92,7 @@ void AntSystem::init(int ants, int iterations)
  * @param end Path's end point
  * @return std::vector<int> The best path
  */
-std::vector<int> AntSystem::path(int start, int end)
+std::vector<int> AntShortestPathSystem::path(int start, int end)
 {
     std::vector<int> bestPath;
     double shortest = std::numeric_limits<double>::max();
@@ -140,7 +140,7 @@ std::vector<int> AntSystem::path(int start, int end)
 /**
  * Clears instance's state
  */
-void AntSystem::clear()
+void AntShortestPathSystem::clear()
 {
     edge2phero.clear();
     adaptiveEdges.clear();
@@ -152,7 +152,7 @@ void AntSystem::clear()
  * @param length Tour's length produced by an ant
  * @return double Amount of pheromone
  */
-double AntSystem::diffPheromone(double length)
+double AntShortestPathSystem::diffPheromone(double length)
 {
     return PHERO_QUANTITY / length;
 }
@@ -163,7 +163,7 @@ double AntSystem::diffPheromone(double length)
  * @param antTraces Created traces by ants
  * @param tourLengths The length of traces
  */
-void AntSystem::updateTrails(std::map<int, std::vector<int>>& antTraces,
+void AntShortestPathSystem::updateTrails(std::map<int, std::vector<int>>& antTraces,
                              std::map<int, double>& tourLengths)
 {
     // First, evaporate all existing pheromone levels
@@ -204,7 +204,7 @@ void AntSystem::updateTrails(std::map<int, std::vector<int>>& antTraces,
  * @param end Path's destination
  * @param trace Container where path's nodes will be stored
  */
-void AntSystem::goAnt(int start, int end, std::vector<int>& trace)
+void AntShortestPathSystem::goAnt(int start, int end, std::vector<int>& trace)
 {
     // Detect cycles and give up this attempt
     if(isCyclic(start, trace))
@@ -259,7 +259,7 @@ void AntSystem::goAnt(int start, int end, std::vector<int>& trace)
  * @param tour Container with path's nodes
  * @return double Tour's length
  */
-double AntSystem::calcTourLength(std::vector<int>& tour)
+double AntShortestPathSystem::calcTourLength(std::vector<int>& tour)
 {
     if(tour.size() <= 1)
         return 0;
@@ -290,7 +290,7 @@ double AntSystem::calcTourLength(std::vector<int>& tour)
  * @param edgeEnd The edge's end point
  * @return double The probability
  */
-double AntSystem::prob(int edgeStart, int edgeEnd)
+double AntShortestPathSystem::prob(int edgeStart, int edgeEnd)
 {
     double numerator = std::pow(pheromone(edgeStart, edgeEnd), A_PAR)
             * std::pow(heuInfo(edgeStart, edgeEnd), B_PAR);
@@ -312,7 +312,7 @@ double AntSystem::prob(int edgeStart, int edgeEnd)
  * @param edgeEnd The edge's end point
  * @return double The amount of heuristic information
  */
-double AntSystem::heuInfo(int edgeStart, int edgeEnd)
+double AntShortestPathSystem::heuInfo(int edgeStart, int edgeEnd)
 {
     // Find the edge with this lambda function and use its weight
     auto it = std::find_if(edge2phero.cbegin(), edge2phero.cend(),
@@ -332,7 +332,7 @@ double AntSystem::heuInfo(int edgeStart, int edgeEnd)
  * @param edgeEnd The edge's end point
  * @return double The amount of pheromone
  */
-double AntSystem::pheromone(int edgeStart, int edgeEnd)
+double AntShortestPathSystem::pheromone(int edgeStart, int edgeEnd)
 {
     // Find the edge with this lambda function and return its pheromone level
     auto it = std::find_if(edge2phero.cbegin(), edge2phero.cend(),
@@ -351,7 +351,7 @@ double AntSystem::pheromone(int edgeStart, int edgeEnd)
  * @param node The input node
  * @return std::vector<int> Container with nodes
  */
-std::vector<int> AntSystem::availNeighbours(int node)
+std::vector<int> AntShortestPathSystem::availNeighbours(int node)
 {
     std::vector<int> neighbours;
 
@@ -373,7 +373,7 @@ std::vector<int> AntSystem::availNeighbours(int node)
  * @param nodes The sequence of nodes
  * @return bool The indication of a cyclic sequence
  */
-bool AntSystem::isCyclic(int nd, const std::vector<int>& nodes)
+bool AntShortestPathSystem::isCyclic(int nd, const std::vector<int>& nodes)
 {
     std::set<int> uniqueNodes;
     uniqueNodes.insert(nd);
@@ -390,7 +390,7 @@ bool AntSystem::isCyclic(int nd, const std::vector<int>& nodes)
  * @param dest Destination node
  * @param weight Weight for the edge
  */
-void AntSystem::insertEdge(int src, int dest, double weight)
+void AntShortestPathSystem::insertEdge(int src, int dest, double weight)
 {
     AdaptiveSystem::insertEdge(src, dest, weight);
     edge2phero.clear();
