@@ -131,7 +131,7 @@ void AdaptiveSystem::insertEdge(int src, int dest, double weight) noexcept(false
     edge.edgeEnd = dest;
     edge.weight = weight;
     edge.id = ++edgeIdCnt;
-    edges.push_back(edge);
+    adaptiveEdges.push_back(edge);
 }
 
 /**
