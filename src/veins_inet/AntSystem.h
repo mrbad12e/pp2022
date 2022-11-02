@@ -33,6 +33,7 @@
 #include <string>
 #include <map>
 #include "AdaptiveSystem.h"
+#include "Djisktra.h"
 using namespace std;
 
 #ifndef VEINS_INET_ANTSYSTEM_H_
@@ -46,7 +47,7 @@ struct edgeHash
     }
 };
 
-class AntSystem : public AdaptiveSystem
+class AntSystem : public AdaptiveSystem, Djisktra
 {
 public:
     static const int ANTS = 250;
