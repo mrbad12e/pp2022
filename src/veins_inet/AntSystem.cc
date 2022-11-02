@@ -35,7 +35,7 @@ AntSystem::AntSystem(const std::string& filename, int ants, int iterations)
     try
     {
         initTopo(filename);
-        for(auto& edge : edges)
+        for(auto& edge : adaptiveEdges)
             edge2phero.insert(std::make_pair(edge, static_cast<double>(PHERO_QUANTITY)));
     }
     catch(std::exception& e)
@@ -143,7 +143,7 @@ std::vector<int> AntSystem::path(int start, int end)
 void AntSystem::clear()
 {
     edge2phero.clear();
-    edges.clear();
+    adaptiveEdges.clear();
 }
 
 /**
@@ -394,6 +394,6 @@ void AntSystem::insertEdge(int src, int dest, double weight)
 {
     AdaptiveSystem::insertEdge(src, dest, weight);
     edge2phero.clear();
-    for(auto& edge : edges)
+    for(auto& edge : adaptiveEdges)
         edge2phero.insert({edge, static_cast<double>(PHERO_QUANTITY)});
 }
