@@ -49,26 +49,22 @@ AntShortestPathSystem::AntShortestPathSystem(const std::string& filename, int an
 /**
  * Constructor initialising the topology from external graph.
  *
- * @param edges: all edeges of updated graph
- * @param vertices: all vertices of updated graph
- * @param ants Number of ants to unlease in each iteration
- * @param iterations Number of iterations
  */
-/*AntShortestPathSystem::AntShortestPathSystem(const std::string& filename, int ants, int iterations)
+AntShortestPathSystem::AntShortestPathSystem()
 {
     try
     {
-        initTopo(filename);
-        for(auto& edge : adaptiveEdges)
-            edge2phero.insert(std::make_pair(edge, static_cast<double>(PHERO_QUANTITY)));
+        for(int i = 0; i < numVertices; i++){
+
+        }
     }
     catch(std::exception& e)
     {
         std::cerr << e.what() << std::endl;
     }
 
-    init(ants, iterations);
-}*/
+    init(ANTS, ITERATIONS);
+}
 
 /**
  * Constructor w/out initialising the topology.
