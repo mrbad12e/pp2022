@@ -245,7 +245,7 @@ void AntShortestPathSystem::goAnt(int start, int end, std::vector<int>& trace)
     int index = 0;
     // Produce a transition probability to each one
     for(int neigh : neighs)
-        probs[index++] = prob(start, neigh);
+        probs[index++] = prob(start, neigh, neighs);
 
     std::uniform_real_distribution<> distro(0, 1);
     double value = distro(gen);
@@ -310,13 +310,13 @@ double AntShortestPathSystem::calcTourLength(std::vector<int>& tour)
  * @param edgeEnd The edge's end point
  * @return double The probability
  */
-double AntShortestPathSystem::prob(int edgeStart, int edgeEnd)
+double AntShortestPathSystem::prob(int edgeStart, int edgeEnd, std::vector<int>& neighs)
 {
     double numerator = std::pow(pheromone(edgeStart, edgeEnd), A_PAR)
             * std::pow(heuInfo(edgeStart, edgeEnd), B_PAR);
 
     double denumerator = 0;
-    std::vector<int> neighs = availNeighbours(edgeStart);
+    //std::vector<int> neighs = availNeighbours(edgeStart);
     for(int neigh : neighs)
         denumerator += std::pow(pheromone(edgeStart, neigh), A_PAR)
                 * std::pow(heuInfo(edgeStart, neigh), B_PAR);
