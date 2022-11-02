@@ -36,7 +36,7 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 OBJS = \
     $O/veins_inet/AdaptiveSystem.o \
     $O/veins_inet/AGVControlApp.o \
-    $O/veins_inet/AntSystem.o \
+    $O/veins_inet/AntShortestPathSystem.o \
     $O/veins_inet/ArrivalDijkstra.o \
     $O/veins_inet/Constant.o \
     $O/veins_inet/Crossing.o \
