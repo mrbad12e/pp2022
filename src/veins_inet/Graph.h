@@ -31,6 +31,7 @@
 
 //typedef std::tuple<double, std::string, int, std::string> Quad;
 typedef std::tuple<double, double, int, std::string> Quad;
+typedef std::tuple<int, int, double> Request;
 
 static void extractTraceAndTime(std::string* trace, double* time){
     int i = 0;
