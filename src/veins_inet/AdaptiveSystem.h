@@ -59,6 +59,9 @@ public:
         int edgeEnd;
         double weight;
         long int id;
+        std::string src;
+        std::string dst;
+        bool isBVertex;
         bool operator<(const Edge&) const;
         bool operator>(const Edge&) const;
         bool operator==(const Edge&) const;
