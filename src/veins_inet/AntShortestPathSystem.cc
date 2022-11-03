@@ -194,6 +194,10 @@ void AntShortestPathSystem::planOut(//std::vector <Quad> adjList[],
 
 } // ACO
 
+std::string AntShortestPathSystem::getRoute(std::string trace, std::string currentLane, int currentVertex, int nextVertex, int exitVertex){
+    return "";
+}
+
 /**
  * Clears instance's state
  */
