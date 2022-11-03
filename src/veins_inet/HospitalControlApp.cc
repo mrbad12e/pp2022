@@ -58,7 +58,7 @@ void HospitalControlApp::readCrossing(){
     std::string line;
     std::ifstream MyReadFile("crossing.txt");
     getline(MyReadFile, line);
-    int numberOfCrossing =std::stoi(line);
+    //int numberOfCrossing =std::stoi(line);
 
     int k = 0;
 
