@@ -29,9 +29,15 @@
 #include <queue> // To set up priority queue
 #include <functional> // To use std::greater<T> -> This will prove to be useful in picking the minimum weight
 
+enum STATE_OF_REQUEST{
+    WAITING_FOR_PROCESSING,
+    BEING_PROCESSED,
+    FINISHED
+};
+
 //typedef std::tuple<double, std::string, int, std::string> Quad;
 typedef std::tuple<double, double, int, std::string> Quad;
-typedef std::tuple<int, int, std::string, double> Request;
+typedef std::tuple<int, int, std::string, double, STATE_OF_REQUEST> Request;
 
 static void extractTraceAndTime(std::string* trace, double* time){
     int i = 0;
