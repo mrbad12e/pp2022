@@ -58,6 +58,7 @@ public:
     static double EMERGENCY_TIME;
 
     static constexpr const bool SHORTEST_PATH = false;
+    static constexpr const double LENGTH_OF_B_VERTEX = 0.1;//assume that length of b_vertex (for ACO) is 0.1
     static constexpr const bool STOP_AT_STATION = true;
     static constexpr const int PAUSING_TIME = 10;
     static std::map<std::string, std::string> routeDict;
