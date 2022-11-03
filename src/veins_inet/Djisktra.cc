@@ -283,13 +283,6 @@ void Djisktra::planOut(//std::vector <Quad> adjList[],
 
 std::string Djisktra::getRoute(std::string trace, std::string currLane, int currentVertex, int nextVertex, int exitVertex){
 
-    if(currLane.compare("E301") == 0
-          && currentVertex == 45
-      && nextVertex == 70
-      && exitVertex == 44
-          ){
-        EV<<"DDDDDD"<<endl;
-  }
   if(currLane.length() > 0){
       if(currLane[0] == '^'){
           currLane = currLane.substr(1);
