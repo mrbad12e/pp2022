@@ -64,6 +64,7 @@ public:
     virtual void clear();
     virtual void insertEdge(int, int, double) noexcept(false);
     void planOut(int source, int target, std::string currLane, AGV* cur) override;
+    std::string getRoute(std::string trace, std::string currentLane, int currentVertex, int nextVertex, int exitVertex) override;
 
 private:
     void init(int, int);
