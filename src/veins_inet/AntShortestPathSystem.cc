@@ -183,6 +183,18 @@ std::vector<int> AntShortestPathSystem::path(int start, int end)
 }
 
 /**
+ * Finds the best path from a source node to a destination using the Ant System.
+ *
+ * @param start Path's starting point
+ * @param end Path's end point
+ * @return std::vector<int> The best path
+ */
+void AntShortestPathSystem::planOut(//std::vector <Quad> adjList[],
+        int source, int target, std::string currLane, AGV* cur){
+
+} // ACO
+
+/**
  * Clears instance's state
  */
 void AntShortestPathSystem::clear()
