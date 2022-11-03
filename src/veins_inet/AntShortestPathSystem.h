@@ -80,6 +80,7 @@ private:
     int ants;
     int iterations;
     std::mt19937_64 gen;
+    int countEdges = 0;
 };
 
 #endif /* VEINS_INET_ANTSYSTEM_H_ */
