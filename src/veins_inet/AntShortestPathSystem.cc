@@ -54,7 +54,6 @@ AntShortestPathSystem::AntShortestPathSystem()
 {
     try
     {
-      double weight;
       double tempW;
       int tempIndex;
       std::string tempTrace;
