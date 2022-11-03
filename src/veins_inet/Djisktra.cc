@@ -148,11 +148,15 @@ void Djisktra::getListEdges(std::string weightEdges){
     std::string line;
     std::string name, weight;
     double w;
+    //double min = 100000;
     while (getline(file, line)) {
         std::stringstream ss(line);
         getline(ss, name, ' ');
         getline(ss, weight, ' ');
         w =std::stod(weight) / Constant::MAX_SPEED;
+        /*if(min > w){
+            min = w;
+        }*/
         edges.push_back(std::make_pair(name, w));
     }
     file.close();
