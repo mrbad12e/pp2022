@@ -63,7 +63,7 @@ AntShortestPathSystem::AntShortestPathSystem()
                 AdaptiveSystem::Edge edge;
                 tempW = std::get<0>(*it);
                 if(tempW == 0){
-                    tempW += Constant::LENGTH_OF_B_VERTEX;
+                    tempW = Constant::LENGTH_OF_B_VERTEX;
                     edge.isBVertex = true;
                 }
                 else{
