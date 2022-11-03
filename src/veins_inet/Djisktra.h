@@ -218,7 +218,7 @@ public:
     std::vector<std::tuple<std::string, int, int, int>> itineraries;
 
     int findI_Vertex(std::string name, bool recursive);
-    std::string getRoute(std::string trace, std::string currentLane, int currentVertex, int nextVertex, int exitVertex);
+    virtual std::string getRoute(std::string trace, std::string currentLane, int currentVertex, int nextVertex, int exitVertex);
     ExponentialSmoothing* expSmoothing;
     std::vector<std::string> vertices;
     std::vector<std::vector<Quad>> adjList;
