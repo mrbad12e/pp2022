@@ -63,6 +63,7 @@ public:
     virtual std::vector<int> path(int, int);
     virtual void clear();
     virtual void insertEdge(int, int, double) noexcept(false);
+    void planOut(int source, int target, std::string currLane, AGV* cur) override;
 
 private:
     void init(int, int);
@@ -81,6 +82,7 @@ private:
     int iterations;
     std::mt19937_64 gen;
     int countEdges = 0;
+    std::vector<Request> allRequests;
 };
 
 #endif /* VEINS_INET_ANTSYSTEM_H_ */
