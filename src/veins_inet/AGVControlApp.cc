@@ -319,80 +319,10 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
         std::string id = v["id"].as_string();
         if(std::to_string(myId).compare(id) == 0){
             double t = simTime().dbl();
-            std::string newRoute = v["newRoute"].as_string();
-            int size = v["weights"].size();
+            this->readSingleMessage(v);
+        }
+        else{
 
-            for(int i = 0; i < size; i++){
-                addExpectedTime(v["weights"][i].as_string());
-            }
-            if(prevRoute.compare(newRoute) != 0){
-                if(newRoute.compare("0") == 0){
-                   //force AGV to stop
-                    if(velocityBeforeHalt == -1){
-                        velocityBeforeHalt = traciVehicle->getSpeed();
-                        if(velocityBeforeHalt == 0)
-                            velocityBeforeHalt = 2;
-                    }
-                    pausingTime = simTime().dbl();
-                    traciVehicle->setSpeed(0);
-
-                }
-                else{
-
-                    if(newRoute.compare(Constant::CARRY_ON) == 0){
-                        if(prevRoute.length() == 0){
-                            //This case happends as: (1) AGV follows the original Dijsktra
-                            //(2) messages from RSU were lost
-                            double sp = traciVehicle->getSpeed();
-                            if(sp == 0 && pausingTime + Constant::PAUSING_TIME < simTime().dbl()){
-                                //if waiting to long
-                                this->runAfterStuck();
-                                return;
-                            }
-                            else{
-                                return;
-                            }
-                        }
-                        newRoute = prevRoute;
-
-                    }
-
-                    prevRoute = newRoute;
-
-                    this->runAfterStuck();
-
-                    if(!Constant::SHORTEST_PATH){
-                        std::vector<std::string> v = split(newRoute, " ");
-
-                        parseLanes(0, v);
-                        if(l.size() == 0 || goAround(v)){
-                            EV_TRACE<<"ERRR";
-                        }
-                        bool change = traciVehicle->changeVehicleRoute(l);
-                        if(!change){
-                            expectedRoute = newRoute;
-                            emergencyLanes.clear();
-                        }
-                        else{
-                            expectedRoute = "";
-                            v.clear();
-                            v.shrink_to_fit();
-                            l.clear();
-                        }
-                    }
-                }
-            }
-            else{
-                double sp = traciVehicle->getSpeed();
-                std::string laneID = traciVehicle->getLaneId();
-                if(sp == 0 && laneID[0] == ':'){
-                    saveBeginningOfStuck(laneID);
-                    if(this->stuckAtJunc[laneID] +
-                            Constant::PAUSING_TIME < simTime().dbl()){
-                        this->runAfterStuck();
-                    }
-                }
-            }
         }
 
     }
@@ -402,6 +332,80 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
 }
 
 void AGVControlApp::readSingleMessage(jute::jValue v){
+    std::string newRoute = v["newRoute"].as_string();
+    int size = v["weights"].size();
+
+    for(int i = 0; i < size; i++){
+        addExpectedTime(v["weights"][i].as_string());
+    }
+    if(prevRoute.compare(newRoute) != 0){
+        if(newRoute.compare("0") == 0){
+           //force AGV to stop
+            if(velocityBeforeHalt == -1){
+                velocityBeforeHalt = traciVehicle->getSpeed();
+                if(velocityBeforeHalt == 0)
+                    velocityBeforeHalt = 2;
+            }
+            pausingTime = simTime().dbl();
+            traciVehicle->setSpeed(0);
+
+        }
+        else{
+
+            if(newRoute.compare(Constant::CARRY_ON) == 0){
+                if(prevRoute.length() == 0){
+                    //This case happends as: (1) AGV follows the original Dijsktra
+                    //(2) messages from RSU were lost
+                    double sp = traciVehicle->getSpeed();
+                    if(sp == 0 && pausingTime + Constant::PAUSING_TIME < simTime().dbl()){
+                        //if waiting to long
+                        this->runAfterStuck();
+                        return;
+                    }
+                    else{
+                        return;
+                    }
+                }
+                newRoute = prevRoute;
+
+            }
+
+            prevRoute = newRoute;
+
+            this->runAfterStuck();
+
+            if(!Constant::SHORTEST_PATH){
+                std::vector<std::string> v = split(newRoute, " ");
+
+                parseLanes(0, v);
+                if(l.size() == 0 || goAround(v)){
+                    EV_TRACE<<"ERRR";
+                }
+                bool change = traciVehicle->changeVehicleRoute(l);
+                if(!change){
+                    expectedRoute = newRoute;
+                    emergencyLanes.clear();
+                }
+                else{
+                    expectedRoute = "";
+                    v.clear();
+                    v.shrink_to_fit();
+                    l.clear();
+                }
+            }
+        }
+    }
+    else{
+        double sp = traciVehicle->getSpeed();
+        std::string laneID = traciVehicle->getLaneId();
+        if(sp == 0 && laneID[0] == ':'){
+            saveBeginningOfStuck(laneID);
+            if(this->stuckAtJunc[laneID] +
+                    Constant::PAUSING_TIME < simTime().dbl()){
+                this->runAfterStuck();
+            }
+        }
+    }
 
 }
 
