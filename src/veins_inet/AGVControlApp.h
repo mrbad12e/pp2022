@@ -27,6 +27,7 @@
 #include <map>
 #include <string>
 #include "Graph.h"
+#include "jute.h"
 #include "StateOfAGV.h"
 
 using namespace omnetpp;
@@ -89,6 +90,7 @@ private:
     std::vector<std::string> passedEdges;
     std::vector<std::string> emergencyLanes;
     void parseLanes(int start, std::vector<std::string> v);
+    void readSingleMessage(jute::jValue v);
     std::list<std::string> l;
     bool checkEmergencySituation();
     double sooner;
