@@ -16,7 +16,6 @@
 #include "AGVControlApp.h"
 //#include "HospitalControlApp.h"
 #include "Constant.h"
-#include "jute.h"
 #include "veins/modules/application/traci/TraCIDemo11pMessage_m.h"
 #include <cstdlib>
 
@@ -400,6 +399,10 @@ void AGVControlApp::handleLowerMsg(cMessage* msg)
     else{
 
     }
+}
+
+void AGVControlApp::readSingleMessage(jute::jValue v){
+
 }
 
 void AGVControlApp::parseLanes(int start, std::vector<std::string> v){
