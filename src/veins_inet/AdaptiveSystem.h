@@ -49,6 +49,14 @@
 
 using boost::property_tree::ptree;
 
+enum STATE_OF_REQUEST{
+    WAITING_FOR_PROCESSING,
+    BEING_PROCESSED,
+    FINISHED
+};
+
+typedef std::tuple<int, int, std::string, double, STATE_OF_REQUEST, std::string> Request;
+
 class AdaptiveSystem
 {
 public:
