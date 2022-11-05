@@ -529,6 +529,7 @@ std::string HospitalControlApp::reRoute(AGV *cur, std::string routeId/*, double 
 
         std::string weights = "";
         weights = this->djisktra->getWeights(newRoute, cur);//->ratio, cur->now, cur->itinerary->laneId);
+        trim(newRoute);
 
         if(newRoute.length() == 0)
             return "";
