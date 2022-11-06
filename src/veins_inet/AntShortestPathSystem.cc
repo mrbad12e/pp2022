@@ -190,8 +190,10 @@ std::vector<int> AntShortestPathSystem::path(int start, int end)
  */
 void AntShortestPathSystem::planOut(//std::vector <Quad> adjList[],
         int source, int target, std::string currLane, AGV* cur){
-    cur->init(numVertices);
+    cur->malloc(numVertices);
+
     cur->ShortestPath[source] = 0;
+
 } // ACO
 
 std::string AntShortestPathSystem::getRoute(std::string trace, std::string currentLane, int currentVertex, int nextVertex, int exitVertex){
