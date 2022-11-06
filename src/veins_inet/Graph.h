@@ -233,7 +233,7 @@ public:
     //std::priority_queue<Quad, std::vector<Quad>, std::greater<Quad> > PQ_MIN; // Set up priority queue for min cost
     std::vector<Quad> allMinOptions;//Set up paths within min cost
     //std::priority_queue<Quad> PQ;
-    void init(int numVertices, double initSource = DBL_MAX){
+    void malloc(int numVertices){
         if(!initialized){
             ShortestPath = (double *)malloc(numVertices*sizeof(double));
             for(int i = 0; i < numVertices; i++){
@@ -245,6 +245,9 @@ public:
             initialized = true;
             return;
         }
+    }
+    void init(int numVertices, double initSource = DBL_MAX){
+        malloc(numVertices);
 
         MIN_LATENCY = DBL_MAX;
         MIN_EMERGENCY = DBL_MAX;
