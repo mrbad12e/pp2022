@@ -80,6 +80,9 @@ public:
     virtual std::vector<int> path(int, int) = 0;
     virtual void insertEdge(int, int, double) noexcept(false);
     virtual void clear() = 0;
+    bool isWorking();//OpenMP threads are running or not
+    virtual bool insertRequest(int source, int dst, int id);
+    std::vector<Request> allRequests;
 
 protected:
     virtual void initTopo(const std::string&);
