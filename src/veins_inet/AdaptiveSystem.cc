@@ -134,6 +134,46 @@ void AdaptiveSystem::insertEdge(int src, int dest, double weight) noexcept(false
     adaptiveEdges.push_back(edge);
 }
 
+bool AdaptiveSystem::isWorking(){
+    bool isRunning = false;
+    for(std::vector<Request>::iterator ptr = allRequests.begin(); ptr != allRequests.end(); ptr++){
+        STATE_OF_REQUEST state = std::get<4>(*it);
+        if(state == BEING_PROCESSED){
+            isRunning = true;
+            break;
+        }
+    }
+    return isRunning;
+}
+
+bool AdaptiveSystem::insertRequest(int source, int dst, int id){
+    if(!isWorking()){
+        for(std::vector<Request>::iterator ptr = allRequests.begin(); ptr != allRequests.end(); ptr++){
+            int theSource = std::get<0>(*it);
+            int theDestination = std::get<1>(*it);
+            if(theSource == source && theDestination == dst){
+                STATE_OF_REQUEST state = std::get<4>(*it);
+                if(state == BEING_PROCESSED ||
+                        state == WAITING_FOR_PROCESSING
+                ){
+                    return false;
+                }
+                else{
+                    //state == FINISHED
+                    double t = simTime().dbl();
+                }
+            }
+
+            if(state == BEING_PROCESSED){
+                isRunning = true;
+                break;
+            }
+        }
+    }
+    return false;
+    //for(std::vector<Request>::iterator ptr = ;)
+}
+
 /**
  * Used for producing edge IDs.
  */
