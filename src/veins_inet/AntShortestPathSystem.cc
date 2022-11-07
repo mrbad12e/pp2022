@@ -190,7 +190,7 @@ std::vector<int> AntShortestPathSystem::path(int start, int end)
  */
 void AntShortestPathSystem::planOut(//std::vector <Quad> adjList[],
         int source, int target, std::string currLane, AGV* cur){
-    cur->malloc(numVertices);
+    cur->memset(numVertices);
 
     cur->ShortestPath[source] = 0;
 
