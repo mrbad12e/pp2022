@@ -22,7 +22,8 @@
  */
 
 #include "AdaptiveSystem.h"
-
+#include "veins/veins.h"
+using namespace omnetpp;
 /**
  * Constructor for edges.
  */
@@ -136,7 +137,7 @@ void AdaptiveSystem::insertEdge(int src, int dest, double weight) noexcept(false
 
 bool AdaptiveSystem::isWorking(){
     bool isRunning = false;
-    for(std::vector<Request>::iterator ptr = allRequests.begin(); ptr != allRequests.end(); ptr++){
+    for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
         STATE_OF_REQUEST state = std::get<4>(*it);
         if(state == BEING_PROCESSED){
             isRunning = true;
@@ -146,9 +147,11 @@ bool AdaptiveSystem::isWorking(){
     return isRunning;
 }
 
+
 bool AdaptiveSystem::insertRequest(int source, int dst, int id){
     if(!isWorking()){
-        for(std::vector<Request>::iterator ptr = allRequests.begin(); ptr != allRequests.end(); ptr++){
+        int i = 0;
+        for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
             int theSource = std::get<0>(*it);
             int theDestination = std::get<1>(*it);
             if(theSource == source && theDestination == dst){
@@ -159,16 +162,21 @@ bool AdaptiveSystem::insertRequest(int source, int dst, int id){
                     return false;
                 }
                 else{
-                    //state == FINISHED
+                    //it means the state == FINISHED
                     double t = simTime().dbl();
+                    double createdTime = std::get<3>(*it);
+                    if(t - createdTime < Constant::DELAY){
+                        return false;
+                    }
+                    else{
+                        break;
+                    }
                 }
             }
+            i++;
+        }//end of fore
 
-            if(state == BEING_PROCESSED){
-                isRunning = true;
-                break;
-            }
-        }
+
     }
     return false;
     //for(std::vector<Request>::iterator ptr = ;)
