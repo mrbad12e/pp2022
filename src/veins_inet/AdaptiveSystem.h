@@ -43,6 +43,12 @@
 #include <functional>
 #include <vector>
 #include <string>
+#include <map>
+#include <sstream>
+#include <algorithm>
+#include <queue> // To set up priority queue
+#include <functional> // To use std::greate
+#include <tuple>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 //#include <omp.h>
