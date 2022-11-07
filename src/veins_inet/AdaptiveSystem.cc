@@ -147,6 +147,29 @@ bool AdaptiveSystem::isWorking(){
     return isRunning;
 }
 
+bool AdaptiveSystem::removeFinisedRequests(std::vector<int>* finishedRequests = NULL){
+    bool selfSearching = finishedRequests == NULL;
+    if(finishedRequests != NULL){
+        selfSearching = finishedRequests->size() == 0;
+    }
+    std::vector<int> *allFinishedOnes ;
+    if(selfSearching){
+        allFinishedOnes = new std::vector<int>();
+        int i = 0;
+        for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
+            STATE_OF_REQUEST state = std::get<4>(*it);
+            if(state == FINISHED){
+                allFinishedOnes->push_back(i);
+            }
+            i++;
+        }
+    }
+    else{
+        allFinishedOnes = finishedRequests;
+    }
+
+}
+
 
 bool AdaptiveSystem::insertRequest(int source, int dst, int id){
     if(!isWorking()){
