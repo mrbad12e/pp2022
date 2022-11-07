@@ -23,7 +23,7 @@
 
 #include "AdaptiveSystem.h"
 #include "veins/veins.h"
-#include <bits/stdc++.h>
+//#include <bits/stdc++.h>
 using namespace omnetpp;
 /**
  * Constructor for edges.
@@ -176,7 +176,7 @@ bool AdaptiveSystem::removeExpiredRequests(std::vector<int>* expiredRequests){
     for(std::vector<int>::iterator it = tooOldOnes->end(); it != tooOldOnes->begin(); it--){
         index = *it;
         if(index >= 0 && index < allRequests.size()){
-            remove(allRequests.begin(), allRequests.end(), index);
+            allRequests.erase(allRequests.begin() + index);
             numberOfRemoved++;
         }
     }
