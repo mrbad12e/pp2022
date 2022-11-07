@@ -219,7 +219,6 @@ bool AdaptiveSystem::insertRequest(int source, int dst, int id){
 
     }
     return false;
-    //for(std::vector<Request>::iterator ptr = ;)
 }
 
 /**
