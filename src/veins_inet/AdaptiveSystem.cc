@@ -23,6 +23,7 @@
 
 #include "AdaptiveSystem.h"
 #include "veins/veins.h"
+#include <bits/stdc++.h>
 using namespace omnetpp;
 /**
  * Constructor for edges.
@@ -147,33 +148,46 @@ bool AdaptiveSystem::isWorking(){
     return isRunning;
 }
 
-bool AdaptiveSystem::removeFinisedRequests(std::vector<int>* finishedRequests = NULL){
-    bool selfSearching = finishedRequests == NULL;
-    if(finishedRequests != NULL){
-        selfSearching = finishedRequests->size() == 0;
+bool AdaptiveSystem::removeExpiredRequests(std::vector<int>* expiredRequests){
+    bool selfSearching = expiredRequests == NULL;
+    if(expiredRequests != NULL){
+        selfSearching = expiredRequests->size() == 0;
     }
-    std::vector<int> *allFinishedOnes ;
+    std::vector<int> *tooOldOnes ;
     if(selfSearching){
-        allFinishedOnes = new std::vector<int>();
+        tooOldOnes = new std::vector<int>();
         int i = 0;
+        double t = simTime().dbl();
         for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
             STATE_OF_REQUEST state = std::get<4>(*it);
-            if(state == FINISHED){
-                allFinishedOnes->push_back(i);
+            double createdTime = std::get<3>(*it);
+
+            if(state != BEING_PROCESSED && (t - createdTime > Constant::DELAY)){
+                tooOldOnes->push_back(i);
             }
             i++;
         }
     }
     else{
-        allFinishedOnes = finishedRequests;
+        tooOldOnes = expiredRequests;
     }
-
+    int index = 0;
+    int numberOfRemoved = 0;
+    for(std::vector<int>::iterator it = tooOldOnes->end(); it != tooOldOnes->begin(); it--){
+        index = *it;
+        if(index >= 0 && index < allRequests.size()){
+            remove(allRequests.begin(), allRequests.end(), index);
+            numberOfRemoved++;
+        }
+    }
+    return (numberOfRemoved != 0);
 }
 
 
 bool AdaptiveSystem::insertRequest(int source, int dst, int id){
     if(!isWorking()){
         int i = 0;
+        double t = simTime().dbl();
         for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
             int theSource = std::get<0>(*it);
             int theDestination = std::get<1>(*it);
@@ -186,7 +200,7 @@ bool AdaptiveSystem::insertRequest(int source, int dst, int id){
                 }
                 else{
                     //it means the state == FINISHED
-                    double t = simTime().dbl();
+
                     double createdTime = std::get<3>(*it);
                     if(t - createdTime < Constant::DELAY){
                         return false;
@@ -197,8 +211,11 @@ bool AdaptiveSystem::insertRequest(int source, int dst, int id){
                 }
             }
             i++;
-        }//end of fore
-
+        }//end of for
+        this->removeExpiredRequests(NULL);
+        allRequests.push_back(
+                std::make_tuple(source, dst, std::to_string(id), t, WAITING_FOR_PROCESSING, ""));
+        return true;
 
     }
     return false;
