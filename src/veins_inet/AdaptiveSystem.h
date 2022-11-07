@@ -88,6 +88,7 @@ public:
     virtual void clear() = 0;
     bool isWorking();//OpenMP threads are running or not
     virtual bool insertRequest(int source, int dst, int id);
+    virtual bool removeFinisedRequests(std::vector<int>* finishedRequests = NULL);
     std::vector<Request> allRequests;
 
 protected:
