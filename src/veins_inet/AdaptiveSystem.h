@@ -40,7 +40,6 @@
  */
 
 
-#include <functional>
 #include <vector>
 #include <string>
 #include <map>
@@ -51,6 +50,7 @@
 #include <tuple>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
+#include "Constant.h"
 //#include <omp.h>
 
 using boost::property_tree::ptree;
@@ -88,7 +88,7 @@ public:
     virtual void clear() = 0;
     bool isWorking();//OpenMP threads are running or not
     virtual bool insertRequest(int source, int dst, int id);
-    virtual bool removeFinisedRequests(std::vector<int>* finishedRequests = NULL);
+    virtual bool removeExpiredRequests(std::vector<int>* expiredRequests);
     std::vector<Request> allRequests;
 
 protected:
