@@ -193,7 +193,13 @@ void AntShortestPathSystem::planOut(//std::vector <Quad> adjList[],
     cur->memset(numVertices);
 
     cur->ShortestPath[source] = 0;
-    if(this->insertRequest(source, target, cur->id));
+    this->insertRequest(source, target, cur->id);
+    if(target != cur->itinerary->exit){
+        this->insertRequest(target, cur->itinerary->exit, cur->id);
+    }
+    if(this->canExecuteReqs()){
+        EV<<"prepare for parallelization ACO";
+    }
 
 } // ACO
 
