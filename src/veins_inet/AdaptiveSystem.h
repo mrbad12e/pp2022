@@ -86,8 +86,9 @@ public:
     virtual void clear() = 0;
     bool isWorking();//OpenMP threads are running or not
     bool isFullReqs(); //checking the number of reqs exceeds the maximum value or not
-    virtual bool insertRequest(int source, int dst, int id);
+    virtual bool insertRequest(int source, int dst, std::string id);
     virtual bool removeExpiredRequests(std::vector<int>* expiredRequests);
+    virtual bool canExecuteReqs();
     std::vector<Request> allRequests;
 
 protected:
