@@ -192,13 +192,16 @@ bool AdaptiveSystem::isFullReqs(){
            count++;
        }
     }
-    return (count<= Constant::MAX_REQUESTS);
+    return (count > Constant::MAX_REQUESTS);
 }
 
 
 bool AdaptiveSystem::insertRequest(int source, int dst, int id){
     if(!isWorking()){
         int i = 0;
+        if(isFullReqs()){
+            return false;
+        }
         double t = simTime().dbl();
         for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
             int theSource = std::get<0>(*it);
