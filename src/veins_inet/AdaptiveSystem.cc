@@ -173,7 +173,7 @@ bool AdaptiveSystem::removeExpiredRequests(std::vector<int>* expiredRequests){
     }
     int index = 0;
     int numberOfRemoved = 0;
-    for(std::vector<int>::iterator it = tooOldOnes->end(); it != tooOldOnes->begin(); it--){
+    for(auto it = tooOldOnes->end(); it != tooOldOnes->begin(); it--){
         index = *it;
         if(index >= 0 && index < allRequests.size()){
             allRequests.erase(allRequests.begin() + index);
