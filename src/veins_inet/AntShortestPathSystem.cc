@@ -191,8 +191,9 @@ std::vector<int> AntShortestPathSystem::path(int start, int end)
 void AntShortestPathSystem::planOut(//std::vector <Quad> adjList[],
         int source, int target, std::string currLane, AGV* cur){
     cur->memset(numVertices);
-
-    cur->ShortestPath[source] = 0;
+    if(!isWorking()){
+        cur->ShortestPath[source] = 0;
+    }
     this->insertRequest(source, target, cur->id);
     if(target != cur->itinerary->exit){
         this->insertRequest(target, cur->itinerary->exit, cur->id);
