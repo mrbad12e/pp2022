@@ -193,6 +193,7 @@ void AntShortestPathSystem::planOut(//std::vector <Quad> adjList[],
     cur->memset(numVertices);
 
     cur->ShortestPath[source] = 0;
+    if(this->insertRequest(source, target, cur->id));
 
 } // ACO
 
