@@ -183,6 +183,18 @@ bool AdaptiveSystem::removeExpiredRequests(std::vector<int>* expiredRequests){
     return (numberOfRemoved != 0);
 }
 
+bool AdaptiveSystem::isFullReqs(){
+    int count = 0;
+    for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
+       STATE_OF_REQUEST state = std::get<4>(*it);
+       if(state == WAITING_FOR_PROCESSING
+       ){
+           count++;
+       }
+    }
+    return (count<= Constant::MAX_REQUESTS);
+}
+
 
 bool AdaptiveSystem::insertRequest(int source, int dst, int id){
     if(!isWorking()){
