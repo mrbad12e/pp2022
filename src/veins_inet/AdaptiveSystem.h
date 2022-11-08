@@ -85,6 +85,7 @@ public:
     virtual void insertEdge(int, int, double) noexcept(false);
     virtual void clear() = 0;
     bool isWorking();//OpenMP threads are running or not
+    bool isFullReqs(); //checking the number of reqs exceeds the maximum value or not
     virtual bool insertRequest(int source, int dst, int id);
     virtual bool removeExpiredRequests(std::vector<int>* expiredRequests);
     std::vector<Request> allRequests;
