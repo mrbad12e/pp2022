@@ -64,6 +64,7 @@ public:
     static std::map<std::string, std::string> routeDict;
     static constexpr const double THRESHOLD = -2;
     static constexpr const double DELAY = 10; //10 seconds
+    static constexpr const int MAX_REQUESTS = 6;
     static constexpr const ModeOfLatencyEmergenyTime STRATEGY
                     = ModeOfLatencyEmergenyTime::MIN;
 };
