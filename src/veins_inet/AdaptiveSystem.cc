@@ -183,6 +183,23 @@ bool AdaptiveSystem::removeExpiredRequests(std::vector<int>* expiredRequests){
     return (numberOfRemoved != 0);
 }
 
+bool AdaptiveSystem::canExecuteReqs(){
+    //int beingProcessed = 0;
+    int waiting = 0;
+    double t = simTime().dbl();
+    for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
+        STATE_OF_REQUEST state = std::get<4>(*it);
+        double createdTime = std::get<3>(*it);
+        if(state == BEING_PROCESSED){
+            return false;
+        }
+        else if(state == WAITING_FOR_PROCESSING && (t - createdTime < Constant::DELAY)){
+            waiting++;
+        }
+    }
+    return (waiting >= 1);
+}
+
 bool AdaptiveSystem::isFullReqs(){
     int count = 0;
     for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
@@ -196,7 +213,7 @@ bool AdaptiveSystem::isFullReqs(){
 }
 
 
-bool AdaptiveSystem::insertRequest(int source, int dst, int id){
+bool AdaptiveSystem::insertRequest(int source, int dst, std::string id){
     if(!isWorking()){
         int i = 0;
         if(isFullReqs()){
@@ -229,7 +246,7 @@ bool AdaptiveSystem::insertRequest(int source, int dst, int id){
         }//end of for
         this->removeExpiredRequests(NULL);
         allRequests.push_back(
-                std::make_tuple(source, dst, std::to_string(id), t, WAITING_FOR_PROCESSING, ""));
+                std::make_tuple(source, dst, id, t, WAITING_FOR_PROCESSING, ""));
         return true;
 
     }
