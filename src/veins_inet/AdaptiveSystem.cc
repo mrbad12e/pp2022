@@ -216,7 +216,6 @@ bool AdaptiveSystem::isFullReqs(){
 
 bool AdaptiveSystem::insertRequest(int source, int dst, std::string id){
     if(!isWorking()){
-        int i = 0;
         if(isFullReqs()){
             return false;
         }
@@ -227,29 +226,16 @@ bool AdaptiveSystem::insertRequest(int source, int dst, std::string id){
             int theSource = std::get<0>(*it);
             int theDestination = std::get<1>(*it);
             if(theSource == source && theDestination == dst){
-                STATE_OF_REQUEST state = std::get<4>(*it);
-                if(state == BEING_PROCESSED ||
-                        state == WAITING_FOR_PROCESSING
-                ){
-                    return false;
-                }
-                else{
-                    //it means the state == FINISHED
-
-                    double createdTime = std::get<3>(*it);
-                    if(t - createdTime < Constant::DELAY){
-                        return false;
-                    }
-                    else{
-                        break;
-                    }
+                std::string ids = std::get<2>(*it);
+                if(ids.find("$" + id + "$") != std::string::npos){
+                    std::get<2>(*it) = ids + "$" + id + "$";
+                    return true;
                 }
             }
-            i++;
         }//end of for
 
         allRequests.push_back(
-                std::make_tuple(source, dst, id, t, WAITING_FOR_PROCESSING, ""));
+                std::make_tuple(source, dst, "$" + id + "$", t, WAITING_FOR_PROCESSING, ""));
         return true;
 
     }
