@@ -225,16 +225,21 @@ bool AdaptiveSystem::insertRequest(int source, int dst, std::string id){
         for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
             int theSource = std::get<0>(*it);
             int theDestination = std::get<1>(*it);
+            std::string ids = std::get<2>(*it);
+            double time = std::get<3>(*it);
             if(theSource == source && theDestination == dst){
-                std::string ids = std::get<2>(*it);
                 if(ids.find("$" + id + "$") == std::string::npos){
                     std::get<2>(*it) = ids + "$" + id + "$";
                     return true;
                 }
-
                 else{
                     return false;
                 }
+            }
+            else if(ids.find("$" + id + "$") != std::string::npos
+                    && theDestination == dst
+            ){
+
             }
         }//end of for
 
