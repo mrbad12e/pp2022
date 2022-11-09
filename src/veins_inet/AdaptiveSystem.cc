@@ -231,6 +231,10 @@ bool AdaptiveSystem::insertRequest(int source, int dst, std::string id){
                     std::get<2>(*it) = ids + "$" + id + "$";
                     return true;
                 }
+
+                else{
+                    return false;
+                }
             }
         }//end of for
 
