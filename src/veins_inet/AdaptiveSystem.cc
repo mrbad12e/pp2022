@@ -221,6 +221,8 @@ bool AdaptiveSystem::insertRequest(int source, int dst, std::string id){
             return false;
         }
         double t = simTime().dbl();
+        this->removeExpiredRequests(NULL);
+
         for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
             int theSource = std::get<0>(*it);
             int theDestination = std::get<1>(*it);
@@ -245,7 +247,7 @@ bool AdaptiveSystem::insertRequest(int source, int dst, std::string id){
             }
             i++;
         }//end of for
-        this->removeExpiredRequests(NULL);
+
         allRequests.push_back(
                 std::make_tuple(source, dst, id, t, WAITING_FOR_PROCESSING, ""));
         return true;
