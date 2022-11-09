@@ -227,7 +227,7 @@ bool AdaptiveSystem::insertRequest(int source, int dst, std::string id){
             int theDestination = std::get<1>(*it);
             if(theSource == source && theDestination == dst){
                 std::string ids = std::get<2>(*it);
-                if(ids.find("$" + id + "$") != std::string::npos){
+                if(ids.find("$" + id + "$") == std::string::npos){
                     std::get<2>(*it) = ids + "$" + id + "$";
                     return true;
                 }
