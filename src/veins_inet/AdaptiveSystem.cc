@@ -258,7 +258,7 @@ bool AdaptiveSystem::insertRequest(int source, int dst, std::string id){
             ){
                 if(ids.compare("$" + id + "$") == 0){
                     identicalReqs->push_back(i);
-                    needRemoveIdentical = false;
+                    needRemoveIdentical = true;
                 }
                 else{
                     std::string replacedStr = "$" + id + "$";
@@ -271,7 +271,8 @@ bool AdaptiveSystem::insertRequest(int source, int dst, std::string id){
             i++;
         }//end of for
 
-        this->removeExpiredRequests(identicalReqs);
+        if(needRemoveIdentical)
+            this->removeExpiredRequests(identicalReqs);
         allRequests.push_back(
                 std::make_tuple(source, dst, "$" + id + "$", t, WAITING_FOR_PROCESSING, ""));
         return true;
