@@ -278,7 +278,6 @@ bool AdaptiveSystem::insertRequest(int source, int dst, std::string id){
                 else{
                     std::string replacedStr = "$" + id + "$";
                     int start = ids.find(replacedStr);
-
                     std::string newIds = ids.replace(start, replacedStr.length(), "");
                     std::get<2>(*it) = newIds;
                 }
