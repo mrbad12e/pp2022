@@ -89,6 +89,7 @@ public:
     virtual bool insertRequest(int source, int dst, std::string id);
     virtual bool removeExpiredRequests(std::vector<int>* expiredRequests);
     virtual bool canExecuteReqs();
+    virtual bool hasIdenticalReq();
     std::vector<Request> allRequests;
 
 protected:
