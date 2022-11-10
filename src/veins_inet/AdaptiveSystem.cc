@@ -200,7 +200,7 @@ bool AdaptiveSystem::removeExpiredRequests(std::vector<int>* expiredRequests){
 /*prepare for parallelization
  * from ThanhNT
  */
-void AdaptiveSystem::initAdaptiveEdges(){
+/*void AdaptiveSystem::initAdaptiveEdges(std::vector<std::vector<Quad>> adjList){
     double tempW;
     int tempIndex;
     std::string tempTrace;
@@ -228,7 +228,7 @@ void AdaptiveSystem::initAdaptiveEdges(){
           adaptiveEdges.push_back(edge);
       }
    }
-}
+}*/
 
 bool AdaptiveSystem::canExecuteReqs(){
     //int beingProcessed = 0;
