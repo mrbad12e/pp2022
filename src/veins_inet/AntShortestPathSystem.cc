@@ -191,6 +191,14 @@ std::vector<int> AntShortestPathSystem::path(int start, int end)
 void AntShortestPathSystem::planOut(//std::vector <Quad> adjList[],
         int source, int target, std::string currLane, AGV* cur){
     cur->memset(numVertices);
+    for (std::vector<Quad>::iterator it = adjList[source].begin(); it != adjList[source].end(); it++){
+        tempW = std::get<0>(*it);
+        tempTrace = std::get<3>(*it);
+        tempIndex = std::get<2>(*it);
+        if(!Constant::SHORTEST_PATH){
+            timeWeightVertices[tempIndex] = this->expSmoothing->getDampingValue(tempIndex, timeWeightVertices[tempIndex], vertices[tempIndex]);
+        }
+    }
     if(!isWorking()){
         cur->ShortestPath[source] = 0;
     }
