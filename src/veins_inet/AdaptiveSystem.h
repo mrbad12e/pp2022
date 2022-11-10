@@ -90,6 +90,7 @@ public:
     virtual bool removeExpiredRequests(std::vector<int>* expiredRequests);
     virtual bool canExecuteReqs();
     virtual bool hasIdenticalReq();
+    virtual void initAdaptiveEdges();//prepare for parallelization
     std::vector<Request> allRequests;
 
 protected:
