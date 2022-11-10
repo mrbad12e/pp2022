@@ -55,7 +55,7 @@ AntShortestPathSystem::AntShortestPathSystem()
     try
     {
         //create a clone of adjList from updated graph
-        initAdaptiveEdges();
+        //initAdaptiveEdges();
     }
     catch(std::exception& e)
     {
@@ -166,6 +166,7 @@ std::vector<int> AntShortestPathSystem::path(int start, int end)
 void AntShortestPathSystem::planOut(//std::vector <Quad> adjList[],
         int source, int target, std::string currLane, AGV* cur){
     cur->memset(numVertices);
+    double tempW; int tempIndex; std::string tempTrace;
     for (std::vector<Quad>::iterator it = adjList[source].begin(); it != adjList[source].end(); it++){
         tempW = std::get<0>(*it);
         tempTrace = std::get<3>(*it);
