@@ -24,6 +24,10 @@
 #include <vector>
 #include <algorithm>
 #include <assert.h>
+#include <string>
+#include <tuple>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #include "Constant.h"
 #include "Graph.h"
 #include "Crossing.h"
@@ -31,6 +35,9 @@
 // Author: Aakash Prabhu
 #include <queue> // To set up priority queue
 #include <functional> // To use std::greater<T> -> This will prove to be useful in picking the minimum weight
+
+using boost::property_tree::ptree;
+using namespace omnetpp;
 
 
 class ExponentialSmoothing{
@@ -200,6 +207,9 @@ private:
     double lastGettingPedestrians = 0;
 
 };
+
+
+
 
 class Djisktra {
 public:
