@@ -198,6 +198,7 @@ void AntShortestPathSystem::planOut(//std::vector <Quad> adjList[],
     if(target != cur->itinerary->exit){
         this->insertRequest(target, cur->itinerary->exit, cur->id);
     }
+    assert(!(this->hasIdenticalReq()));
     if(this->canExecuteReqs()){
         EV<<"prepare for parallelization ACO";
     }
