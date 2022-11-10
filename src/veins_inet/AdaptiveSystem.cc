@@ -197,6 +197,39 @@ bool AdaptiveSystem::removeExpiredRequests(std::vector<int>* expiredRequests){
     return (numberOfRemoved != 0);
 }
 
+/*prepare for parallelization
+ * from ThanhNT
+ */
+void AdaptiveSystem::initAdaptiveEdges(){
+    double tempW;
+    int tempIndex;
+    std::string tempTrace;
+    for(int i = 0; i < numVertices; i++){
+      for (std::vector<Quad>::iterator it = adjList[i].begin(); it != adjList[i].end(); it++){
+          AdaptiveSystem::Edge edge;
+          tempW = std::get<0>(*it);
+          if(tempW == 0){
+              tempW = Constant::LENGTH_OF_B_VERTEX;
+              edge.isBVertex = true;
+          }
+          else{
+              tempW -= Constant::LENGTH_OF_B_VERTEX;
+              edge.isBVertex = false;
+          }
+          tempTrace = std::get<3>(*it);
+          tempIndex = std::get<2>(*it);
+
+          edge.edgeStart = i;
+          edge.edgeEnd = tempIndex;
+          edge.weight = tempW;
+          edge.src = vertices[i];
+          edge.dst = tempTrace;
+          edge.id = countEdges++;
+          adaptiveEdges.push_back(edge);
+      }
+   }
+}
+
 bool AdaptiveSystem::canExecuteReqs(){
     //int beingProcessed = 0;
     int waiting = 0;
