@@ -226,6 +226,23 @@ bool AdaptiveSystem::isFullReqs(){
     return (count > Constant::MAX_REQUESTS);
 }
 
+bool AdaptiveSystem::hasIdenticalReq(){
+    int i = 0;
+    for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
+        i++;
+        int theSource = std::get<0>(*it);
+        int theDestination = std::get<1>(*it);
+        for(std::vector<Request>::iterator ptr = allRequests.begin() + i; ptr != allRequests.end(); ptr++){
+            int src = std::get<0>(*ptr);
+            int dst = std::get<1>(*ptr);
+            if(src == theSource && dst == theDestination){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 
 bool AdaptiveSystem::insertRequest(int source, int dst, std::string id){
     if(!isWorking()){
