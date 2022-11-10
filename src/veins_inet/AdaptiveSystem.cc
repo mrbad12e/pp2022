@@ -154,6 +154,7 @@ bool AdaptiveSystem::removeExpiredRequests(std::vector<int>* expiredRequests){
         selfSearching = expiredRequests->size() == 0;
     }
     std::vector<int> *tooOldOnes ;
+    bool inIncrementOrder = true;
     if(selfSearching){
         tooOldOnes = new std::vector<int>();
         int i = 0;
@@ -170,10 +171,22 @@ bool AdaptiveSystem::removeExpiredRequests(std::vector<int>* expiredRequests){
     }
     else{
         tooOldOnes = expiredRequests;
+        int prev = -1;
+        for(auto it = tooOldOnes->begin(); it != tooOldOnes->end(); it++){
+            if(prev > (*it)){
+                inIncrementOrder = false;
+                break;
+            }
+            else{
+                prev = (*it);
+            }
+        }
     }
     int index = 0;
     int numberOfRemoved = 0;
-    std::reverse(tooOldOnes->begin(), tooOldOnes->end());
+    if(inIncrementOrder){
+        std::reverse(tooOldOnes->begin(), tooOldOnes->end());
+    }
     for(auto it = tooOldOnes->begin(); it != tooOldOnes->end(); it++){
         index = *it;
         if(index >= 0 && index < allRequests.size()){
@@ -221,6 +234,10 @@ bool AdaptiveSystem::insertRequest(int source, int dst, std::string id){
         }
         double t = simTime().dbl();
         this->removeExpiredRequests(NULL);
+        int i = 0;
+
+        std::vector<int>* identicalReqs = new std::vector<int>();
+        bool needRemoveIdentical = false;
 
         for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
             int theSource = std::get<0>(*it);
@@ -239,10 +256,22 @@ bool AdaptiveSystem::insertRequest(int source, int dst, std::string id){
             else if(ids.find("$" + id + "$") != std::string::npos
                     && theDestination == dst
             ){
+                if(ids.compare("$" + id + "$") == 0){
+                    identicalReqs->push_back(i);
+                    needRemoveIdentical = false;
+                }
+                else{
+                    std::string replacedStr = "$" + id + "$";
+                    int start = ids.find(replacedStr);
 
+                    std::string newIds = ids.replace(start, replacedStr.length(), "");
+                    std::get<2>(*it) = newIds;
+                }
             }
+            i++;
         }//end of for
 
+        this->removeExpiredRequests(identicalReqs);
         allRequests.push_back(
                 std::make_tuple(source, dst, "$" + id + "$", t, WAITING_FOR_PROCESSING, ""));
         return true;
