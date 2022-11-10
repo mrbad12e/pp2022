@@ -270,9 +270,7 @@ bool AdaptiveSystem::insertRequest(int source, int dst, std::string id){
                     return false;
                 }
             }
-            else if(ids.find("$" + id + "$") != std::string::npos
-                    && theDestination == dst
-            ){
+            else if(ids.find("$" + id + "$") != std::string::npos && theDestination == dst){
                 if(ids.compare("$" + id + "$") == 0){
                     identicalReqs->push_back(i);
                     needRemoveIdentical = true;
