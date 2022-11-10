@@ -260,7 +260,6 @@ bool AdaptiveSystem::insertRequest(int source, int dst, std::string id){
             int theSource = std::get<0>(*it);
             int theDestination = std::get<1>(*it);
             std::string ids = std::get<2>(*it);
-            double time = std::get<3>(*it);
             if(theSource == source && theDestination == dst){
                 if(ids.find("$" + id + "$") == std::string::npos){
                     std::get<2>(*it) = ids + "$" + id + "$";
