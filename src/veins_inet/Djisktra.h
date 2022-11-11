@@ -420,7 +420,36 @@ public:
         }
         return false;
     }
-    //virtual void initAdaptiveEdges(std::vector<std::vector<Quad>> adjList);//prepare for parallelization
+    virtual void initAdaptiveEdges(std::vector<std::vector<Quad>> adjList, int numVertices, int vertices[])//prepare for parallelization
+    {
+        double tempW;
+        int tempIndex;
+        std::string tempTrace;
+        int countEdges = 0;
+        for(int i = 0; i < numVertices; i++){
+          for (std::vector<Quad>::iterator it = adjList[i].begin(); it != adjList[i].end(); it++){
+              AdaptiveSystem::Edge edge;
+              tempW = std::get<0>(*it);
+              if(tempW == 0){
+                  tempW = Constant::LENGTH_OF_B_VERTEX;
+                  edge.isBVertex = true;
+              }
+              else{
+                  tempW -= Constant::LENGTH_OF_B_VERTEX;
+                  edge.isBVertex = false;
+              }
+              tempTrace = std::get<3>(*it);
+              tempIndex = std::get<2>(*it);
+              edge.edgeStart = i;
+              edge.edgeEnd = tempIndex;
+              edge.weight = tempW;
+              edge.src = vertices[i];
+              edge.dst = tempTrace;
+              edge.id = countEdges++;
+              adaptiveEdges.push_back(edge);
+          }
+       }
+    }
     std::vector<Request> allRequests;
 
 protected:
@@ -432,7 +461,7 @@ protected:
 
 
 
-class Djisktra {
+class Djisktra : public AdaptiveSystem{
 public:
     Djisktra();
     virtual ~Djisktra();
