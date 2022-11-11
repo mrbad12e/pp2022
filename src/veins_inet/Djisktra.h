@@ -458,8 +458,15 @@ public:
        }
     }
 
-    virtual void initAdaptiveVertices(std::vector<double> timeWeightVertices){
-
+    virtual void updateWeights(std::vector<double> timeWeightVertices){
+        int indexSrc, indexDst;
+        //double weightSrc, weightDst;
+        for(int i = 0; i < adaptiveEdges.size(); i++){
+            indexSrc = adaptiveEdges[i].edgeStart;
+            indexDst = adaptiveEdges[i].edgeEnd;
+            adaptiveEdges[i].weightSrc = timeWeightVertices[indexSrc];
+            adaptiveEdges[i].weightDst = timeWeightVertices[indexDst];
+        }
     }
     std::vector<Request> allRequests;
 
