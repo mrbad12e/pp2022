@@ -185,6 +185,7 @@ void AntShortestPathSystem::planOut(//std::vector <Quad> adjList[],
     assert(!(this->hasIdenticalReq()));
     if(this->canExecuteReqs()){
         EV<<"prepare for parallelization ACO";
+        this->updateWeights(this->timeWeightVertices);
     }
 
 } // ACO
