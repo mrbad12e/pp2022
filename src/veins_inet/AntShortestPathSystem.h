@@ -47,7 +47,7 @@ struct edgeHash
     }
 };
 
-class AntShortestPathSystem : public AdaptiveSystem, public Djisktra
+class AntShortestPathSystem : /*public AdaptiveSystem,*/ public Djisktra
 {
 public:
     static const int ANTS = 250;
