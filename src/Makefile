@@ -34,7 +34,6 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
 OBJS = \
-    $O/veins_inet/AdaptiveSystem.o \
     $O/veins_inet/AGVControlApp.o \
     $O/veins_inet/AntShortestPathSystem.o \
     $O/veins_inet/ArrivalDijkstra.o \
