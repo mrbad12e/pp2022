@@ -63,6 +63,7 @@ public:
     virtual std::vector<int> path(int, int);
     virtual void clear();
     virtual void insertEdge(int, int, double) noexcept(false);
+    virtual std::vector<Request> kickOff();
     void planOut(int source, int target, std::string currLane, AGV* cur) override;
     std::string getRoute(std::string trace, std::string currentLane, int currentVertex, int nextVertex, int exitVertex) override;
 
