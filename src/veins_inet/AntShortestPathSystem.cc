@@ -186,9 +186,39 @@ void AntShortestPathSystem::planOut(//std::vector <Quad> adjList[],
     if(this->canExecuteReqs()){
         EV<<"prepare for parallelization ACO";
         this->updateWeights(this->timeWeightVertices);
+        std::vector<Request> work = this->kickOff();
     }
 
 } // ACO
+
+/*
+ * Mark all waiting requests that they are being processed by changing the state
+ * @pre: the requests are not being worked, and there is already several waiting requests
+ * @post: calling the path of AntShortestPathSystem and all expired reqs disappear
+ */
+std::vector<Request> AntShortestPathSystem::kickOff(){
+    double t = simTime().dbl();
+    std::vector<Request> result;
+    std::vector<int> expiredReqs;
+    int i = 0;
+    for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
+        STATE_OF_REQUEST state = std::get<4>(*it);
+        double createdTime = std::get<3>(*it);
+        if(state == WAITING_FOR_PROCESSING){
+            if(t - createdTime < Constant::DELAY){
+                std::get<4>(*it) = BEING_PROCESSED;
+                std::get<3>(*it) = t;
+                result.push_back(*it);
+            }
+            else{
+                expiredReqs.push_back(i);
+            }
+        }
+        i++;
+    }
+    this->removeExpiredRequests(&expiredReqs);
+    return result;
+}
 
 std::string AntShortestPathSystem::getRoute(std::string trace, std::string currentLane, int currentVertex, int nextVertex, int exitVertex){
     return "";
