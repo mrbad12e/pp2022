@@ -34,7 +34,7 @@ AntShortestPathSystem::AntShortestPathSystem(const std::string& filename, int an
 {
     try
     {
-        initTopo(filename);
+        //initTopo(filename);
         for(auto& edge : adaptiveEdges)
             edge2phero.insert(std::make_pair(edge, static_cast<double>(PHERO_QUANTITY)));
     }
