@@ -223,7 +223,9 @@ public:
     {
         int edgeStart;
         int edgeEnd;
-        double weight;
+        double weightEdge;
+        double weightSrc;
+        double weightDst;
         long int id;
         std::string src;
         std::string dst;
@@ -244,7 +246,7 @@ public:
         }
 
         Edge(){
-            edgeStart = edgeEnd = weight = id = 0;
+            edgeStart = edgeEnd = weightEdge = id = 0;
         }
     };
 
@@ -262,7 +264,7 @@ public:
         AdaptiveSystem::Edge edge;
         edge.edgeStart = src;
         edge.edgeEnd = dst;
-        edge.weight = weight;
+        edge.weightEdge = weight;
         edge.id = ++ Constant::edgeIdCnt;
         adaptiveEdges.push_back(edge);
     }
@@ -420,11 +422,13 @@ public:
         }
         return false;
     }
-    virtual void initAdaptiveEdges(std::vector<std::vector<Quad>> adjList, int numVertices, int vertices[], int* countEdges)//prepare for parallelization
+    virtual void initAdaptiveEdges(std::vector<std::vector<Quad>> adjList, std::vector<std::string> vertices, std::vector<double> timeWeightVertices, int* countEdges)//prepare for parallelization
     {
         double tempW;
         int tempIndex;
         std::string tempTrace;
+
+        int numVertices = adjList.size();
 
         for(int i = 0; i < numVertices; i++){
           for (std::vector<Quad>::iterator it = adjList[i].begin(); it != adjList[i].end(); it++){
@@ -441,14 +445,21 @@ public:
               tempTrace = std::get<3>(*it);
               tempIndex = std::get<2>(*it);
               edge.edgeStart = i;
+              edge.weightSrc = timeWeightVertices[i];
               edge.edgeEnd = tempIndex;
-              edge.weight = tempW;
+              edge.weightDst = timeWeightVertices[tempIndex];
+              edge.weightEdge = tempW;
               edge.src = vertices[i];
               edge.dst = tempTrace;
+              EV<<vertices[tempIndex]<<endl;
               edge.id = (*countEdges)++;
               adaptiveEdges.push_back(edge);
           }
        }
+    }
+
+    virtual void initAdaptiveVertices(std::vector<double> timeWeightVertices){
+
     }
     std::vector<Request> allRequests;
 
