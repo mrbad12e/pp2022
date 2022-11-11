@@ -254,13 +254,16 @@ public:
     virtual ~AdaptiveSystem(){
 
     }
-    virtual std::vector<int> path(int, int) = 0;
+    virtual std::vector<int> path(int src, int dst){
+        std::vector<int> v;
+        return v;
+    }
     virtual void insertEdge(int src, int dst, double weight) noexcept(false){
         AdaptiveSystem::Edge edge;
         edge.edgeStart = src;
         edge.edgeEnd = dst;
         edge.weight = weight;
-        edge.id = ++edgeIdCnt;
+        edge.id = ++ Constant::edgeIdCnt;
         adaptiveEdges.push_back(edge);
     }
 
@@ -424,8 +427,7 @@ protected:
     //virtual void initTopo(const std::string&);
     std::vector<Edge> adaptiveEdges;
 
-private:
-    static int edgeIdCnt;
+
 };
 
 
