@@ -56,6 +56,7 @@ public:
     static double GLOBAL_LATER;
     static int TOTAL_AGV;
     static double EMERGENCY_TIME;
+    static int edgeIdCnt;
 
     static constexpr const bool SHORTEST_PATH = false;
     static constexpr const double LENGTH_OF_B_VERTEX = 0.1;//assume that length of b_vertex (for ACO) is 0.1
