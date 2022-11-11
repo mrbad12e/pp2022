@@ -55,7 +55,7 @@ AntShortestPathSystem::AntShortestPathSystem()
     try
     {
         //create a clone of adjList from updated graph
-        //initAdaptiveEdges();
+        initAdaptiveEdges(adjList, vertices, timeWeightVertices, &countEdges);
     }
     catch(std::exception& e)
     {
@@ -332,7 +332,7 @@ double AntShortestPathSystem::calcTourLength(std::vector<int>& tour)
                 });
 
         if(it != edge2phero.cend())
-            weightSum += (*it).first.weight;
+            weightSum += (*it).first.weightEdge;
     }
 
     return weightSum;
@@ -378,7 +378,7 @@ double AntShortestPathSystem::heuInfo(int edgeStart, int edgeEnd)
                         && pair.first.edgeEnd == edgeEnd;
             });
 
-    return it != edge2phero.cend() ? 1 / (*it).first.weight : 0;
+    return it != edge2phero.cend() ? 1 / (*it).first.weightEdge : 0;
 }
 
 /**
