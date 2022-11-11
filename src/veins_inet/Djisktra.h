@@ -39,6 +39,13 @@
 using boost::property_tree::ptree;
 using namespace omnetpp;
 
+enum STATE_OF_REQUEST{
+    WAITING_FOR_PROCESSING,
+    BEING_PROCESSED,
+    FINISHED
+};
+
+typedef std::tuple<int, int, std::string, double, STATE_OF_REQUEST, std::string> Request;
 
 class ExponentialSmoothing{
 public:
@@ -208,6 +215,218 @@ private:
 
 };
 
+
+class AdaptiveSystem
+{
+public:
+    struct Edge
+    {
+        int edgeStart;
+        int edgeEnd;
+        double weight;
+        long int id;
+        std::string src;
+        std::string dst;
+        bool isBVertex;
+        bool operator<(const Edge& rhs) const
+        {
+            return id < rhs.id;
+        }
+
+        bool operator>(const Edge& rhs) const
+        {
+            return id > rhs.id;
+        }
+
+        bool operator==(const Edge& rhs) const
+        {
+            return id == rhs.id;
+        }
+
+        Edge(){
+            edgeStart = edgeEnd = weight = id = 0;
+        }
+    };
+
+    AdaptiveSystem(){
+
+    }
+    virtual ~AdaptiveSystem(){
+
+    }
+    virtual std::vector<int> path(int, int) = 0;
+    virtual void insertEdge(int src, int dst, double weight) noexcept(false){
+        AdaptiveSystem::Edge edge;
+        edge.edgeStart = src;
+        edge.edgeEnd = dst;
+        edge.weight = weight;
+        edge.id = ++edgeIdCnt;
+        adaptiveEdges.push_back(edge);
+    }
+
+    //virtual void clear() = 0;
+    bool isWorking()//OpenMP threads are running or not
+    {
+        bool isRunning = false;
+        for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
+            STATE_OF_REQUEST state = std::get<4>(*it);
+            if(state == BEING_PROCESSED){
+                isRunning = true;
+                break;
+            }
+        }
+        return isRunning;
+    }
+    bool isFullReqs() //checking the number of reqs exceeds the maximum value or not
+    {
+        int count = 0;
+        for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
+           STATE_OF_REQUEST state = std::get<4>(*it);
+           if(state == WAITING_FOR_PROCESSING
+           ){
+               count++;
+           }
+        }
+        return (count > Constant::MAX_REQUESTS);
+    }
+    virtual bool insertRequest(int source, int dst, std::string id){
+        if(!isWorking()){
+            if(isFullReqs()){
+                return false;
+            }
+            double t = simTime().dbl();
+            this->removeExpiredRequests(NULL);
+            int i = 0;
+
+            std::vector<int>* identicalReqs = new std::vector<int>();
+            bool needRemoveIdentical = false;
+
+            for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
+                int theSource = std::get<0>(*it);
+                int theDestination = std::get<1>(*it);
+                std::string ids = std::get<2>(*it);
+                if(theSource == source && theDestination == dst){
+                    if(ids.find("$" + id + "$") == std::string::npos){
+                        std::get<2>(*it) = ids + "$" + id + "$";
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else if(ids.find("$" + id + "$") != std::string::npos && theDestination == dst){
+                    if(ids.compare("$" + id + "$") == 0){
+                        identicalReqs->push_back(i);
+                        needRemoveIdentical = true;
+                    }
+                    else{
+                        std::string replacedStr = "$" + id + "$";
+                        int start = ids.find(replacedStr);
+                        std::string newIds = ids.replace(start, replacedStr.length(), "");
+                        std::get<2>(*it) = newIds;
+                    }
+                }
+                i++;
+            }//end of for
+
+            if(needRemoveIdentical)
+                this->removeExpiredRequests(identicalReqs);
+            allRequests.push_back(
+                    std::make_tuple(source, dst, "$" + id + "$", t, WAITING_FOR_PROCESSING, ""));
+            return true;
+
+        }
+        return false;
+    }
+    virtual bool removeExpiredRequests(std::vector<int>* expiredRequests){
+        bool selfSearching = expiredRequests == NULL;
+        if(expiredRequests != NULL){
+            selfSearching = expiredRequests->size() == 0;
+        }
+        std::vector<int> *tooOldOnes ;
+        bool inIncrementOrder = true;
+        if(selfSearching){
+            tooOldOnes = new std::vector<int>();
+            int i = 0;
+            double t = simTime().dbl();
+            for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
+                STATE_OF_REQUEST state = std::get<4>(*it);
+                double createdTime = std::get<3>(*it);
+
+                if(state != BEING_PROCESSED && (t - createdTime > Constant::DELAY)){
+                    tooOldOnes->push_back(i);
+                }
+                i++;
+            }
+        }
+        else{
+            tooOldOnes = expiredRequests;
+            int prev = -1;
+            for(auto it = tooOldOnes->begin(); it != tooOldOnes->end(); it++){
+                if(prev > (*it)){
+                    inIncrementOrder = false;
+                    break;
+                }
+                else{
+                    prev = (*it);
+                }
+            }
+        }
+        int index = 0;
+        int numberOfRemoved = 0;
+        if(inIncrementOrder){
+            std::reverse(tooOldOnes->begin(), tooOldOnes->end());
+        }
+        for(auto it = tooOldOnes->begin(); it != tooOldOnes->end(); it++){
+            index = *it;
+            if(index >= 0 && index < allRequests.size()){
+                allRequests.erase(allRequests.begin() + index);
+                numberOfRemoved++;
+            }
+        }
+        return (numberOfRemoved != 0);
+    }
+    virtual bool canExecuteReqs(){
+        int waiting = 0;
+        double t = simTime().dbl();
+        for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
+            STATE_OF_REQUEST state = std::get<4>(*it);
+            double createdTime = std::get<3>(*it);
+            if(state == BEING_PROCESSED){
+                return false;
+            }
+            else if(state == WAITING_FOR_PROCESSING && (t - createdTime < Constant::DELAY)){
+                waiting++;
+            }
+        }
+        return (waiting >= 1);
+    }
+    virtual bool hasIdenticalReq(){
+        int i = 0;
+        for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
+            i++;
+            int theSource = std::get<0>(*it);
+            int theDestination = std::get<1>(*it);
+            for(std::vector<Request>::iterator ptr = allRequests.begin() + i; ptr != allRequests.end(); ptr++){
+                int src = std::get<0>(*ptr);
+                int dst = std::get<1>(*ptr);
+                if(src == theSource && dst == theDestination){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    //virtual void initAdaptiveEdges(std::vector<std::vector<Quad>> adjList);//prepare for parallelization
+    std::vector<Request> allRequests;
+
+protected:
+    //virtual void initTopo(const std::string&);
+    std::vector<Edge> adaptiveEdges;
+
+private:
+    static int edgeIdCnt;
+};
 
 
 
