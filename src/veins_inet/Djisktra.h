@@ -420,12 +420,12 @@ public:
         }
         return false;
     }
-    virtual void initAdaptiveEdges(std::vector<std::vector<Quad>> adjList, int numVertices, int vertices[])//prepare for parallelization
+    virtual void initAdaptiveEdges(std::vector<std::vector<Quad>> adjList, int numVertices, int vertices[], int* countEdges)//prepare for parallelization
     {
         double tempW;
         int tempIndex;
         std::string tempTrace;
-        int countEdges = 0;
+
         for(int i = 0; i < numVertices; i++){
           for (std::vector<Quad>::iterator it = adjList[i].begin(); it != adjList[i].end(); it++){
               AdaptiveSystem::Edge edge;
@@ -445,7 +445,7 @@ public:
               edge.weight = tempW;
               edge.src = vertices[i];
               edge.dst = tempTrace;
-              edge.id = countEdges++;
+              edge.id = (*countEdges)++;
               adaptiveEdges.push_back(edge);
           }
        }
