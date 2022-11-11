@@ -24,6 +24,7 @@ double Constant::GLOBAL_HARMFULNESS = 0;
 double Constant::GLOBAL_SONNER = 0;
 double Constant::GLOBAL_LATER = 0;
 double Constant::EMERGENCY_TIME = 0;
+int Constant::edgeIdCnt = 0;
 std::map<std::string, std::string> Constant::routeDict = {{"route_0", ""}};
 //std::string Constant::SUPPLY_DISPOSAL = "$";
 Constant::Constant() {
