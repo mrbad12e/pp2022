@@ -187,6 +187,18 @@ void AntShortestPathSystem::planOut(//std::vector <Quad> adjList[],
         EV<<"prepare for parallelization ACO";
         this->updateWeights(this->timeWeightVertices);
         std::vector<Request> work = this->kickOff();
+        int N = work.size();
+        Request jobs[N];
+        for(int i = 0; i < N; i++){
+            jobs[i] = work[i];
+        }
+        int src, dst;
+        std::vector<int> r;
+        for(int i = 0; i < N; i++){
+            src = std::get<0>(jobs[i]);
+            dst = std::get<1>(jobs[i]);
+            r = this->path(src, dst);
+        }
     }
 
 } // ACO
