@@ -501,10 +501,10 @@ bool AntShortestPathSystem::isCyclic(int nd, const std::vector<int>& nodes)
  * @param dest Destination node
  * @param weight Weight for the edge
  */
-void AntShortestPathSystem::insertEdge(int src, int dest, double weight)
+/*void AntShortestPathSystem::insertEdge(int src, int dest, double weight)
 {
     AdaptiveSystem::insertEdge(src, dest, weight);
     edge2phero.clear();
     for(auto& edge : adaptiveEdges)
         edge2phero.insert({edge, static_cast<double>(PHERO_QUANTITY)});
-}
+}*/
