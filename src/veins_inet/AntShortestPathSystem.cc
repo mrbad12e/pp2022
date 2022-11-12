@@ -56,6 +56,8 @@ AntShortestPathSystem::AntShortestPathSystem()
     {
         //create a clone of adjList from updated graph
         initAdaptiveEdges(adjList, vertices, timeWeightVertices, &countEdges);
+        for(auto& edge : adaptiveEdges)
+            edge2phero.insert(std::make_pair(edge, static_cast<double>(PHERO_QUANTITY)));
     }
     catch(std::exception& e)
     {
