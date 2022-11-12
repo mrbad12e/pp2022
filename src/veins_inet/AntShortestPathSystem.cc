@@ -201,9 +201,26 @@ void AntShortestPathSystem::planOut(//std::vector <Quad> adjList[],
             dst = std::get<1>(jobs[i]);
             r = this->path(src, dst);
         }
+        markFinishedReqs();
     }
 
 } // ACO
+
+/*
+ * This func will mark that all WAITING_FOR_PROCESSING reqs will become FINISHED
+ * @pre: the kick off must collect all non-expired WAITING_FOR_PROCESSING reqs
+ * as well as remove all expired WAITING_FOR_PROCESSING reqs
+ */
+void AntShortestPathSystem::markFinishedReqs(){
+    double t = simTime().dbl();
+    for(std::vector<Request>::iterator it = allRequests.begin(); it != allRequests.end(); it++){
+        STATE_OF_REQUEST state = std::get<4>(*it);
+        if(state == WAITING_FOR_PROCESSING){
+            std::get<4>(*it) = FINISHED;
+            std::get<3>(*it) = t;
+        }
+    }
+}
 
 /*
  * Mark all waiting requests that they are being processed by changing the state
