@@ -376,8 +376,12 @@ double AntShortestPathSystem::calcTourLength(std::vector<int>& tour)
                             && pair.first.edgeEnd == tour[i + 1];
                 });
 
-        if(it != edge2phero.cend())
+        if(it != edge2phero.cend()){
+            //ThanhNT 12th Nov
+            weightSum += (*it).first.weightSrc;
+            //Endof ThanhNT 12th Nov
             weightSum += (*it).first.weightEdge;
+        }
     }
 
     return weightSum;
@@ -423,7 +427,13 @@ double AntShortestPathSystem::heuInfo(int edgeStart, int edgeEnd)
                         && pair.first.edgeEnd == edgeEnd;
             });
 
-    return it != edge2phero.cend() ? 1 / (*it).first.weightEdge : 0;
+    //ThanhNT 12th Nov
+    //set comment to the original statement
+    //return it != edge2phero.cend() ? 1 / (*it).first.weightEdge : 0;
+    //declare a denominator
+    double denominator = (*it).first.weightSrc + (*it).first.weightEdge;
+    return it != edge2phero.cend() ? 1 / denominator : 0;
+    //Endof ThanhNT 12thNov
 }
 
 /**
