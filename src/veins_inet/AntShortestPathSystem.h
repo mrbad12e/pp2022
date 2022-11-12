@@ -50,13 +50,13 @@ struct edgeHash
 class AntShortestPathSystem : /*public AdaptiveSystem,*/ public Djisktra
 {
 public:
-    //static const int ANTS = 250;
+    static const int ANTS = 250;
     //ThanhNT 12th Nov
-    static const int ANTS = 500;
+    //static const int ANTS = 500;
     //Endof ThanhNT 12th Nov
-    //static const int ITERATIONS = 150;
+    static const int ITERATIONS = 150;
     //ThanhNT 12th Nov
-    static const int ITERATIONS = 300;
+    //static const int ITERATIONS = 300;
     //Endof ThanhNT 12th Nov
     static const int PHERO_QUANTITY = 100;
     static constexpr double A_PAR = 1;
@@ -71,6 +71,7 @@ public:
     //virtual void insertEdge(int, int, double) noexcept(false);
     virtual std::vector<Request> kickOff();
     void planOut(int source, int target, std::string currLane, AGV* cur) override;
+    virtual void markFinishedReqs();
     std::string getRoute(std::string trace, std::string currentLane, int currentVertex, int nextVertex, int exitVertex) override;
 
 private:
