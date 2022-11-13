@@ -355,6 +355,7 @@ std::string HospitalControlApp::readMessage(TraCIDemo11pMessage *bc) {
         cur->id = std::to_string(bc->getSenderAddress());
         cur->itinerary = new ItineraryRecord();
         cur->itinerary->localWait = 0;
+        cur->createdTime = t;
         vhs.push_back(cur);
     }
 
