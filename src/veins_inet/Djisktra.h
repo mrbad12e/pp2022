@@ -26,6 +26,8 @@
 #include <assert.h>
 #include <string>
 #include <tuple>
+#include <stdio.h>
+#include <stdlib.h>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include "Constant.h"
@@ -427,6 +429,7 @@ public:
         double tempW;
         int tempIndex;
         std::string tempTrace;
+        std::string multiFiles = "";
 
         int numVertices = adjList.size();
 
@@ -445,18 +448,28 @@ public:
               tempTrace = std::get<3>(*it);
               tempIndex = std::get<2>(*it);
               edge.edgeStart = i;
-              edge.weightSrc = timeWeightVertices[i];
+              edge.weightSrc = std::round(timeWeightVertices[i]*100.0)/100.0;
               edge.edgeEnd = tempIndex;
-              edge.weightDst = timeWeightVertices[tempIndex];
-              edge.weightEdge = tempW;
+              edge.weightDst = std::round(timeWeightVertices[tempIndex]*100.0)/100.0;
+              edge.weightEdge = std::round(tempW*100.0)/100.0;
               edge.src = vertices[i];
               edge.dst = tempTrace;
               EV<<vertices[tempIndex]<<endl;
               edge.id = (*countEdges)++;
+              multiFiles.append("input4ACO/" + std::to_string(i) + "_" +
+                               std::to_string(tempIndex) + "_" +
+                               twoDecimalString(edge.weightSrc) + "_" +
+                               twoDecimalString(edge.weightDst) + "_" +
+                               twoDecimalString(edge.weightEdge) + ".txt ");
               adaptiveEdges.push_back(edge);
           }
        }
+       multiFiles = "touch " + multiFiles;
+       system("rm input4ACO/*.txt");
+       system(multiFiles.c_str());
+
     }
+
 
     virtual void updateWeights(std::vector<double> timeWeightVertices){
         int indexSrc, indexDst;
