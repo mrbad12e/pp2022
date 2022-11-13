@@ -225,6 +225,7 @@ public:
     double expectedTimeAtStation = -1;
     double MIN_LATENCY = DBL_MAX;
     double MIN_EMERGENCY = DBL_MAX;
+    double createdTime = -1;
     std::vector<std::string> traces;
     std::vector <bool> visitedVertex;
     std::vector <bool> visitedEmergencyVertex;
