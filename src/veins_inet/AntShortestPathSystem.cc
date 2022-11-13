@@ -155,6 +155,10 @@ std::vector<int> AntShortestPathSystem::path(int start, int end)
         updateTrails(antTraces, tourLengths);
     }
 
+    if(bestPath.size() > 0){
+        EV<<"found something!!!"<<endl;
+    }
+
     return bestPath;
 }
 
@@ -195,11 +199,11 @@ void AntShortestPathSystem::planOut(//std::vector <Quad> adjList[],
             jobs[i] = work[i];
         }
         int src, dst;
-        std::vector<int> r;
+        //std::vector<int> r;
         for(int i = 0; i < N; i++){
             src = std::get<0>(jobs[i]);
             dst = std::get<1>(jobs[i]);
-            r = this->path(src, dst);
+            //this->path(src, dst);
         }
         markFinishedReqs();
     }
