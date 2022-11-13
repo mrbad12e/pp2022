@@ -87,6 +87,13 @@ static void timing_(double* wcTime, double* cpuTime)
    timing(wcTime, cpuTime);
 }
 
+static std::string twoDecimalString(double x){
+    std::string y = std::to_string(x);
+    int len = y.size();
+    y = y.substr(0, len - 4);
+    return y;
+}
+
 
 static char* mergeContent(long Id){
     char *cstr = new char[strlen(Constant::RSU_IDENTIFY) + 1];
