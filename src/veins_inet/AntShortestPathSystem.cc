@@ -203,7 +203,7 @@ void AntShortestPathSystem::planOut(//std::vector <Quad> adjList[],
         for(int i = 0; i < N; i++){
             src = std::get<0>(jobs[i]);
             dst = std::get<1>(jobs[i]);
-            //this->path(src, dst);
+            this->path(src, dst);
         }
         markFinishedReqs();
     }
@@ -486,14 +486,18 @@ double AntShortestPathSystem::pheromone(int edgeStart, int edgeEnd)
 std::vector<int> AntShortestPathSystem::availNeighbours(int node)
 {
     std::vector<int> neighbours;
+    //std::vector<std::string> traces;
 
     // Find all edges that start from the input node and return its
     // other endpoints
     std::for_each(edge2phero.cbegin(), edge2phero.cend(),
-            [&neighbours, node](std::pair<Edge, double> pair)
+            [&neighbours, //&traces,
+                 node](std::pair<Edge, double> pair)
             {
-                if(pair.first.edgeStart == node)
+                if(pair.first.edgeStart == node){
                     neighbours.push_back(pair.first.edgeEnd);
+                    //traces.push_back(pair.first.dst);
+                }
             });
 
     return neighbours;
