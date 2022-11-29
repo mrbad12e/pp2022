@@ -1,0 +1,5 @@
+g++ -pg -Wno-deprecated -c -g Wall.cpp
+g++ -pg -Wno-deprecated -c -g Agent.cpp
+g++ -pg -Wno-deprecated -c -g SocialForce.cpp
+g++ -Wno-deprecated -g Core.cpp -o out Wall.o Agent.o SocialForce.o -lglut -lGLU -lGL
+rm *.o
