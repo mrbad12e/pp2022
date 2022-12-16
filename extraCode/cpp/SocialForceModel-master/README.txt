@@ -1,3 +1,5 @@
+Họ và tên: Nguyễn Trọng Nghĩa 20215101
+
 Phần chỉnh sửa code ở file Core.cpp
 
 Câu a ở dòng 201
