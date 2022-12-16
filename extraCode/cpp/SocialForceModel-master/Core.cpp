@@ -97,35 +97,110 @@ void createWalls() {
 	Wall *wall;
 
 	// Upper Wall
-	wall = new Wall(-25.0, 6.0, 25.0, 6.0);		// Step 1: Create wall and define its coordinates (param: x1, y1, x2, y2)
-	socialForce->addWall(wall);					// Step 2: Add wall to SFM
+	// wall = new Wall(-25.0, 6.0, 25.0, 6.0);		// Step 1: Create wall and define its coordinates (param: x1, y1, x2, y2)
+	// socialForce->addWall(wall);					// Step 2: Add wall to SFM
 
 	// Lower Wall
-	wall = new Wall(-25.0, -6.0, 25.0, -6.0);
+	// wall = new Wall(-25.0, -6.0, 25.0, -6.0);
+	// socialForce->addWall(wall);
+
+	// cau b
+
+	// wall ngang
+	wall = new Wall(-25.0, 4.0, -4.5, 4.0); // TB
 	socialForce->addWall(wall);
+
+	wall = new Wall(4.5, 4.0, 25.0, 4.0); // DB
+	socialForce->addWall(wall);
+
+	wall = new Wall(-25.0, -4.0, -4.5, -4.0); // TN
+	socialForce->addWall(wall);
+
+	wall = new Wall(4.5, -4.0, 25.0, -4.0); // DN
+	socialForce->addWall(wall);
+
+	// wall doc
+	wall = new Wall(-4.5, 4.0, -4.5, 20.0); // TB
+	socialForce->addWall(wall);
+
+	wall = new Wall(4.5, 4.0, 4.5, 20.0); // DB
+	socialForce->addWall(wall);
+
+	wall = new Wall(-4.5, -4.0, -4.5, -20.0); // TN
+	socialForce->addWall(wall);
+
+	wall = new Wall(4.5, -4.0, 4.5, -20.0); // DN
+	socialForce->addWall(wall);
+}
+
+// cau c
+
+void thang(Agent* agent){
+	float x = agent->getPosition().x, y = agent->getPosition().y;
+	if (x < -5 && x > -20.3) agent->setPath(randomFloat(20.0, 30.0), randomFloat(-4.0, 0.0), 5.0);
+	else if (x > 5 && x < 20.3) agent->setPath(randomFloat(-30.0, -20.0), randomFloat(0.0, 4.0), 5.0);
+	else if (y > 0) agent->setPath(randomFloat(-4.0, 0.0), randomFloat(-20.0, -15.0), 5.0);
+	else if (y < 0) agent->setPath(randomFloat(0.0, 4.0), randomFloat(15.0, 20.0), 5.0);
+}
+
+void trai(Agent* agent){
+	float x = agent->getPosition().x, y = agent->getPosition().y;
+	if (x < -5 && x > -20.3) agent->setPath(randomFloat(0.0, 4.0), randomFloat(15.0, 20.0), 22.5);
+	else if (x > 5 && x < 20.3) agent->setPath(randomFloat(-4.0, 0.0), randomFloat(-20.0, -15.0), 22.5);
+	else if (y > 0) agent->setPath(randomFloat(15.0, 20.0), randomFloat(-4.0, 0.0), 22.5);
+	else if (y < 0) agent->setPath(randomFloat(-20.0, -15.0), randomFloat(0.0, 4.0), 22.5);
+}
+
+void phai(Agent* agent){
+	float x = agent->getPosition().x, y = agent->getPosition().y;
+	if (x < -5 && x > -20.3) agent->setPath(randomFloat(-4.0, 0.0), randomFloat(-20.0, -15.0), -22.5);
+	else if (x > 5 && x < 20.3) agent->setPath(randomFloat(0.0, 4.0), randomFloat(15.0, 20.0), -22.5);
+	else if (y > 0) agent->setPath(randomFloat(-20.0, -15.0), randomFloat(0.0, 4.0), -22.5);
+	else if (y < 0) agent->setPath(randomFloat(15.0, 20.0), randomFloat(-4.0, 0.0), -22.5);
 }
 
 void createAgents() {
 	Agent *agent;
 	bool opposite = false;
+	for (int i=0; i<4; i++)
+		for (int idx = 0; idx < 30; idx++) {
+			agent = new Agent;															// Step 1: Create agent
 
-	for (int idx = 0; idx < 400; idx++) {
-		agent = new Agent;															// Step 1: Create agent
+			int d = rand()%3;
+			// if (!opposite) {
+			// 	agent->setPosition(randomFloat(-20.3F, -5.0), randomFloat(-5.0, 5.0));	// Step 2: Set initial position (param: x, y)
+			// 	agent->setPath(randomFloat(25.0, 30.0), randomFloat(-5.0, 5.0), 5.0);	// Step 3: Set target position(s) (param: x, y, waypt_radius)  Can set multiple targets by repeating step 3
+				
+			// 	opposite = true;
+			// }
+			// else {
+			// 	agent->setPosition(randomFloat(5.0, 20.3F), randomFloat(-5.0, 5.0));
+			// 	agent->setPath(randomFloat(-30.0, -25.0), randomFloat(-5.0, 5.0), 5.0);
+			// 	opposite = false;
+			// }
+			
+			// cau c
 
-		if (!opposite) {
-			agent->setPosition(randomFloat(-20.3F, -5.0), randomFloat(-5.0, 5.0));	// Step 2: Set initial position (param: x, y)
-			agent->setPath(randomFloat(25.0, 30.0), randomFloat(-5.0, 5.0), 5.0);	// Step 3: Set target position(s) (param: x, y, waypt_radius)  Can set multiple targets by repeating step 3
-			opposite = true;
+			if (i==0) agent->setPosition(randomFloat(-20.0, -15.0), randomFloat(-4.0, 4.0));
+			else if (i==1) agent->setPosition(randomFloat(-3.5, 3.5), randomFloat(10.0, 15.0));
+			else if (i==2) agent->setPosition(randomFloat(15.0, 20.0), randomFloat(-4.0, 4.0));
+			else if (i==3) agent->setPosition(randomFloat(-3.5, 3.5), randomFloat(-15.0, -10.0));
+
+
+			if (d==0) {
+				thang(agent); agent->setColour(1, 0, 0);
+			}
+			else if (d==1) {
+				trai(agent); agent->setColour(0, 1, 0);
+			}
+			else if (d==2){ 
+				phai(agent); agent->setColour(0, 0, 1); 
+			}
+
+			// agent->setDesiredSpeed(randomFloat(0.7, 1.2));
+			agent->setDesiredSpeed(randomFloat(0.1, 0.5));  // cau a
+			socialForce->addAgent(agent);												// Step 4: Add agent to SFM
 		}
-
-		else {
-			agent->setPosition(randomFloat(5.0, 20.3F), randomFloat(-5.0, 5.0));
-			agent->setPath(randomFloat(-30.0, -25.0), randomFloat(-5.0, 5.0), 5.0);
-			opposite = false;
-		}
-
-		socialForce->addAgent(agent);												// Step 4: Add agent to SFM
-	}
 }
 
 void display() {
@@ -322,8 +397,10 @@ void computeFPS() {
 	currTime = glutGet(GLUT_ELAPSED_TIME);	// Get time in milliseconds since 'glutInit()' called
 	frameTime = currTime - prevTime;
 
+	
+
 	if (frameTime > 1000) {
-		fps = frameCount / (static_cast<float>(frameTime) / 1000);	// Compute the number of FPS
+		fps = frameCount / (static_cast<float>(frameTime) / 10);	// Compute the number of FPS
 		prevTime = currTime;
 		frameCount = 0;												// Reset number of frames
 	}

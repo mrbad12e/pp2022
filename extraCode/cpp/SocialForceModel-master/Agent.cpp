@@ -13,7 +13,10 @@ Agent::Agent() {
 	radius = 0.2F;
 
 	// Desired Speed Based on (Moussaid et al., 2009)
-	normal_distribution<float> distribution(1.29F, 0.19F);	// Generate random value of mean 1.29 and standard deviation 0.19
+	// normal_distribution<float> distribution(1.29F, 0.19F);	// Generate random value of mean 1.29 and standard deviation 0.19
+
+	// normal_distribution<float> distribution(0.30F, 0.19F);
+	normal_distribution<float> distribution(1.50F, 0.19F);
 	desiredSpeed = distribution(generator);
 	
 	colour.set(0.0, 0.0, 0.0);
